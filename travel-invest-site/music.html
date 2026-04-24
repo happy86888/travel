@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>音樂 — 指數 & 行旅</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.music-outer{max-width:var(--container);margin:0 auto;padding:40px 20px 80px}
+.sonus-wrapper{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.sonus-header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--accent);padding-bottom:12px;margin-bottom:16px}
+.sonus-brand{display:flex;align-items:baseline;gap:8px}
+.sonus-brand h1{font-family:var(--font-display);font-style:italic;font-weight:500;font-size:28px;letter-spacing:.02em;color:#8a5a2b}
+.sonus-brand span{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-30);letter-spacing:.2em;text-transform:uppercase}
+.sonus-tip{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-30);letter-spacing:.05em}
+.sonus-tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:12px}
+.sonus-tab{padding:8px 14px;border:1px solid var(--border);background:var(--white);color:rgba(20,18,16,.7);border-radius:4px;cursor:pointer;font-family:inherit;font-size:13px;transition:all .2s}
+.sonus-tab:hover{background:rgba(184,107,42,.08)}
+.sonus-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.sonus-tab .count{font-family:'JetBrains Mono',monospace;font-size:9px;margin-left:6px;opacity:.7}
+.sonus-controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.sonus-search{flex:1;min-width:180px;background:var(--white);border:1px solid var(--border);color:var(--ink);padding:10px 14px;border-radius:4px;font-family:inherit;font-size:13px}
+.sonus-search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(184,107,42,.1)}
+.sonus-search::placeholder{color:var(--ink-30);font-style:italic}
+.sonus-filter{display:flex;background:var(--white);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.sonus-filter button{background:none;border:none;color:var(--ink-30);padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.sonus-filter button.active{background:var(--accent);color:#fff}
+.sonus-tracks{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:6px;background:var(--white);margin-bottom:16px;max-height:400px;overflow-y:auto}
+.sonus-track{display:grid;grid-template-columns:30px 1fr auto;gap:14px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.sonus-track:last-child{border-bottom:none}
+.sonus-track:hover{background:rgba(184,107,42,.06)}
+.sonus-track.playing{background:rgba(184,107,42,.12)}
+.sonus-track.playing .track-title{color:#8a5a2b;font-weight:500}
+.track-number{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-30);text-align:center}
+.track-info{display:flex;flex-direction:column;gap:2px;min-width:0}
+.track-title{font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track-artist{font-size:11px;color:var(--ink-30);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track-platform{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;padding:3px 7px;border-radius:3px;text-transform:uppercase;border:1px solid}
+.track-platform.spotify{color:#5a8a5a;border-color:rgba(90,138,90,.4);background:rgba(90,138,90,.06)}
+.track-platform.soundcloud{color:#c97532;border-color:rgba(201,117,50,.4);background:rgba(201,117,50,.06)}
+.track-platform.mixcloud{color:#4a7aa8;border-color:rgba(74,122,168,.4);background:rgba(74,122,168,.06)}
+.sonus-player{background:var(--warm);border:1px solid var(--border);border-radius:8px;padding:16px;box-shadow:0 4px 12px rgba(20,18,16,.06)}
+.player-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:16px}
+.now-playing{flex:1;min-width:0}
+.np-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.25em;color:var(--ink-30);text-transform:uppercase}
+.np-title{font-family:var(--font-display);font-style:italic;font-size:18px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.np-artist{font-size:11px;color:rgba(20,18,16,.7)}
+.platform-link{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(184,107,42,.1);border:1px solid rgba(184,107,42,.3);color:#8a5a2b;text-decoration:none;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap}
+.platform-link:hover{background:rgba(184,107,42,.2)}
+.player-frame{border-radius:6px;overflow:hidden;border:1px solid var(--border);background:var(--warm);height:160px}
+.player-frame iframe{width:100%;height:100%;border:none;display:block}
+.player-empty{height:160px;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border);border-radius:6px;font-family:var(--font-display);font-style:italic;color:var(--ink-30);font-size:14px}
+@media(max-width:600px){.sonus-wrapper{padding:16px}.sonus-brand h1{font-size:22px}.sonus-controls{flex-direction:column}.player-info{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">指數 <span class="amp">&</span> 行旅<span style="font-family:var(--font-body);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-left:10px;opacity:.8">會員制</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">關於講師</a></li>
+    <li><a href="tools.html">旅行工具</a></li>
+    <li><a href="news.html">財經新聞</a></li>
+    <li><a href="etfrun.html">指數投資模擬器</a></li>
+    <li><a href="bkfly.html">BK飛行計算機</a></li>
+    <li><a href="health.html">健康</a></li>
+    <li><a href="mind.html">心靈</a></li>
+    <li><a href="music.html" class="active">音樂</a></li>
+    <li><a href="holdings.html">持股</a></li>
+    <li><a href="goals.html">目標</a></li>
+  </ul>
+  <a href="tools.html" class="nav-cta">開始試算</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="overline">音樂 × 工作之聲</div>
+    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">為投資與旅程<br><em>而設計的配樂</em></h1>
+    <p class="prose" style="max-width:440px">5 大歌單、175+ 首精選音樂。從專注模式到爵士藍調，找到屬於自己當下的節奏。</p>
+  </div>
+</div>
+
+<div class="section">
+<div class="music-outer">
+
+<div class="sonus-wrapper">
+  <div class="sonus-header">
+    <div class="sonus-brand">
+      <h1>Sonus</h1>
+      <span>· 工作之聲</span>
+    </div>
+    <div class="sonus-tip">點擊曲目開始播放</div>
+  </div>
+
+  <div class="sonus-tabs" id="sonus-tabs"></div>
+
+  <div class="sonus-controls">
+    <input type="text" class="sonus-search" id="sonus-search" placeholder="搜尋歌曲、藝人..."/>
+    <div class="sonus-filter">
+      <button class="active" data-filter="all">全部</button>
+      <button data-filter="soundcloud">SC</button>
+      <button data-filter="mixcloud">MC</button>
+      <button data-filter="spotify">SP</button>
+    </div>
+  </div>
+
+  <div class="sonus-tracks" id="sonus-tracklist"></div>
+
+  <div class="sonus-player">
+    <div class="player-info">
+      <div class="now-playing">
+        <div class="np-label">正在播放</div>
+        <div class="np-title" id="np-title">— 選一首歌開始 —</div>
+        <div class="np-artist" id="np-artist">&nbsp;</div>
+      </div>
+      <a href="#" class="platform-link" id="platform-link" style="display:none;" target="_blank">在原平台開啟 →</a>
+    </div>
+    <div id="player-slot">
+      <div class="player-empty">尚未播放</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">指數 <span class="amp">&amp;</span> 行旅</a>
+  <div class="footer-links">
+    <a href="about.html">關於</a><a href="tools.html">工具</a><a href="news.html">新聞</a>
+  </div>
+  <div class="footer-copy">&copy; 2025 指數 &amp; 行旅</div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+const PLAYLISTS = [
+  { id: 'pl_focus', name: '專注音樂' },
+  { id: 'pl_mando', name: '流行華語' },
+  { id: 'pl_oldies', name: '英文老歌' },
+  { id: 'pl_jazz', name: '爵士藍調' },
+  { id: 'pl_mix', name: 'DJ Mix' },
+];
+
+let _id = 0;
+const T = (title, artist, platform, url, playlistId) => ({ id: 'tr_' + (++_id), title, artist, platform, url, playlistId });
+
+const TRACKS = [
+  T('Lofi Girl · 主頁', 'Lofi Girl', 'soundcloud', 'https://soundcloud.com/lofi_girl', 'pl_focus'),
+  T('Chillhop Music', 'Chillhop', 'soundcloud', 'https://soundcloud.com/chillhopdotcom', 'pl_focus'),
+  T('College Music', 'College Music', 'soundcloud', 'https://soundcloud.com/collegemusic-1', 'pl_focus'),
+  T('Soulection', 'Soulection', 'soundcloud', 'https://soundcloud.com/soulection', 'pl_focus'),
+  T('Ninja Tune', 'Ninja Tune', 'soundcloud', 'https://soundcloud.com/ninjatune', 'pl_focus'),
+  T('Stones Throw', 'Stones Throw', 'soundcloud', 'https://soundcloud.com/stonesthrow', 'pl_focus'),
+  T('Inner Ocean Records', 'Inner Ocean', 'soundcloud', 'https://soundcloud.com/inneroceanrecords', 'pl_focus'),
+  T('Jinsang', 'Jinsang', 'soundcloud', 'https://soundcloud.com/jinsang', 'pl_focus'),
+  T('Idealism', 'Idealism', 'soundcloud', 'https://soundcloud.com/idealism', 'pl_focus'),
+  T('Tomppabeats', 'Tomppabeats', 'soundcloud', 'https://soundcloud.com/tomppabeats', 'pl_focus'),
+  T('Bsd.u', 'Bsd.u', 'soundcloud', 'https://soundcloud.com/bsd-u', 'pl_focus'),
+  T('Saib', 'Saib', 'soundcloud', 'https://soundcloud.com/saib_eats', 'pl_focus'),
+  T('Eevee', 'Eevee', 'soundcloud', 'https://soundcloud.com/eeveemusic', 'pl_focus'),
+  T('Aso', 'Aso', 'soundcloud', 'https://soundcloud.com/aso-music', 'pl_focus'),
+  T('Kupla', 'Kupla', 'soundcloud', 'https://soundcloud.com/kuplamusic', 'pl_focus'),
+  T('Lofi Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/lofi/', 'pl_focus'),
+  T('Chillhop Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/chillhop/', 'pl_focus'),
+  T('Ambient Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/ambient/', 'pl_focus'),
+  T('Study Music', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/study/', 'pl_focus'),
+  T('Classical', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/classical/', 'pl_focus'),
+  T('Piano', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/piano/', 'pl_focus'),
+  T('Bossa Nova', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/bossa-nova/', 'pl_focus'),
+  T('Trip Hop', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/trip-hop/', 'pl_focus'),
+  T('Peaceful Piano', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO', 'pl_focus'),
+  T('Deep Focus', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ', 'pl_focus'),
+  T('Lo-Fi Beats', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn', 'pl_focus'),
+  T('Brain Food', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWXLeA8Omikj7', 'pl_focus'),
+  T('Coding Mode', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX5trt9i14X7j', 'pl_focus'),
+  T('Productive Morning', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX3PFzdbtx1Us', 'pl_focus'),
+  T('Ambient Chill', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX3Ogo9pFvBkY', 'pl_focus'),
+  T('Instrumental Study', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX9sIqqvKsjG8', 'pl_focus'),
+  T('Reading Soundtrack', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWZZbwlv3Vmtr', 'pl_focus'),
+  T('Stress Relief', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWXe9gFZP0gtP', 'pl_focus'),
+  T('Sleep', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWZd79rJ6a7lp', 'pl_focus'),
+
+  T('Mandopop 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/mandopop', 'pl_mando'),
+  T('Cpop 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/cpop', 'pl_mando'),
+  T('Cantopop 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/cantopop', 'pl_mando'),
+  T('Mandopop Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/mandopop/', 'pl_mando'),
+  T('Cantopop Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/cantopop/', 'pl_mando'),
+  T('Asian Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/asian/', 'pl_mando'),
+  T('Taiwanese Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/taiwanese/', 'pl_mando'),
+  T('Mandopop 1990s', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DXdwlqRHzG1lm', 'pl_mando'),
+  T('Mandopop 2000s', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWY3bRhvBLI3w', 'pl_mando'),
+  T('華語金曲精選', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DXcZQYJ3KGGfh', 'pl_mando'),
+  T('Top Mandarin Hits', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX9rFIKxGqcRH', 'pl_mando'),
+  T('華語咖啡', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX0oW6TKZtafh', 'pl_mando'),
+  T('Mandarin Chill', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX0wiBxUidfFc', 'pl_mando'),
+  T('療癒華語', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX2Y9ohxQAeOC', 'pl_mando'),
+  T('粵語金曲', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX1vR8d9yWpRC', 'pl_mando'),
+  T('華語溫柔小品', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX5RKJDEaA4Iw', 'pl_mando'),
+  T('華語民謠', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX5oyiIHWZi9d', 'pl_mando'),
+  T('華語抒情', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX0WlYGiD3Pkz', 'pl_mando'),
+  T('Indie 華語', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWYRTlrhMB12D', 'pl_mando'),
+  T('Top 50 Taiwan', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZEVXbMnz8KIWsvf9', 'pl_mando'),
+  T('Top 50 Hong Kong', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZEVXbLwpL8TjsxOG', 'pl_mando'),
+
+  T('Oldies 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/oldies', 'pl_oldies'),
+  T('Classic Rock 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/classic%20rock', 'pl_oldies'),
+  T('60s 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/60s', 'pl_oldies'),
+  T('70s 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/70s', 'pl_oldies'),
+  T('80s 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/80s', 'pl_oldies'),
+  T('Folk 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/folk', 'pl_oldies'),
+  T('Acoustic 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/acoustic', 'pl_oldies'),
+  T('Oldies Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/oldies/', 'pl_oldies'),
+  T('Classic Rock', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/classic-rock/', 'pl_oldies'),
+  T('60s Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/60s/', 'pl_oldies'),
+  T('70s Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/70s/', 'pl_oldies'),
+  T('80s Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/80s/', 'pl_oldies'),
+  T('90s Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/90s/', 'pl_oldies'),
+  T('Soft Rock', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/soft-rock/', 'pl_oldies'),
+  T('Country', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/country/', 'pl_oldies'),
+  T('All Out 50s', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWSV3Tk4GO2fq', 'pl_oldies'),
+  T('All Out 60s', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DXaKIA8E7WcJj', 'pl_oldies'),
+  T('All Out 70s', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWTJ7xPn4vNaz', 'pl_oldies'),
+  T('All Out 80s', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX4UtSsGT1Sbe', 'pl_oldies'),
+  T('All Out 90s', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DXbTxeAdrVG2l', 'pl_oldies'),
+  T('Classic Acoustic', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX504r1DvyvxG', 'pl_oldies'),
+  T('Soft Pop Hits', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWTwnEm1IYyoj', 'pl_oldies'),
+  T('Classic Rock Drive', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWXRqgorJj26U', 'pl_oldies'),
+  T('Yacht Rock', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWXAUJ8khrrlM', 'pl_oldies'),
+  T('Easy Listening', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DXdGSHdBOqo54', 'pl_oldies'),
+  T('Have a Great Day!', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX7KNKjOK0o75', 'pl_oldies'),
+  T('I Love My 70s', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX5pbEvQVGrKH', 'pl_oldies'),
+  T('I Love My 80s', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX4o1oenSJRJd', 'pl_oldies'),
+  T('Power Ballads', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX1cyNXLKOzbV', 'pl_oldies'),
+  T('Singer-Songwriter', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX1ngEVM0lKrb', 'pl_oldies'),
+  T('Throwback Hits', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWYBO1MoTDhZI', 'pl_oldies'),
+  T('Top Gold Hits', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX5Ejj0EkURtP', 'pl_oldies'),
+
+  T('Jazz 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/jazz', 'pl_jazz'),
+  T('Blues 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/blues', 'pl_jazz'),
+  T('Smooth Jazz 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/smooth%20jazz', 'pl_jazz'),
+  T('Soul 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/soul', 'pl_jazz'),
+  T('Funk 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/funk', 'pl_jazz'),
+  T('Bossa Nova 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/bossa%20nova', 'pl_jazz'),
+  T('Acid Jazz 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/acid%20jazz', 'pl_jazz'),
+  T('Big Band 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/big%20band', 'pl_jazz'),
+  T('Swing 標籤', 'SoundCloud', 'soundcloud', 'https://soundcloud.com/tags/swing', 'pl_jazz'),
+  T('Jazz Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/jazz/', 'pl_jazz'),
+  T('Blues Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/blues/', 'pl_jazz'),
+  T('Soul Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/soul/', 'pl_jazz'),
+  T('Funk Discovery', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/funk/', 'pl_jazz'),
+  T('Acid Jazz Mix', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/acid-jazz/', 'pl_jazz'),
+  T('Smooth Jazz Mix', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/smooth-jazz/', 'pl_jazz'),
+  T('Nu Jazz', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/nu-jazz/', 'pl_jazz'),
+  T('Latin Jazz', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/latin-jazz/', 'pl_jazz'),
+  T('Bebop', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/bebop/', 'pl_jazz'),
+  T('Jazz Classics', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DXbITWG1ZJKYt', 'pl_jazz'),
+  T('Late Night Jazz', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX0SM0LYsmbMT', 'pl_jazz'),
+  T('Coffee Table Jazz', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWVqfgj8NZEp1', 'pl_jazz'),
+  T('Jazz in the Background', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DXa1rZf8gLhyz', 'pl_jazz'),
+  T('Acoustic Blues', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX0pH2SQMRXnC', 'pl_jazz'),
+  T('Jazz Vibes', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX2vYju3i0lNX', 'pl_jazz'),
+  T('Smooth Jazz', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX5JFG8C46O5z', 'pl_jazz'),
+  T('Soul Coffee', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWULEW2RfoSCi', 'pl_jazz'),
+  T('Sunday Stroll', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX8WZH3sjBjTs', 'pl_jazz'),
+  T('Bossa Nova Dinner', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX4AyFl3yqHeK', 'pl_jazz'),
+  T('Cool Jazz', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DWTbzY5gOVvKd', 'pl_jazz'),
+  T('Jazz for Sleep', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX6VDO8a6cQME', 'pl_jazz'),
+  T('Women of Jazz', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DXc8kgYqQLMfH', 'pl_jazz'),
+  T('Vintage Vibes', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX3HnVWLJgD6X', 'pl_jazz'),
+  T('Modern Jazz Piano', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX3eX64khu6JC', 'pl_jazz'),
+  T('Jazz Saxophone', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DXc0H6RzKxCZw', 'pl_jazz'),
+
+  T('Lofi Mix', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/lofi/', 'pl_mix'),
+  T('Chillhop Mix', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/chillhop/', 'pl_mix'),
+  T('Deep House', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/deep-house/', 'pl_mix'),
+  T('House Music', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/house/', 'pl_mix'),
+  T('Tech House', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/tech-house/', 'pl_mix'),
+  T('Techno', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/techno/', 'pl_mix'),
+  T('Minimal', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/minimal/', 'pl_mix'),
+  T('Progressive House', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/progressive-house/', 'pl_mix'),
+  T('Trance', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/trance/', 'pl_mix'),
+  T('Drum & Bass', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/drum-and-bass/', 'pl_mix'),
+  T('Indie', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/indie/', 'pl_mix'),
+  T('Hip Hop', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/hip-hop/', 'pl_mix'),
+  T('Reggae', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/reggae/', 'pl_mix'),
+  T('Disco', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/disco/', 'pl_mix'),
+  T('Synthwave', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/synthwave/', 'pl_mix'),
+  T('Vaporwave', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/vaporwave/', 'pl_mix'),
+  T('Future Garage', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/future-garage/', 'pl_mix'),
+  T('Dubstep', 'Mixcloud', 'mixcloud', 'https://www.mixcloud.com/discover/dubstep/', 'pl_mix'),
+  T('Soulection Channel', 'Soulection', 'soundcloud', 'https://soundcloud.com/soulection', 'pl_mix'),
+  T('Boiler Room', 'Boiler Room', 'soundcloud', 'https://soundcloud.com/platform', 'pl_mix'),
+  T('Defected Records', 'Defected', 'soundcloud', 'https://soundcloud.com/defectedrecords', 'pl_mix'),
+  T('Anjunadeep', 'Anjunadeep', 'soundcloud', 'https://soundcloud.com/anjunadeep', 'pl_mix'),
+  T('Mau5trap', 'Mau5trap', 'soundcloud', 'https://soundcloud.com/mau5trap', 'pl_mix'),
+  T('mint · Electronic', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n', 'pl_mix'),
+  T('Deep House Relax', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX2TRYkJECvfC', 'pl_mix'),
+  T('Chill House', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX1FzVzi6eRX5', 'pl_mix'),
+  T('Friday Cratediggers', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX8WMG8VPSOJC', 'pl_mix'),
+  T('Massive Dance Hits', 'Spotify', 'spotify', 'https://open.spotify.com/playlist/37i9dQZF1DX0BcQWzuB7ZO', 'pl_mix'),
+];
+
+let currentPlaylist = 'pl_focus';
+let currentTrack = null;
+let filter = 'all';
+let searchQuery = '';
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function getDisplayed() {
+  let list = TRACKS.filter(t => t.playlistId === currentPlaylist);
+  if (filter !== 'all') list = list.filter(t => t.platform === filter);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(t => t.title.toLowerCase().includes(q) || t.artist.toLowerCase().includes(q));
+  }
+  return list;
+}
+
+function renderTabs() {
+  document.getElementById('sonus-tabs').innerHTML = PLAYLISTS.map(p => {
+    const count = TRACKS.filter(t => t.playlistId === p.id).length;
+    const active = currentPlaylist === p.id ? 'active' : '';
+    return `<button class="sonus-tab ${active}" data-id="${p.id}">${escapeHTML(p.name)}<span class="count">${count}</span></button>`;
+  }).join('');
+}
+
+function renderTracks() {
+  const list = getDisplayed();
+  const el = document.getElementById('sonus-tracklist');
+  if (list.length === 0) {
+    el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--ink-30);font-style:italic;">沒有符合的曲目</div>';
+    return;
+  }
+  el.innerHTML = list.map((t, i) => {
+    const playing = currentTrack && currentTrack.id === t.id ? 'playing' : '';
+    return `<div class="sonus-track ${playing}" data-id="${t.id}">
+      <div class="track-number">${String(i+1).padStart(2,'0')}</div>
+      <div class="track-info">
+        <div class="track-title">${escapeHTML(t.title)}</div>
+        <div class="track-artist">${escapeHTML(t.artist)}</div>
+      </div>
+      <div class="track-platform ${t.platform}">${t.platform}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderPlayer() {
+  const npTitle = document.getElementById('np-title');
+  const npArtist = document.getElementById('np-artist');
+  const slot = document.getElementById('player-slot');
+  const link = document.getElementById('platform-link');
+
+  if (!currentTrack) {
+    npTitle.textContent = '— 選一首歌開始 —';
+    npArtist.innerHTML = '&nbsp;';
+    slot.innerHTML = '<div class="player-empty">尚未播放</div>';
+    link.style.display = 'none';
+    return;
+  }
+  const t = currentTrack;
+  npTitle.textContent = t.title;
+  npArtist.textContent = t.artist;
+  link.href = t.url;
+  link.style.display = 'inline-flex';
+
+  let embedSrc = '';
+  if (t.platform === 'spotify') {
+    embedSrc = t.url.replace('open.spotify.com/', 'open.spotify.com/embed/').replace('spotify:', '');
+  } else if (t.platform === 'soundcloud') {
+    embedSrc = `https://w.soundcloud.com/player/?url=${encodeURIComponent(t.url)}&auto_play=true&visual=true&hide_related=true&show_comments=false&show_user=true`;
+  } else if (t.platform === 'mixcloud') {
+    const path = t.url.replace(/^https?:\/\/(www\.)?mixcloud\.com/, '');
+    embedSrc = `https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&autoplay=1&feed=${encodeURIComponent(path)}`;
+  }
+  slot.innerHTML = `<div class="player-frame"><iframe src="${embedSrc}" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
+}
+
+function render() { renderTabs(); renderTracks(); }
+
+document.body.addEventListener('click', (e) => {
+  const tab = e.target.closest('.sonus-tab');
+  if (tab) {
+    currentPlaylist = tab.dataset.id;
+    searchQuery = '';
+    document.getElementById('sonus-search').value = '';
+    render();
+    return;
+  }
+  const track = e.target.closest('.sonus-track');
+  if (track) {
+    const t = TRACKS.find(x => x.id === track.dataset.id);
+    if (t) { currentTrack = t; renderPlayer(); renderTracks(); }
+    return;
+  }
+  const filterBtn = e.target.closest('.sonus-filter button');
+  if (filterBtn) {
+    document.querySelectorAll('.sonus-filter button').forEach(b => b.classList.remove('active'));
+    filterBtn.classList.add('active');
+    filter = filterBtn.dataset.filter;
+    renderTracks();
+  }
+});
+
+document.getElementById('sonus-search').addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  renderTracks();
+});
+
+render();
+renderPlayer();
+</script>
+</body>
+</html>

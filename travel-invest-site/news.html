@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>財經 & 旅行新聞 — 指數 & 行旅</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.news-outer{max-width:var(--container);margin:0 auto;padding:40px 0 80px}
+.tab-bar{display:flex;gap:0;margin-bottom:40px;border-bottom:1.5px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{padding:14px 22px;font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;border:none;background:transparent;cursor:pointer;color:var(--ink-60);font-family:var(--font-body);border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all var(--transition);white-space:nowrap;flex-shrink:0}
+.tab-btn:hover{color:var(--ink)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.card-img{width:100%;overflow:hidden;background:var(--warm-deep)}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.card-img.tall{height:300px}
+.card-img.rect{height:200px}
+.card-body{padding:22px 24px 26px}
+.card-meta{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.card-cat{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.card-sep{width:1px;height:10px;background:var(--border-md);flex-shrink:0}
+.card-date{font-size:10.5px;color:var(--ink-30)}
+.card-title{font-family:var(--font-display);font-weight:400;line-height:1.3;margin-bottom:10px;color:var(--ink)}
+.card-title.lg{font-size:clamp(18px,2.5vw,24px)}
+.card-title.sm{font-size:18px}
+.card-excerpt{font-size:13px;color:var(--ink-60);line-height:1.85;margin-bottom:14px}
+.card-read{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:6px;border-bottom:1px solid transparent;transition:border-color var(--transition)}
+.featured-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
+.featured-main{display:block;text-decoration:none;color:inherit;background:var(--white);overflow:hidden;transition:background var(--transition)}
+.featured-main:hover{background:var(--warm)}
+.featured-main:hover .card-img img{transform:scale(1.03)}
+.featured-main:hover .card-read{border-bottom-color:var(--accent)}
+.more-header{padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:1px}
+.more-label{font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-30)}
+.art-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+.art-card{display:block;text-decoration:none;color:inherit;background:var(--white);overflow:hidden;transition:background var(--transition)}
+.art-card:hover{background:var(--warm)}
+.art-card:hover .card-img img{transform:scale(1.04)}
+.art-card:hover .card-read{border-bottom-color:var(--accent)}
+.art-card .card-body{padding:20px 22px 24px}
+.skel{background:var(--warm-deep);border-radius:2px;animation:shimmer 1.4s ease-in-out infinite}
+@keyframes shimmer{0%,100%{opacity:.35}50%{opacity:.85}}
+.err-box{text-align:center;padding:60px 24px;border:1px solid var(--border);border-radius:var(--radius);background:var(--warm);margin-top:4px}
+.err-title{font-family:var(--font-display);font-size:24px;margin-bottom:10px}
+.err-desc{font-size:13px;color:var(--ink-60);line-height:1.9;max-width:360px;margin:0 auto 20px}
+
+@media(max-width:900px){.art-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){
+  .news-outer{padding:24px 0 60px}
+  .tab-btn{padding:12px 14px;font-size:10px}
+  .featured-wrap{grid-template-columns:1fr}
+  .art-grid{grid-template-columns:1fr}
+  .card-img.tall{height:220px}
+  .card-img.rect{height:170px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">指數 <span class="amp">&</span> 行旅<span style="font-family:var(--font-body);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-left:10px;opacity:.8">會員制</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">關於講師</a></li>
+    <li><a href="tools.html">旅行工具</a></li>
+    <li><a href="news.html" class="active">財經新聞</a></li>
+    <li><a href="etfrun.html">指數投資模擬器</a></li>
+    <li><a href="bkfly.html">BK飛行計算機</a></li>
+    <li><a href="health.html">健康</a></li>
+    <li><a href="mind.html">心靈</a></li>
+    <li><a href="music.html">音樂</a></li>
+    <li><a href="holdings.html">持股</a></li>
+    <li><a href="goals.html">目標</a></li>
+  </ul>
+  <a href="tools.html" class="nav-cta">開始試算</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="overline">財經 × 旅行</div>
+    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">每日精選<br><em>新聞 & 時事</em></h1>
+    <p class="prose" style="max-width:420px">三大新聞來源自動輪替，確保每天都能顯示最新財經資訊。</p>
+  </div>
+</div>
+
+<div class="section">
+<div class="news-outer">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('global',this)">🌐 全球時事</button>
+    <button class="tab-btn" onclick="switchTab('taiwan',this)">🇹🇼 台灣時事</button>
+    <button class="tab-btn" onclick="switchTab('metalcomm',this)">🥇 貴金屬 & 商品型</button>
+    <button class="tab-btn" onclick="switchTab('realestate',this)">🏢 全球房地產</button>
+  </div>
+
+  <div id="skeleton">
+    <div class="featured-wrap">
+      <div style="background:var(--white)"><div class="skel" style="height:300px"></div><div style="padding:22px 24px"><div class="skel" style="height:10px;width:30%;margin-bottom:12px"></div><div class="skel" style="height:20px;width:88%;margin-bottom:7px"></div><div class="skel" style="height:20px;width:65%;margin-bottom:14px"></div><div class="skel" style="height:12px;width:100%;margin-bottom:5px"></div><div class="skel" style="height:12px;width:80%"></div></div></div>
+      <div style="background:var(--white)"><div class="skel" style="height:300px"></div><div style="padding:22px 24px"><div class="skel" style="height:10px;width:30%;margin-bottom:12px"></div><div class="skel" style="height:20px;width:88%;margin-bottom:7px"></div><div class="skel" style="height:20px;width:65%"></div></div></div>
+    </div>
+    <div class="more-header"><span class="more-label">更多文章</span></div>
+    <div class="art-grid">
+      <div style="background:var(--white)"><div class="skel" style="height:180px"></div><div style="padding:20px 22px"><div class="skel" style="height:10px;width:35%;margin-bottom:10px"></div><div class="skel" style="height:15px;width:90%;margin-bottom:5px"></div><div class="skel" style="height:15px;width:60%"></div></div></div>
+      <div style="background:var(--white)"><div class="skel" style="height:180px"></div><div style="padding:20px 22px"><div class="skel" style="height:10px;width:35%;margin-bottom:10px"></div><div class="skel" style="height:15px;width:90%;margin-bottom:5px"></div><div class="skel" style="height:15px;width:60%"></div></div></div>
+      <div style="background:var(--white)"><div class="skel" style="height:180px"></div><div style="padding:20px 22px"><div class="skel" style="height:10px;width:35%;margin-bottom:10px"></div><div class="skel" style="height:15px;width:90%;margin-bottom:5px"></div><div class="skel" style="height:15px;width:60%"></div></div></div>
+      <div style="background:var(--white)"><div class="skel" style="height:180px"></div><div style="padding:20px 22px"><div class="skel" style="height:10px;width:35%;margin-bottom:10px"></div><div class="skel" style="height:15px;width:90%;margin-bottom:5px"></div><div class="skel" style="height:15px;width:60%"></div></div></div>
+    </div>
+  </div>
+
+  <div id="news-content" style="display:none">
+    <div class="featured-wrap" id="featured-section"></div>
+    <div class="more-header"><span class="more-label">更多文章</span></div>
+    <div class="art-grid" id="articles-grid"></div>
+  </div>
+
+  <div id="error-state" style="display:none" class="err-box">
+    <div class="err-title">無法載入新聞</div>
+    <div class="err-desc" id="error-msg">三個新聞來源都暫時無法連線，請稍後再試。</div>
+    <button onclick="retryLoad()">重新載入 →</button>
+  </div>
+</div>
+</div>
+
+
+
+<footer>
+  <a href="index.html" class="footer-logo">指數 <span class="amp">&amp;</span> 行旅</a>
+  <div class="footer-links">
+    <a href="about.html">關於</a><a href="tools.html">工具</a><a href="news.html">新聞</a>
+  </div>
+  <div class="footer-copy">&copy; 2025 指數 &amp; 行旅</div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+// ── 三 API 設定 ──
+const APIS = {
+  newsdata: {
+    key: 'pub_69a32e9abcd349dfb907ce59e36af4f6',
+    fetch: async function(q, lang, size) {
+      const url = 'https://newsdata.io/api/1/news?apikey=' + this.key +
+        '&q=' + encodeURIComponent(q) + '&language=' + lang + '&size=' + size;
+      const r = await fetch(url);
+      const d = await r.json();
+      if (d.status !== 'success') throw new Error('newsdata: ' + (d.message||'error'));
+      return (d.results||[]).filter(a=>a.title&&a.link).map(a=>({
+        title:a.title, desc:a.description||'', url:a.link,
+        img:a.image_url||'', src:a.source_id||'', date:a.pubDate||''
+      }));
+    }
+  },
+  currents: {
+    key: 'bDe9Cbtj4Rac8D_lDUoKV07nZ8hpmbB9EAxSL80cFAOi52ln',
+    fetch: async function(q, lang, size) {
+      const lm = {zh:'zh_TW', en:'en'};
+      const url = 'https://api.currentsapi.services/v1/search?apiKey=' + this.key +
+        '&keywords=' + encodeURIComponent(q) + '&language=' + (lm[lang]||lang) + '&limit=' + size;
+      const r = await fetch(url);
+      const d = await r.json();
+      if (d.status !== 'ok') throw new Error('currents: ' + (d.message||'error'));
+      return (d.news||[]).filter(a=>a.title&&a.url).map(a=>({
+        title:a.title, desc:a.description||'', url:a.url,
+        img:(a.image&&a.image!=='None')?a.image:'', src:a.author||'', date:a.published||''
+      }));
+    }
+  },
+  gnews: {
+    key: 'f38a98371cdbc0a4654cee95ca11e910',
+    fetch: async function(q, lang, size) {
+      const url = 'https://gnews.io/api/v4/search?q=' + encodeURIComponent(q) +
+        '&lang=' + lang + '&max=' + size + '&token=' + this.key;
+      const r = await fetch(url);
+      const d = await r.json();
+      if (!d.articles) throw new Error('gnews: no articles');
+      return (d.articles||[]).filter(a=>a.title&&a.url).map(a=>({
+        title:a.title, desc:a.description||'', url:a.url,
+        img:a.image||'', src:a.source?.name||'', date:a.publishedAt||''
+      }));
+    }
+  }
+};
+
+// 每個頁籤的主要 API 順序（第一個失敗自動用第二個，以此類推）
+const TAB_CFG = {
+  global:     { q:'stock market ETF investment economy finance',        lang:'en', apis:['currents','gnews','newsdata'] },
+  taiwan:     { q:'台灣 股市 投資 經濟 財經 ETF',                        lang:'zh', apis:['newsdata','currents','gnews'] },
+  metalcomm:  { q:'gold price commodity oil', lang:'en', apis:['gnews','currents','newsdata'] },
+  realestate: { q:'real estate housing market', lang:'en', apis:['gnews','currents','newsdata'] },
+};
+
+const FB = {
+  global:     'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=70&auto=format&fit=crop',
+  taiwan:     'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=800&q=70&auto=format&fit=crop',
+  metalcomm:  'https://images.unsplash.com/photo-1610375461246-83df859d849d?w=800&q=70&auto=format&fit=crop',
+  realestate: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=70&auto=format&fit=crop',
+};
+
+const LABELS = { global:'全球時事', taiwan:'台灣時事', metalcomm:'貴金屬 & 商品型', realestate:'全球房地產' };
+
+let currentTab = 'global';
+let memCache = {};
+
+function ck(tab){ return 'news_'+tab+'_'+new Date().toISOString().split('T')[0]; }
+function readSS(tab){ try{ const r=sessionStorage.getItem(ck(tab)); return r?JSON.parse(r):null; }catch(e){return null;} }
+function writeSS(tab,d){ try{ sessionStorage.setItem(ck(tab),JSON.stringify(d)); }catch(e){} }
+
+function fmtDate(d){
+  try{ return new Date(d).toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric'}); }
+  catch(e){ return ''; }
+}
+function imgTag(src, fb){
+  const s = src && src.startsWith('http') ? src : fb;
+  return '<img src="'+s+'" loading="lazy" onerror="this.onerror=null;this.src=\''+fb+'\'">';
+}
+
+function show(id){
+  ['skeleton','news-content','error-state'].forEach(i=>{
+    document.getElementById(i).style.display = i===id ? 'block' : 'none';
+  });
+}
+
+function render(articles, tab){
+  const fb = FB[tab] || FB.global;
+  const label = LABELS[tab] || '新聞';
+  const [a0,a1,...rest] = articles;
+
+  document.getElementById('featured-section').innerHTML = [a0,a1].filter(Boolean).map((a,i)=>`
+    <a href="${a.url}" target="_blank" rel="noopener" class="featured-main">
+      <div class="card-img tall">${imgTag(a.img, fb)}</div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-cat">${a.src||label}</span>
+          <span class="card-sep"></span>
+          <span class="card-date">${fmtDate(a.date)}</span>
+        </div>
+        <div class="card-title ${i===0?'lg':'sm'}">${a.title}</div>
+        <div class="card-excerpt">${a.desc.slice(0,120)}${a.desc.length>120?'…':''}</div>
+        <span class="card-read">閱讀全文 →</span>
+      </div>
+    </a>`).join('');
+
+  document.getElementById('articles-grid').innerHTML = rest.slice(0,4).map(a=>`
+    <a href="${a.url}" target="_blank" rel="noopener" class="art-card">
+      <div class="card-img rect">${imgTag(a.img, fb)}</div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-cat">${a.src||label}</span>
+          <span class="card-sep"></span>
+          <span class="card-date">${fmtDate(a.date)}</span>
+        </div>
+        <div class="card-title sm">${a.title}</div>
+        <div class="card-excerpt">${a.desc.slice(0,80)}${a.desc.length>80?'…':''}</div>
+        <span class="card-read">閱讀全文 →</span>
+      </div>
+    </a>`).join('');
+
+  show('news-content');
+}
+
+async function loadTab(tab){
+  if (memCache[tab]) { render(memCache[tab], tab); return; }
+  const cached = readSS(tab);
+  if (cached && cached.length) { memCache[tab]=cached; render(cached, tab); return; }
+
+  show('skeleton');
+  const cfg = TAB_CFG[tab];
+  let lastErr = null;
+
+  for (const apiName of cfg.apis) {
+    try {
+      const arts = await APIS[apiName].fetch(cfg.q, cfg.lang, 6);
+      if (arts.length) {
+        memCache[tab] = arts;
+        writeSS(tab, arts);
+        
+        render(arts, tab);
+        return;
+      }
+    } catch(e) {
+      lastErr = e;
+      console.warn('['+tab+'] '+apiName+' failed:', e.message);
+    }
+  }
+  document.getElementById('error-msg').textContent = lastErr?.message || '請稍後再試';
+  show('error-state');
+}
+
+function retryLoad(){
+  memCache[currentTab] = null;
+  try{ sessionStorage.removeItem(ck(currentTab)); }catch(e){}
+  loadTab(currentTab);
+}
+
+function switchTab(tab, btn){
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadTab(tab);
+}
+
+loadTab('global');
+</script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>文章 — 指數 & 行旅</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.article-hero{
+  margin-top:68px;
+  width:100%;height:480px;
+  overflow:hidden;position:relative;
+}
+.article-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.article-hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(20,18,16,.55) 0%,transparent 60%);
+}
+
+.article-wrap{max-width:740px;margin:0 auto;padding:56px 48px 100px}
+
+.article-back{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-60);text-decoration:none;margin-bottom:40px;
+  transition:color var(--transition);
+}
+.article-back:hover{color:var(--accent)}
+.article-back::before{content:'←';font-style:normal}
+
+.article-meta{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.article-cat{font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.article-sep{width:1px;height:10px;background:var(--border-md)}
+.article-date{font-size:11px;color:var(--ink-30);letter-spacing:.04em}
+
+.article-title{
+  font-family:var(--font-display);
+  font-size:clamp(34px,4.5vw,52px);
+  font-weight:300;line-height:1.15;
+  letter-spacing:-.01em;margin-bottom:28px;
+}
+.article-title em{font-style:italic;color:var(--accent)}
+
+.article-lead{
+  font-family:var(--font-serif);
+  font-size:17px;line-height:2;color:var(--ink-60);
+  font-weight:300;
+  padding-bottom:28px;border-bottom:1px solid var(--border);
+  margin-bottom:36px;
+}
+
+.article-body{font-family:var(--font-serif);font-size:15.5px;line-height:2;color:var(--ink);font-weight:300}
+.article-body p{margin-bottom:24px;color:var(--ink-60)}
+.article-body h2{
+  font-family:var(--font-display);font-size:28px;font-weight:400;
+  margin:44px 0 16px;color:var(--ink);line-height:1.25;
+}
+.article-body h2 em{font-style:italic;color:var(--forest)}
+.article-body blockquote{
+  margin:36px 0;padding:24px 32px;
+  border-left:3px solid var(--accent);
+  background:var(--warm);border-radius:0 var(--radius) var(--radius) 0;
+}
+.article-body blockquote p{
+  font-family:var(--font-display);font-size:20px;font-weight:300;
+  font-style:italic;color:var(--ink);margin:0;line-height:1.6;
+}
+
+.article-inline-img{
+  margin:36px 0;width:100%;border-radius:var(--radius);overflow:hidden;
+}
+.article-inline-img img{width:100%;object-fit:cover;display:block}
+.article-inline-img figcaption{
+  font-size:11px;color:var(--ink-30);letter-spacing:.06em;
+  padding:10px 0 0;text-align:center;
+}
+
+.article-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:48px;padding-top:32px;border-top:1px solid var(--border)}
+
+.article-more{margin-top:72px;padding-top:40px;border-top:1px solid var(--border)}
+.article-more-label{font-size:10.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-30);margin-bottom:28px}
+.article-more-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.more-card{
+  display:block;text-decoration:none;color:inherit;
+  border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;transition:border-color var(--transition);
+}
+.more-card:hover{border-color:var(--accent)}
+.more-card img{width:100%;height:140px;object-fit:cover;display:block}
+.more-card-body{padding:18px 20px}
+.more-card-cat{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.more-card-title{font-family:var(--font-display);font-size:17px;font-weight:400;line-height:1.3}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">指數 <span class="amp">&</span> 行旅<span style="font-family:var(--font-body);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-left:10px;opacity:.8">會員制</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">關於講師</a></li>
+    <li><a href="tools.html">旅行工具</a></li>
+    <li><a href="news.html">財經新聞</a></li>
+    <li><a href="etfrun.html">指數投資模擬器</a></li>
+    <li><a href="bkfly.html">BK飛行計算機</a></li>
+    <li><a href="health.html">健康</a></li>
+    <li><a href="mind.html">心靈</a></li>
+    <li><a href="music.html">音樂</a></li>
+    <li><a href="holdings.html">持股</a></li>
+    <li><a href="goals.html">目標</a></li>
+  </ul>
+  <a href="tools.html" class="nav-cta">開始試算</a>
+</nav>
+
+<div class="article-hero" id="article-hero">
+  <img id="hero-img" src="" alt=""/>
+  <div class="article-hero-overlay"></div>
+</div>
+
+<div class="article-wrap">
+  <a href="news.html" class="article-back">返回新聞列表</a>
+
+  <div class="article-meta">
+    <span class="article-cat" id="a-cat"></span>
+    <span class="article-sep"></span>
+    <span class="article-date" id="a-date"></span>
+  </div>
+
+  <h1 class="article-title" id="a-title"></h1>
+  <p class="article-lead" id="a-lead"></p>
+  <div class="article-body" id="a-body"></div>
+
+  <div class="article-tags" id="a-tags"></div>
+
+  <div class="article-more">
+    <div class="article-more-label">繼續閱讀</div>
+    <div class="article-more-grid" id="a-more"></div>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">指數 <span class="amp">&amp;</span> 行旅</a>
+  <div class="footer-links">
+    <a href="about.html">關於</a><a href="tools.html">工具</a><a href="news.html">新聞</a>
+  </div>
+  <div class="footer-copy">&copy; 2025 指數 &amp; 行旅</div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+const ARTICLES = {
+  1:{
+    cat:'指數投資',date:'2025 年 4 月 24 日',
+    title:'Fed 維持利率不變，全球 ETF 資金流入創今年新高',
+    img:'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1400&q=85&auto=format&fit=crop',
+    lead:'聯準會在本次會議決定維持基準利率於 5.25%～5.50% 區間不變，市場普遍解讀為偏鴿派立場。這個訊號帶動全球股市回溫，追蹤全球市場的 ETF 單週淨流入達 420 億美元，為今年以來最大單週流入規模。',
+    body:`<h2>利率不變，對指數投資人<em>意味著什麼</em>？</h2>
+<p>許多人以為「利率不變」是個沒有訊息量的中立決定。但對指數投資人來說，Fed 按兵不動往往是市場重新定價風險資產的契機。當固定收益工具的吸引力不再上升，資金自然開始重新流向股市——而追蹤整體市場的 ETF 正是最直接的受益者。</p>
+<blockquote><p>真正的指數投資，不是預測利率，而是讓利率的每一次變動都成為你持倉的一部分。</p></blockquote>
+<p>本週全球主要指數 ETF 均出現不同程度的資金流入。追蹤全球市場的 VT 單週漲幅約 1.8%，追蹤美國市場的 VOO 則上漲約 2.1%。對長期持有指數 ETF 的投資人而言，這週的波動不過是時間軸上的一個微小漣漪。</p>
+<h2>台灣投資人應如何看待這波<em>行情</em>？</h2>
+<p>台灣投資人若持有 0050、00878 等台股 ETF，短期的連動效果相對有限，因為台股有其自身的基本面驅動力。但若同時持有追蹤全球或美股的 ETF，則這波行情帶來的帳面增值是真實的。</p>
+<figure class="article-inline-img">
+  <img src="https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1000&q=80&auto=format&fit=crop" alt="ETF 投資組合圖表" style="height:360px"/>
+  <figcaption>全球 ETF 資金流向，2025 年 Q1～Q2</figcaption>
+</figure>
+<p>更重要的是：這樣的市場行情，不應改變你原本設定好的定期定額計畫。市場好的時候繼續買，市場壞的時候也繼續買——這才是指數投資最核心的精神。</p>
+<p>如果你還沒有建立自動化的定期投資計畫，現在是一個很好的時機開始思考。不是因為市場漲了才要買，而是因為任何時候都是開始的好時機。</p>`,
+    tags:['指數投資','ETF','Fed','美股','全球市場'],
+    related:[2,5]
+  },
+  2:{
+    cat:'旅行體驗',date:'2025 年 4 月 22 日',
+    title:'春日東京：在新宿御苑想通了資產配置這件事',
+    img:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1400&q=85&auto=format&fit=crop',
+    lead:'四月的東京，空氣裡有一種輕盈的重量。我在新宿御苑的長椅上坐了整整一個下午，看著千株染井吉野次第落下，突然理解了一件和投資有關的事。',
+    body:`<h2>分散，不只是投資的智慧</h2>
+<p>新宿御苑種了超過 1,000 株不同品種的櫻花樹。早開的、晚開的、顏色深的、顏色淺的，交錯排列，讓這裡的花期延續比其他地方長了將近兩週。</p>
+<p>這不就是資產配置最直白的比喻嗎？不把全部的錢押在單一資產，就像不讓整座園子只種一種花——當市場的春天來臨，你永遠有某個部位正在盛開。</p>
+<blockquote><p>在新宿御苑，我第一次用眼睛而不是腦子，真正理解了分散投資這件事。</p></blockquote>
+<figure class="article-inline-img">
+  <img src="https://images.unsplash.com/photo-1522383225653-ed111181a951?w=1000&q=80&auto=format&fit=crop" alt="東京春天櫻花" style="height:380px"/>
+  <figcaption>四月的新宿御苑，染井吉野盛開</figcaption>
+</figure>
+<h2>旅行的另一層<em>複利</em></h2>
+<p>這趟東京四天的花費，含來回機票與住宿，大約台幣三萬五千元。對我來說，這不只是消費——這是我用過去幾年定期投資的股息，支付的一趟思考之旅。</p>
+<p>當你的被動收入能夠支付你的旅行費用，旅行的意義就改變了。它不再是「奢侈品」，而是你選擇的生活方式的一部分。財富自由，從來不是某個數字，而是當你訂機票時不需要看銀行帳戶餘額的那種自在。</p>`,
+    tags:['東京','日本','旅行哲學','資產配置','春天'],
+    related:[1,4]
+  },
+  3:{
+    cat:'旅行工具',date:'2025 年 4 月 18 日',
+    title:'用 35,000 里程飛日本商務艙，完整攻略分享',
+    img:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1400&q=85&auto=format&fit=crop',
+    lead:'很多人以為商務艙是有錢人才能享受的東西。但過去兩年，我已經用里程兌換了三次商務艙機票，每次花費的現金接近於零。這篇文章把完整的方法拆解給你看。',
+    body:`<h2>長榮無限萬哩遊，<em>台灣最值得累積的里程計畫</em></h2>
+<p>如果你只打算認真累積一個里程計畫，我的建議是長榮航空的無限萬哩遊。從台灣出發飛日本，來回商務艙只需 50,000 里程，而且長榮的商務艙品質在亞太地區名列前茅。</p>
+<blockquote><p>里程不是有錢人的遊戲，而是懂得系統化累積的人的工具。</p></blockquote>
+<figure class="article-inline-img">
+  <img src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=1000&q=80&auto=format&fit=crop" alt="飛機商務艙座位" style="height:340px"/>
+  <figcaption>長榮航空商務艙，台北飛東京航線</figcaption>
+</figure>
+<h2>三個月累積 35,000 里程的<em>具體方法</em></h2>
+<p>我在不出國的情況下，透過以下三個管道在三個月內累積了 35,000 里程：一是申辦聯名信用卡的開卡禮（約 15,000 里程）；二是日常消費刷卡累積（每月約 5,000 至 8,000 里程）；三是參與里程促銷活動（一次性獲得 5,000 里程）。</p>
+<p>關鍵不在於你花了多少錢，而在於你把原本就會花的錢，有系統地導入里程累積的管道。</p>
+<p>想查詢你的里程可以兌換哪條航線、哪個艙等，可以使用我們的<a href="tools.html" style="color:var(--accent)">里程兌換計算機</a>，輸入出發地和目的地就能立即查詢所有航空公司的所需里程數。</p>`,
+    tags:['里程','長榮','商務艙','信用卡','旅行工具'],
+    related:[7,6]
+  },
+  4:{
+    cat:'旅行哲學',date:'2025 年 4 月 15 日',
+    title:'峇里島日落教我的複利哲學',
+    img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1400&q=85&auto=format&fit=crop',
+    lead:'在烏布的稻田邊，我第一次真正理解「時間是最強的複利」這句話的重量。那是一個普通的黃昏，但它改變了我對時間的整個理解。',
+    body:`<h2>稻田裡的<em>時間課</em></h2>
+<p>峇里島烏布的稻田，一年可以收穫兩到三次。每一粒稻子都是上一個季節播種的結果，而下一季的豐收，又依賴這一季留下的種子。農夫不焦慮，因為他知道時間在他這一邊。</p>
+<p>我坐在田邊看著夕陽，想到了我的投資帳戶。五年前我開始定期定額投入全球 ETF，當時帳戶裡的錢少得可憐。但每一筆投入，都在為下一筆的複利增長播種。</p>
+<blockquote><p>複利的本質，就是讓今天的你，為明天的你種下一粒種子。</p></blockquote>
+<figure class="article-inline-img">
+  <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=1000&q=80&auto=format&fit=crop" alt="峇里島烏布梯田" style="height:380px"/>
+  <figcaption>峇里島烏布，Tegallalang 梯田</figcaption>
+</figure>
+<h2>旅行，是對自己<em>最好的投資</em></h2>
+<p>這趟峇里島的旅行，我花了台幣兩萬二千元，待了五天。帶回來的，是對複利一個全新的身體理解——不只是腦子裡的公式，而是眼睛看見、皮膚感受過的真實體悟。</p>
+<p>如果你還沒有開始投資，現在就是最好的時機。如果你已經在投資，現在就是旅行的好時機。兩件事從來不是互斥的。</p>`,
+    tags:['峇里島','旅行哲學','複利','時間','指數投資'],
+    related:[2,1]
+  },
+  5:{
+    cat:'指數投資',date:'2025 年 4 月 12 日',
+    title:'00878 vs VT：台灣投資人如何選擇全球佈局',
+    img:'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=1400&q=85&auto=format&fit=crop',
+    lead:'00878 是台灣最受歡迎的高股息 ETF 之一；VT 則追蹤全球股市，涵蓋 9,000 多支股票。兩者之間，台灣的指數投資人應該怎麼選？這篇文章分享我的思考框架。',
+    body:`<h2>高股息 vs 全市場，<em>不是非此即彼</em></h2>
+<p>很多人把這個問題框架成「高股息好還是全市場好」的二元對立，但更準確的問法是：你的投資目標是什麼？你在哪個人生階段？你能接受多少波動？</p>
+<blockquote><p>沒有最好的 ETF，只有最適合你當前處境的 ETF。</p></blockquote>
+<figure class="article-inline-img">
+  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1000&q=80&auto=format&fit=crop" alt="投資組合比較分析" style="height:340px"/>
+  <figcaption>資產配置的核心，在於理解自己的投資目標</figcaption>
+</figure>
+<h2>我的實際配置<em>邏輯</em></h2>
+<p>我個人的做法是：以 VT（全球市場）作為核心持倉，佔整體投資組合的 70%；以 00878 作為衛星配置，佔 20%；保留 10% 的現金作為機動資金。</p>
+<p>這樣的配置讓我能享受全球市場的長期增長，同時透過 00878 的季配息，在需要現金流的時候有穩定的來源。不是哪個更好，而是各司其職。</p>`,
+    tags:['00878','VT','ETF比較','台股','全球市場'],
+    related:[1,8]
+  },
+  6:{
+    cat:'旅行體驗',date:'2025 年 4 月 8 日',
+    title:'京都慢行：花費最少，收穫最多的旅行方式',
+    img:'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1400&q=85&auto=format&fit=crop',
+    lead:'一個人、一張 JR Pass、七天，用最少的預算走遍京都最美的角落。這不只是一篇旅遊攻略，更是一次關於「慢」的練習。',
+    body:`<h2>京都教我的<em>慢速投資</em></h2>
+<p>京都沒有東京的速度感。這裡的美，需要你放慢腳步才能看見——早晨六點的伏見稻荷，還沒有觀光客的鳥居隧道；傍晚五點的哲學之道，楓葉的倒影在水面緩緩移動。</p>
+<p>慢下來，才能看見真正重要的東西。這和指數投資的哲學驚人地相似：停止追逐短期波動，慢下來讓時間做它的工作。</p>
+<blockquote><p>京都的美，在於它從不急著讓你看見。指數投資的回報，也是如此。</p></blockquote>
+<figure class="article-inline-img">
+  <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1000&q=80&auto=format&fit=crop" alt="京都哲學之道" style="height:380px"/>
+  <figcaption>京都哲學之道，秋日午後</figcaption>
+</figure>
+<h2>七天京都的<em>實際花費</em></h2>
+<p>這趟旅行的總花費約台幣三萬元，含來回機票、JR Pass、青年旅館七晚住宿，以及所有餐飲。平均每天花費不到台幣四千三百元。</p>
+<p>想試算自己的旅行預算？可以使用我們的<a href="tools.html" style="color:var(--accent)">旅費試算工具</a>，輸入出發地、目的地、人數與天數，自動幫你估算完整旅費。</p>`,
+    tags:['京都','日本','旅行體驗','慢旅行','預算旅遊'],
+    related:[2,7]
+  },
+  7:{
+    cat:'旅行工具',date:'2025 年 4 月 5 日',
+    title:'如何在 3 個月內累積 50,000 里程？信用卡策略全解析',
+    img:'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1400&q=85&auto=format&fit=crop',
+    lead:'不用出國也能大量累積里程。我用這套信用卡策略，在三個月內累積了超過 50,000 里程，足夠兌換一張台北飛東京的長榮商務艙來回機票。',
+    body:`<h2>里程累積的<em>三個核心管道</em></h2>
+<p>大多數人以為里程只能靠搭飛機累積，但這只是最慢的方式。真正有效率的里程累積，80% 來自地面消費——特別是信用卡的日常刷卡。</p>
+<blockquote><p>把你每天本來就要花的錢，有系統地導進里程帳戶，是零成本累積里程的核心邏輯。</p></blockquote>
+<figure class="article-inline-img">
+  <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1000&q=80&auto=format&fit=crop" alt="信用卡與消費" style="height:320px"/>
+  <figcaption>選對信用卡，讓每筆消費都在累積里程</figcaption>
+</figure>
+<h2>三個月 50,000 里程的<em>完整拆解</em></h2>
+<p>第一個月：申辦長榮聯名卡，開卡禮 20,000 里程。第一個月達到消費門檻，再獲得 5,000 里程。第二、三個月：每月刷卡消費約台幣六萬元（含房租、生活費、保險），累積約 12,000 里程。參與一次里程促銷活動，獲得加倍里程 8,000。三個月總計：45,000 里程。</p>
+<p>加上平時搭乘長榮旅行累積的飛行里程，很容易在三個月內突破 50,000 里程的門檻。</p>`,
+    tags:['里程','信用卡','旅行工具','長榮','商務艙'],
+    related:[3,6]
+  },
+  8:{
+    cat:'指數投資',date:'2025 年 4 月 1 日',
+    title:'市場下跌 10%，指數投資人該怎麼辦？',
+    img:'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=1400&q=85&auto=format&fit=crop',
+    lead:'每次市場修正，都是考驗投資紀律的時刻。上個月我在首爾旅行時，帳戶裡的資產在一週內蒸發了 10%。這是我的應對方式，以及我從中學到的事。',
+    body:`<h2>下跌的時候，<em>你最應該做的一件事</em></h2>
+<p>市場下跌 10% 的時候，大多數人的直覺是賣出。但對指數投資人來說，正確的問題不是「我應不應該賣出」，而是「我的長期投資邏輯改變了嗎」。</p>
+<p>如果你相信全球經濟長期向上，如果你相信人類的生產力會持續增長，那麼一次 10% 的回檔，不過是一次更便宜的買進機會。</p>
+<blockquote><p>市場下跌，對長期投資人來說是折扣，不是損失。損失，只在你賣出的那一刻成真。</p></blockquote>
+<figure class="article-inline-img">
+  <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1000&q=80&auto=format&fit=crop" alt="股市走勢圖" style="height:340px"/>
+  <figcaption>短期波動在長期趨勢面前，不過是微小的雜訊</figcaption>
+</figure>
+<h2>我在首爾的<em>實際應對</em></h2>
+<p>市場下跌的那週，我在首爾吃韓式烤肉、逛弘大的咖啡館。帳戶裡的數字在跌，但我的旅行繼續。因為我知道，帳戶裡的錢，是用不到的未來的錢——它在市場裡運作，不需要我每天盯著它。</p>
+<p>那週月底，我如往常執行了定期定額的買進。市場下跌 10%，意味著我用同樣的錢，買到了更多的份額。</p>`,
+    tags:['市場下跌','投資紀律','指數投資','首爾','定期定額'],
+    related:[1,5]
+  },
+  9:{
+    cat:'旅行哲學',date:'2025 年 3 月 28 日',
+    title:'在巴黎街頭，我想通了什麼是「足夠」',
+    img:'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1400&q=85&auto=format&fit=crop',
+    lead:'財富自由的目標不是累積無限的錢，而是找到讓你感到「足夠」的生活方式。我在香榭麗舍大道上走了一個下午，找到了屬於我的答案。',
+    body:`<h2>巴黎教我的<em>足夠哲學</em></h2>
+<p>巴黎的物價不便宜，但巴黎人過的是一種豐盛的生活。他們在小咖啡館坐一個小時，只點一杯濃縮咖啡；他們在公園裡帶著一瓶紅酒和一條法棍，就能度過一個完美的週日下午。</p>
+<p>這不是窮，這是「足夠」的藝術——知道什麼讓你快樂，然後把資源放在那些地方，而不是漫無目的地消費更多。</p>
+<blockquote><p>財富自由不是擁有一切，而是不再需要一切。</p></blockquote>
+<figure class="article-inline-img">
+  <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=1000&q=80&auto=format&fit=crop" alt="巴黎塞納河畔" style="height:380px"/>
+  <figcaption>巴黎塞納河畔的午後，是一種生活的選擇</figcaption>
+</figure>
+<h2>我的「足夠數字」是<em>多少</em>？</h2>
+<p>回到台灣之後，我認真計算了自己的「足夠數字」——讓我能維持現在生活品質所需要的每月被動收入。答案不是一個天文數字，而是一個我可以在可見的未來達到的目標。</p>
+<p>你的足夠數字是多少？這是每個追求財富自由的人，都值得花一個下午認真思考的問題。</p>`,
+    tags:['巴黎','旅行哲學','財富自由','足夠','生活方式'],
+    related:[4,2]
+  }
+};
+
+const RELATED_INFO = {
+  1:{title:'Fed 利率不變，ETF 資金流入新高',cat:'指數投資',img:'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=70&auto=format&fit=crop'},
+  2:{title:'春日東京：新宿御苑的資產配置課',cat:'旅行體驗',img:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&q=70&auto=format&fit=crop'},
+  3:{title:'35,000 里程飛日本商務艙攻略',cat:'旅行工具',img:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=70&auto=format&fit=crop'},
+  4:{title:'峇里島日落教我的複利哲學',cat:'旅行哲學',img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=70&auto=format&fit=crop'},
+  5:{title:'00878 vs VT：台灣投資人如何選擇',cat:'指數投資',img:'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=400&q=70&auto=format&fit=crop'},
+  6:{title:'京都慢行：花費最少收穫最多',cat:'旅行體驗',img:'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&q=70&auto=format&fit=crop'},
+  7:{title:'三個月累積 50,000 里程的方法',cat:'旅行工具',img:'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&q=70&auto=format&fit=crop'},
+  8:{title:'市場下跌 10%，指數投資人怎麼辦',cat:'指數投資',img:'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=400&q=70&auto=format&fit=crop'},
+  9:{title:'在巴黎，我想通了什麼是「足夠」',cat:'旅行哲學',img:'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=70&auto=format&fit=crop'},
+};
+
+// Load article
+const params = new URLSearchParams(location.search);
+const id = parseInt(params.get('id')) || 1;
+const art = ARTICLES[id];
+
+if (art) {
+  document.title = art.title + ' — 指數 & 行旅';
+  document.getElementById('hero-img').src = art.img;
+  document.getElementById('hero-img').alt = art.title;
+  document.getElementById('a-cat').textContent = art.cat;
+  document.getElementById('a-date').textContent = art.date;
+  document.getElementById('a-title').innerHTML = art.title;
+  document.getElementById('a-lead').textContent = art.lead;
+  document.getElementById('a-body').innerHTML = art.body;
+
+  // Tags
+  const tagsEl = document.getElementById('a-tags');
+  art.tags.forEach(t => {
+    const span = document.createElement('span');
+    span.className = 'pill';
+    span.textContent = t;
+    tagsEl.appendChild(span);
+  });
+
+  // Related
+  const moreEl = document.getElementById('a-more');
+  art.related.forEach(rid => {
+    const r = RELATED_INFO[rid];
+    if (!r) return;
+    moreEl.innerHTML += `
+      <a href="article.html?id=${rid}" class="more-card">
+        <img src="${r.img}" alt="${r.title}" loading="lazy"/>
+        <div class="more-card-body">
+          <div class="more-card-cat">${r.cat}</div>
+          <div class="more-card-title">${r.title}</div>
+        </div>
+      </a>`;
+  });
+}
+</script>
+</body>
+</html>

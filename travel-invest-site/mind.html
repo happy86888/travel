@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>心靈 — 指數 & 行旅</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.page-outer{max-width:var(--container);margin:0 auto;padding:48px 0 80px}
+.card-img{width:100%;overflow:hidden;background:var(--warm-deep)}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.card-img.tall{height:300px}
+.card-img.rect{height:200px}
+.card-body{padding:22px 24px 26px}
+.card-meta{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.card-cat{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.card-sep{width:1px;height:10px;background:var(--border-md);flex-shrink:0}
+.card-date{font-size:10.5px;color:var(--ink-30)}
+.card-title{font-family:var(--font-display);font-weight:400;line-height:1.3;margin-bottom:10px;color:var(--ink)}
+.card-title.lg{font-size:clamp(18px,2.5vw,24px)}
+.card-title.sm{font-size:18px}
+.card-excerpt{font-size:13px;color:var(--ink-60);line-height:1.85;margin-bottom:14px}
+.card-read{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:6px;border-bottom:1px solid transparent;transition:border-color var(--transition)}
+.news-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
+.news-card{display:block;text-decoration:none;color:inherit;background:var(--white);overflow:hidden;transition:background var(--transition)}
+.news-card:hover{background:var(--warm)}
+.news-card:hover .card-img img{transform:scale(1.03)}
+.news-card:hover .card-read{border-bottom-color:var(--accent)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.art-card{display:block;text-decoration:none;color:inherit;background:var(--white);overflow:hidden;transition:background var(--transition)}
+.art-card:hover{background:var(--warm)}
+.art-card .card-body{padding:20px 22px 24px}
+.sec-header{padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:1px}
+.sec-label{font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-30)}
+.sec-label.accent{color:var(--accent)}
+.skel{background:var(--warm-deep);border-radius:2px;animation:shimmer 1.4s ease-in-out infinite}
+@keyframes shimmer{0%,100%{opacity:.35}50%{opacity:.85}}
+.err-box{text-align:center;padding:48px 24px;background:var(--warm);border:1px solid var(--border)}
+/* 今日語錄大卡 */
+.quote-hero{background:var(--ink);padding:64px 52px;text-align:center;position:relative;overflow:hidden;margin-bottom:1px}
+.quote-hero-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(184,107,42,.1),transparent 65%);pointer-events:none}
+.quote-hero-inner{position:relative;z-index:1;max-width:680px;margin:0 auto}
+.quote-icon{font-size:36px;margin-bottom:24px}
+.quote-text{font-family:var(--font-display);font-size:clamp(20px,3vw,30px);font-weight:300;color:rgba(255,255,255,.9);line-height:1.55;letter-spacing:.01em;margin-bottom:20px;font-style:italic}
+.quote-author{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+/* 小語錄卡 */
+.quote-card{background:var(--warm);padding:32px 28px}
+.quote-card-icon{font-size:22px;margin-bottom:14px}
+.quote-card-text{font-family:var(--font-display);font-size:17px;font-weight:400;color:var(--ink);line-height:1.65;margin-bottom:12px;font-style:italic}
+.quote-card-author{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+/* 練習卡 */
+.practice-card{background:var(--white);padding:28px}
+.practice-icon{font-size:26px;margin-bottom:12px}
+.practice-title{font-family:var(--font-display);font-size:19px;font-weight:400;margin-bottom:8px;color:var(--ink)}
+.practice-sub{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.practice-body{font-size:13px;color:var(--ink-60);line-height:2}
+@media(max-width:768px){
+  .page-outer{padding:28px 0 60px}
+  .news-wrap{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr}
+  .quote-hero{padding:40px 24px}
+  .card-img.tall{height:200px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">指數 <span class="amp">&</span> 行旅<span style="font-family:var(--font-body);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-left:10px;opacity:.8">會員制</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">關於講師</a></li>
+    <li><a href="tools.html">旅行工具</a></li>
+    <li><a href="news.html">財經新聞</a></li>
+    <li><a href="etfrun.html">指數投資模擬器</a></li>
+    <li><a href="bkfly.html">BK飛行計算機</a></li>
+    <li><a href="health.html">健康</a></li>
+    <li><a href="mind.html" class="active">心靈</a></li>
+    <li><a href="music.html">音樂</a></li>
+    <li><a href="holdings.html">持股</a></li>
+    <li><a href="goals.html">目標</a></li>
+  </ul>
+  <a href="tools.html" class="nav-cta">開始試算</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="overline">心靈 × 平靜</div>
+    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">每日心靈<br><em>語錄 & 文章</em></h1>
+    <p class="prose" style="max-width:440px">現代人壓力太大，每天給自己 5 分鐘。一篇文章、一句語錄、一個練習，讓心安靜下來。</p>
+  </div>
+</div>
+
+<div class="section">
+<div class="page-outer">
+
+  <!-- 今日語錄 -->
+  <div class="sec-header" style="margin-top:1px"><span class="sec-label accent">今日心靈語錄 — 每天自動更換</span></div>
+  <div id="quote-hero-wrap"></div>
+
+  <div class="grid3" id="quote-cards-wrap"></div>
+
+  <!-- 每日練習 -->
+  <div class="sec-header" style="margin-top:1px"><span class="sec-label accent">每日 5 分鐘練習 — 讓心安靜下來（任選三個使用）</span></div>
+  <div class="grid3">
+
+    <div class="practice-card">
+      <div class="practice-icon">🌬️</div>
+      <div class="practice-title">4-7-8 呼吸法</div>
+      <div class="practice-sub">舒緩焦慮 · 隨時可做</div>
+      <div class="practice-body">
+        1. 吸氣 4 秒<br>
+        2. 屏息 7 秒<br>
+        3. 吐氣 8 秒<br>
+        4. 重複 4 輪<br><br>
+        💡 感到緊張時做一輪，神經系統立即平靜。睡前做效果最好。
+      </div>
+    </div>
+
+    <div class="practice-card">
+      <div class="practice-icon">🧠</div>
+      <div class="practice-title">5-4-3-2-1 落地法</div>
+      <div class="practice-sub">壓力過大時 · 回到當下</div>
+      <div class="practice-body">
+        👁 說出 5 個你看到的東西<br>
+        ✋ 說出 4 個你摸到的東西<br>
+        👂 說出 3 個你聽到的聲音<br>
+        👃 說出 2 個你聞到的氣味<br>
+        👅 說出 1 個你嚐到的味道<br><br>
+        💡 將注意力帶回當下，切斷焦慮迴路
+      </div>
+    </div>
+
+    <div class="practice-card">
+      <div class="practice-icon">📓</div>
+      <div class="practice-title">感恩日記練習</div>
+      <div class="practice-sub">每日 3 分鐘 · 改變視角</div>
+      <div class="practice-body">
+        每天早上寫下：<br>
+        ① 今天我感激的 3 件事<br>
+        ② 今天讓我期待的 1 件事<br>
+        ③ 昨天我做得好的 1 件事<br><br>
+        💡 研究顯示持續 21 天，大腦正向迴路會被重塑。
+      </div>
+    </div>
+
+    <div class="practice-card">
+      <div class="practice-icon">🧘</div>
+      <div class="practice-title">身體掃描冥想</div>
+      <div class="practice-sub">放鬆全身 · 5–10 分鐘</div>
+      <div class="practice-body">
+        1. 坐下或躺下，閉上眼睛<br>
+        2. 從頭頂開始往下覺察身體<br>
+        3. 經過臉、肩、胸、腹、腿<br>
+        4. 對緊繃處輕輕呼氣放鬆<br><br>
+        💡 釋放隱藏的身體緊繃，工作久坐後特別有效
+      </div>
+    </div>
+
+    <div class="practice-card">
+      <div class="practice-icon">🚶</div>
+      <div class="practice-title">正念散步</div>
+      <div class="practice-sub">活動身心 · 隨時可做</div>
+      <div class="practice-body">
+        在家或公園慢走 5 分鐘：<br>
+        🦶 感受腳掌接觸地面<br>
+        💨 感受空氣穿過鼻腔<br>
+        🌳 觀察周圍的顏色與光影<br>
+        🔇 不滑手機、不戴耳機<br><br>
+        💡 把走路變成一種冥想，重新連結當下
+      </div>
+    </div>
+
+    <div class="practice-card">
+      <div class="practice-icon">✍️</div>
+      <div class="practice-title">情緒書寫釋放</div>
+      <div class="practice-sub">情緒卡住時 · 5 分鐘</div>
+      <div class="practice-body">
+        拿一張紙，寫下：<br>
+        💭 我現在的感覺是什麼？<br>
+        🔍 是什麼觸發了這個感覺？<br>
+        🎯 我真正需要的是什麼？<br>
+        ✨ 我可以為自己做什麼？<br><br>
+        💡 寫完撕掉也沒關係，重點是讓情緒流動
+      </div>
+    </div>
+
+    <div class="practice-card">
+      <div class="practice-icon">☕</div>
+      <div class="practice-title">五感品茶練習</div>
+      <div class="practice-sub">日常儀式 · 10 分鐘</div>
+      <div class="practice-body">
+        泡一杯茶或咖啡：<br>
+        👀 觀察顏色、看蒸氣升起<br>
+        👃 聞香氣、深呼吸三次<br>
+        🤲 感受杯子的溫度<br>
+        👅 慢慢一小口、停留再吞嚥<br><br>
+        💡 把每天必做的事，變成靜心的時刻
+      </div>
+    </div>
+
+    <div class="practice-card">
+      <div class="practice-icon">🌅</div>
+      <div class="practice-title">晨間意圖設定</div>
+      <div class="practice-sub">起床後 · 3 分鐘</div>
+      <div class="practice-body">
+        睜眼後不要立刻拿手機：<br>
+        ☀️ 深呼吸三次，感受身體醒來<br>
+        🎯 問自己：今天最想完成什麼？<br>
+        💛 想一件值得感謝的事<br>
+        🌟 設定今天的「一個字」（例如：穩、慢）<br><br>
+        💡 用意圖開啟一天，比反應式生活更有力量
+      </div>
+    </div>
+
+    <div class="practice-card">
+      <div class="practice-icon">🌙</div>
+      <div class="practice-title">睡前回顧儀式</div>
+      <div class="practice-sub">睡前 · 5 分鐘</div>
+      <div class="practice-body">
+        關燈躺下後，回想一天：<br>
+        ✅ 今天做得好的一件事<br>
+        💭 今天學到的一件事<br>
+        🙏 今天值得感謝的一件事<br>
+        💤 對自己說：「今天辛苦了」<br><br>
+        💡 良好的睡前儀式，讓深度睡眠提升 30%
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 區塊間隔 -->
+  <div style="height:80px;display:flex;align-items:center;justify-content:center;margin:40px 0">
+    <div style="width:60px;height:1px;background:var(--border-md)"></div>
+    <div style="margin:0 16px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-30)">心靈文章</div>
+    <div style="width:60px;height:1px;background:var(--border-md)"></div>
+  </div>
+
+  <!-- 新聞區 skeleton -->
+  <div id="news-skeleton">
+    <div class="news-wrap">
+      <div style="background:var(--white)"><div class="skel" style="height:300px"></div><div style="padding:22px 24px"><div class="skel" style="height:10px;width:30%;margin-bottom:12px"></div><div class="skel" style="height:18px;width:88%;margin-bottom:7px"></div><div class="skel" style="height:18px;width:65%"></div></div></div>
+      <div style="background:var(--white)"><div class="skel" style="height:300px"></div><div style="padding:22px 24px"><div class="skel" style="height:10px;width:30%;margin-bottom:12px"></div><div class="skel" style="height:18px;width:88%;margin-bottom:7px"></div><div class="skel" style="height:18px;width:65%"></div></div></div>
+    </div>
+    <div class="sec-header"><span class="sec-label">更多文章</span></div>
+    <div class="grid3">
+      <div style="background:var(--white)"><div class="skel" style="height:180px"></div><div style="padding:20px 22px"><div class="skel" style="height:10px;width:35%;margin-bottom:10px"></div><div class="skel" style="height:15px;width:90%;margin-bottom:5px"></div><div class="skel" style="height:15px;width:60%"></div></div></div>
+      <div style="background:var(--white)"><div class="skel" style="height:180px"></div><div style="padding:20px 22px"><div class="skel" style="height:10px;width:35%;margin-bottom:10px"></div><div class="skel" style="height:15px;width:90%;margin-bottom:5px"></div><div class="skel" style="height:15px;width:60%"></div></div></div>
+      <div style="background:var(--white)"><div class="skel" style="height:180px"></div><div style="padding:20px 22px"><div class="skel" style="height:10px;width:35%;margin-bottom:10px"></div><div class="skel" style="height:15px;width:90%;margin-bottom:5px"></div><div class="skel" style="height:15px;width:60%"></div></div></div>
+    </div>
+  </div>
+
+  <div id="news-content" style="display:none">
+    <div class="news-wrap" id="featured-section"></div>
+    <div class="sec-header"><span class="sec-label">更多文章</span></div>
+    <div class="grid3" id="articles-grid"></div>
+  </div>
+
+  <div id="error-state" style="display:none" class="err-box">
+    <p style="font-family:var(--font-display);font-size:22px;margin-bottom:8px">無法載入文章</p>
+    <p style="font-size:13px;color:var(--ink-60)" id="error-msg"></p>
+    <button onclick="loadNews()" style="margin-top:16px">重新載入 →</button>
+  </div>
+
+
+</div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">指數 <span class="amp">&amp;</span> 行旅</a>
+  <div class="footer-links">
+    <a href="about.html">關於</a><a href="tools.html">工具</a><a href="news.html">新聞</a>
+  </div>
+  <div class="footer-copy">&copy; 2025 指數 &amp; 行旅</div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+const FB = 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&q=75&auto=format&fit=crop';
+
+const APIS_M = {
+  currents: { key:'bDe9Cbtj4Rac8D_lDUoKV07nZ8hpmbB9EAxSL80cFAOi52ln',
+    fetch: async function(q,lang,n){ const r=await fetch('https://api.currentsapi.services/v1/search?apiKey='+this.key+'&keywords='+encodeURIComponent(q)+'&language='+(lang==='zh'?'zh_TW':'en')+'&limit='+n); const d=await r.json(); if(d.status!=='ok') throw new Error(d.message||'currents error'); return (d.news||[]).filter(a=>a.title&&a.url).map(a=>({title:a.title,desc:a.description||'',url:a.url,img:(a.image&&a.image!=='None')?a.image:'',src:a.author||'',lang:lang})); }
+  },
+  newsdata: { key:'pub_69a32e9abcd349dfb907ce59e36af4f6',
+    fetch: async function(q,lang,n){ const r=await fetch('https://newsdata.io/api/1/news?apikey='+this.key+'&q='+encodeURIComponent(q)+'&language='+lang+'&size='+n); const d=await r.json(); if(d.status!=='success') throw new Error(d.message||'newsdata error'); return (d.results||[]).filter(a=>a.title&&a.link).map(a=>({title:a.title,desc:a.description||'',url:a.link,img:a.image_url||'',src:a.source_id||'',lang:lang})); }
+  },
+  gnews: { key:'f38a98371cdbc0a4654cee95ca11e910',
+    fetch: async function(q,lang,n){ const r=await fetch('https://gnews.io/api/v4/search?q='+encodeURIComponent(q)+'&lang='+lang+'&max='+n+'&token='+this.key); const d=await r.json(); if(!d.articles) throw new Error('gnews error'); return d.articles.filter(a=>a.title&&a.url).map(a=>({title:a.title,desc:a.description||'',url:a.url,img:a.image||'',src:a.source?.name||'',lang:lang})); }
+  }
+};
+
+function fmtDate(d){try{return new Date(d).toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric'});}catch(e){return '';}}
+function imgTag(src){const s=src&&src.startsWith('http')?src:FB;return '<img src="'+s+'" loading="lazy" onerror="this.onerror=null;this.src=\''+FB+'\'">';}
+
+async function tryFetch(api,q,lang,n){
+  try{ const a=await APIS_M[api].fetch(q,lang,n); return a.length?a:null; }catch(e){ console.warn(api,e.message); return null; }
+}
+
+async function loadNews(){
+  // 同時抓中文 3 篇 + 英文 3 篇，各有輪替
+  const [zhArts, enArts] = await Promise.all([
+    (async()=>{
+      return await tryFetch('newsdata','心靈 冥想 壓力 正念 情緒管理','zh',3)
+          || await tryFetch('currents','心靈 冥想 正念','zh',3)
+          || [];
+    })(),
+    (async()=>{
+      return await tryFetch('currents','mindfulness meditation mental wellness','en',3)
+          || await tryFetch('gnews','mindfulness mental health meditation','en',3)
+          || await tryFetch('newsdata','mindfulness meditation wellness','en',3)
+          || [];
+    })()
+  ]);
+
+  const combined = [];
+  const maxLen = Math.max(zhArts.length, enArts.length);
+  for(let i=0;i<maxLen;i++){
+    if(zhArts[i]) combined.push(zhArts[i]);
+    if(enArts[i]) combined.push(enArts[i]);
+  }
+
+  if(!combined.length){
+    document.getElementById('news-skeleton').style.display='none';
+    document.getElementById('error-state').style.display='block';
+    document.getElementById('error-msg').textContent='所有新聞來源暫時無法連線，請稍後再試';
+    return;
+  }
+
+  const [a0,a1,...rest]=combined;
+  document.getElementById('featured-section').innerHTML=[a0,a1].filter(Boolean).map((a,i)=>
+    '<a href="'+a.url+'" target="_blank" rel="noopener" class="news-card"><div class="card-img tall">'+imgTag(a.img)+'</div><div class="card-body"><div class="card-meta"><span class="card-cat">'+a.src+'</span><span class="card-sep"></span><span style="font-size:10px;color:var(--ink-30)">'+(a.lang==='zh'?'中文':'English')+'</span></div><div class="card-title '+(i===0?'lg':'sm')+'">'+a.title+'</div><div class="card-excerpt">'+a.desc.slice(0,100)+'…</div><span class="card-read">閱讀全文 →</span></div></a>'
+  ).join('');
+  document.getElementById('articles-grid').innerHTML=rest.map(a=>
+    '<a href="'+a.url+'" target="_blank" rel="noopener" class="art-card"><div class="card-img rect">'+imgTag(a.img)+'</div><div class="card-body"><div class="card-meta"><span class="card-cat">'+a.src+'</span><span class="card-sep"></span><span style="font-size:10px;color:var(--ink-30)">'+(a.lang==='zh'?'中文':'English')+'</span></div><div class="card-title sm">'+a.title+'</div><span class="card-read">閱讀全文 →</span></div></a>'
+  ).join('');
+  document.getElementById('news-skeleton').style.display='none';
+  document.getElementById('news-content').style.display='block';
+}
+loadNews();
+
+// ── 100 則心靈語錄，每天換一篇 ──
+const QUOTES = [
+  { text:'你不必控制你的想法，你只需要停止讓你的想法控制你。', author:'Dan Millman', icon:'🌿' },
+  { text:'平靜不是沒有風暴，而是在風暴中找到寧靜。', author:'佚名', icon:'🌊' },
+  { text:'你今天感受到的壓力，是你在乎某件事的證明。', author:'佚名', icon:'💫' },
+  { text:'慢下來，不是退縮，而是讓自己看得更清楚。', author:'佚名', icon:'🍃' },
+  { text:'呼吸。你已經度過了所有曾以為度不過的難關。', author:'佚名', icon:'✨' },
+  { text:'你的價值不由你的生產力決定。你本身就足夠了。', author:'佚名', icon:'🌸' },
+  { text:'照顧好自己，不是自私，而是讓你有能力去照顧你愛的人。', author:'佚名', icon:'🌻' },
+  { text:'你不需要許多事情來快樂，你只需要幾件對的事情。', author:'佚名', icon:'🍀' },
+  { text:'每一次深呼吸，都是一次重新開始的機會。', author:'佚名', icon:'🌅' },
+  { text:'不是所有的風暴都是來破壞你的，有些是來清除你路上的障礙。', author:'佚名', icon:'⛅' },
+  { text:'學會放下不屬於你的，你才有空間接住真正屬於你的。', author:'佚名', icon:'🍃' },
+  { text:'你今天的樣子，已經是你能做到的最好了。', author:'佚名', icon:'💛' },
+  { text:'靜下來，不是什麼都不做，而是讓自己聽見內心的聲音。', author:'佚名', icon:'🔮' },
+  { text:'真正的力量，是在一切混亂中依然保持內心的平靜。', author:'佚名', icon:'🌙' },
+  { text:'生命中最重要的事，往往不是最緊急的事。', author:'佚名', icon:'⏳' },
+  { text:'不要為昨天的遺憾哭泣，因為它擋住了你看見今天美好的視線。', author:'佚名', icon:'🌄' },
+  { text:'你所經歷的一切，都在讓你變成一個更完整的人。', author:'佚名', icon:'🌱' },
+  { text:'比較是快樂的竊賊，請停止和別人的生命賽跑。', author:'羅斯福', icon:'🔑' },
+  { text:'勇氣不是沒有恐懼，而是判斷還有比恐懼更重要的事。', author:'佚名', icon:'🦁' },
+  { text:'你無法回到過去改變起點，但你可以從現在開始改變結局。', author:'C.S. Lewis', icon:'🚪' },
+  { text:'失敗只是上天要你換一條路走。', author:'佚名', icon:'🛤' },
+  { text:'當你覺得一切都對你不利時，記住，飛機是逆風起飛的。', author:'亨利福特', icon:'✈️' },
+  { text:'不是每一天都是好日子，但每一天都有好的東西。', author:'佚名', icon:'☀️' },
+  { text:'你種下的每一個善意，終將以你意想不到的方式回到你身邊。', author:'佚名', icon:'🌾' },
+  { text:'心靜自然涼。當你的心平靜下來，世界也會跟著安靜。', author:'佚名', icon:'🪷' },
+  { text:'越安靜，你能聽見的越多。把自己的頻率調低，你會聽見生命的聲音。', author:'Ram Dass', icon:'🔇' },
+  { text:'幾乎所有事情只要暫時休息一下就會恢復，包括你自己。', author:'Anne Lamott', icon:'🔌' },
+  { text:'你不需要一直保持正向。感到悲傷、憤怒、沮喪，都完全沒問題。', author:'佚名', icon:'🌦' },
+  { text:'休息不是懶惰，而是讓生命可以持續運轉的關鍵。', author:'佚名', icon:'🛌' },
+  { text:'你可以同時是一件傑作，也是一個仍在進化中的作品。', author:'Sophia Bush', icon:'🎨' },
+  { text:'放心呼吸吧，你已經撐過了所有最糟糕的日子。', author:'佚名', icon:'💨' },
+  { text:'快樂不是留到未來再享受的東西，而是你現在就要設計進生活裡的東西。', author:'Jim Rohn', icon:'🏡' },
+  { text:'人生最重要的事，就是享受生活、保持快樂，這是真正重要的一切。', author:'奧黛麗赫本', icon:'🌹' },
+  { text:'你沒辦法從空杯子裡倒出東西給別人。先把自己照顧好。', author:'佚名', icon:'☕' },
+  { text:'困難的中間藏著機會。', author:'愛因斯坦', icon:'💡' },
+  { text:'你所想的決定你是誰，你所感受的決定你吸引什麼，你所想像的決定你創造什麼。', author:'佛陀', icon:'🧘' },
+  { text:'當下這一刻是我們唯一能真正擁有的時刻，也是通往所有時刻的門。', author:'一行禪師', icon:'🚪' },
+  { text:'不要活在過去，不要幻想未來，把心專注在當下這一刻。', author:'佛陀', icon:'🕰' },
+  { text:'放開你無法控制的，專注在你能改變的。', author:'佚名', icon:'🎈' },
+  { text:'你的感受是真實的，你的掙扎是真實的，而你並不孤單。', author:'佚名', icon:'🤝' },
+  { text:'成長從來不是一條直線，請對自己多一點慈悲。', author:'佚名', icon:'📈' },
+  { text:'有時候，最勇敢的事，就是繼續撐下去。', author:'佚名', icon:'🏃' },
+  { text:'真正的平靜，不是把自己關起來，而是在喧囂中找到安靜的角落。', author:'佚名', icon:'🏔' },
+  { text:'每天進步一點點，一年後你會驚訝自己走了多遠。', author:'佚名', icon:'📅' },
+  { text:'不要讓別人的意見，成為你內心的噪音。', author:'賈伯斯', icon:'🔕' },
+  { text:'你不需要別人的允許，去成為你想成為的人。', author:'佚名', icon:'🗝' },
+  { text:'有時候，什麼都不做，就是最好的事。', author:'小熊維尼', icon:'🍯' },
+  { text:'把感謝說出口，把愛意表達出來。今天，不要等待。', author:'佚名', icon:'💌' },
+  { text:'你所擁有的，已經是某人夢寐以求的。', author:'佚名', icon:'🌟' },
+  { text:'活在當下，讓你的雙腳踩在大地上，讓你的心安住在此刻。', author:'佚名', icon:'👣' },
+  { text:'情緒不是事實，承認它，然後讓它像雲一樣飄過去。', author:'佚名', icon:'🌬' },
+  { text:'你不等於你的焦慮，你不等於你的低潮，你不等於你的壞日子。', author:'佚名', icon:'🌤' },
+  { text:'守護你內心的平靜，那是你最珍貴的資產。', author:'佚名', icon:'🛡' },
+  { text:'不需要把所有事都想清楚才能前進，沒有人是這樣的。', author:'佚名', icon:'🗺' },
+  { text:'每天一小步，時間累積起來會帶來巨大的改變。', author:'佚名', icon:'🪜' },
+  { text:'跑你自己的賽道，別人的終點不是你的終點。', author:'佚名', icon:'🏅' },
+  { text:'你的能量很珍貴，請謹慎地決定把它給誰。', author:'佚名', icon:'⚡' },
+  { text:'目標不是完美，而是不放棄地繼續走下去。', author:'佚名', icon:'🎯' },
+  { text:'通往快樂沒有一條路，快樂本身就是那條路。', author:'佛陀', icon:'🛤' },
+  { text:'當你平靜時，你才真正擁有了生命中最珍貴的東西。', author:'佚名', icon:'🪐' },
+  { text:'你不需要成為別人，世界上已經有一個那樣的人了。你是唯一的。', author:'王爾德', icon:'🪞' },
+  { text:'一個人最大的勇氣，是忠於自己。', author:'佚名', icon:'⚔️' },
+  { text:'給自己多一點耐心，你還在成長。', author:'佚名', icon:'🌿' },
+  { text:'你已經撐過了那些以為撐不過的日子，這就是你的力量證明。', author:'佚名', icon:'💪' },
+  { text:'選擇讓你真正快樂的事，而不是讓別人覺得你快樂的事。', author:'佚名', icon:'🎭' },
+  { text:'人生不是馬拉松，不需要每一步都跑得很快，慢慢來比較快。', author:'佚名', icon:'🚶' },
+  { text:'你值得被溫柔對待，包括被你自己溫柔對待。', author:'佚名', icon:'🌷' },
+  { text:'有些事現在不懂，等你走過了，自然就懂了，時間會給你答案。', author:'佚名', icon:'🔭' },
+  { text:'不要讓過去的你，綁住現在的你。', author:'佚名', icon:'⛓' },
+  { text:'放手不等於放棄，而是接受了有些事無法改變。', author:'佚名', icon:'🍂' },
+  { text:'你值得好好休息，光是存在本身就已經足夠了。', author:'佚名', icon:'🌙' },
+  { text:'療癒不是一條直線，有些天你會感覺退步了，但請繼續走。', author:'佚名', icon:'🌀' },
+  { text:'你不是太多，你剛剛好，你本來就足夠了。', author:'佚名', icon:'⚖️' },
+  { text:'對自己溫柔一點，你是宇宙中獨一無二的存在，不亞於任何一棵樹和任何一顆星。', author:'Max Ehrmann', icon:'🌌' },
+  { text:'耗盡你精神的，也在耗盡你的身體。滋養你精神的，也在滋養你的身體。', author:'Caroline Myss', icon:'🔋' },
+  { text:'最勇敢的行為，是為自己思考，並大聲說出來。', author:'可可香奈兒', icon:'🦋' },
+  { text:'有時候你需要走出去，呼吸一口新鮮空氣，重新想起你是誰。', author:'佚名', icon:'🚶' },
+  { text:'擔憂不能消除明天的煩惱，只能消耗今天的平靜。', author:'佚名', icon:'☮️' },
+  { text:'你沒有落後，你正在你需要在的地方。', author:'佚名', icon:'📍' },
+  { text:'感恩，讓我們手中的變成了足夠。', author:'伊索', icon:'🙏' },
+  { text:'不是每一個問題都需要立刻解決，有些事交給時間就好。', author:'佚名', icon:'⏰' },
+  { text:'你的故事還沒寫完，不要在中間就放棄。', author:'佚名', icon:'📖' },
+  { text:'做一個讓自己驕傲的人，不是讓別人羨慕的人。', author:'佚名', icon:'🏆' },
+  { text:'人生中最值得投資的，永遠是你自己。', author:'佚名', icon:'💎' },
+  { text:'疲憊的時候，睡一覺再說。很多事情明天看都不一樣了。', author:'佚名', icon:'😴' },
+  { text:'感謝那些讓你變強的困難，和那些讓你更懂得珍惜的失去。', author:'佚名', icon:'🌈' },
+  { text:'你的存在本身，就已經是一種貢獻。', author:'佚名', icon:'✨' },
+  { text:'別讓壞情緒住太久，它們只是過客，不是房客。', author:'佚名', icon:'🚪' },
+  { text:'有時候，走對方向的一小步，卻是你人生中最大的一步。', author:'佚名', icon:'👟' },
+  { text:'你已經足夠了，你擁有的已經足夠了，你做的已經足夠了。', author:'佚名', icon:'🫂' },
+  { text:'平靜，從一個微笑開始。', author:'德蕾莎修女', icon:'😊' },
+  { text:'唯一的出路，就是穿越它。', author:'Robert Frost', icon:'🌅' },
+  { text:'照顧自己不是自私的，你無法從一個空的容器中倒出東西給別人。', author:'Eleanor Brown', icon:'🫙' },
+  { text:'最黑暗的夜晚也會結束，太陽終將升起。', author:'雨果', icon:'🌞' },
+  { text:'你比你以為的更勇敢，比你看起來的更強大，比你認為的更聰明。', author:'A.A. Milne', icon:'🐻' },
+  { text:'生命不是以呼吸的次數來衡量，而是以那些令你屏息的時刻來衡量。', author:'Maya Angelou', icon:'🎇' },
+  { text:'到最後，只有三件事真正重要：你愛了多深、你活得多溫柔、你放手時多優雅。', author:'佛陀', icon:'🕊' },
+  { text:'人生是一段旅程，不是一場競賽。慢慢走，好好看。', author:'佚名', icon:'🗺' },
+  { text:'每一個你以為是結局的地方，其實都是新故事的開始。', author:'佚名', icon:'🌅' },
+  { text:'不要把別人的評價當作你的自我定義，你比那些話更大。', author:'佚名', icon:'🛡' },
+];
+
+// 每天換一篇（台灣時區 UTC+8）
+const tzOffset = 8 * 60 * 60 * 1000;
+const dayNum = Math.floor((Date.now() + tzOffset) / (1000*60*60*24));
+const mainIdx = dayNum % QUOTES.length;
+const main = QUOTES[mainIdx];
+const others = QUOTES.filter((_,i) => i !== mainIdx).slice(0,3);
+
+// 明天幾點更新
+const tomorrow = new Date();
+tomorrow.setUTCHours(-8,0,0,0); // 台灣時間 00:00
+tomorrow.setUTCDate(tomorrow.getUTCDate()+1);
+const diffH = Math.round((tomorrow - Date.now()) / 36e5);
+
+document.getElementById('quote-hero-wrap').innerHTML =
+  '<div class="quote-hero">' +
+  '<div class="quote-hero-bg"></div>' +
+  '<div class="quote-hero-inner">' +
+  '<div class="quote-icon">' + main.icon + '</div>' +
+  '<div class="quote-text">\u201c' + main.text + '\u201d</div>' +
+  '<div class="quote-author">\u2014 ' + main.author + '</div>' +
+  '<div style="font-size:10px;opacity:.4;margin-top:12px;font-family:var(--font-body);letter-spacing:.1em;text-transform:uppercase">第 ' + (mainIdx+1) + ' / 100 則 · 約 ' + diffH + ' 小時後更新</div>' +
+  '</div></div>';
+
+document.getElementById('quote-cards-wrap').innerHTML = others.map(q =>
+  '<div class="quote-card">' +
+  '<div class="quote-card-icon">' + q.icon + '</div>' +
+  '<div class="quote-card-text">\u201c' + q.text + '\u201d</div>' +
+  '<div class="quote-card-author">\u2014 ' + q.author + '</div>' +
+  '</div>'
+).join('');
+
+</script>
+</body>
+</html>

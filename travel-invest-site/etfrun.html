@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>指數投資模擬器 — 指數 & 行旅</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+.etf-outer{max-width:var(--container);margin:0 auto;padding:40px 20px 80px}
+
+.sim-wrapper{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:36px 32px;
+}
+
+.sim-header{margin-bottom:24px}
+.sim-header h2{
+  font-family:var(--font-display);
+  font-size:28px;
+  font-weight:400;
+  color:var(--ink);
+  margin-bottom:8px;
+  font-style:italic;
+}
+.sim-header h2 em{color:var(--accent)}
+.sim-header p{font-size:14px;color:var(--ink-60);line-height:1.7}
+
+/* Tabs */
+.sim-tabs{display:flex;gap:6px;margin-bottom:28px;flex-wrap:wrap}
+.sim-tab{
+  font-size:12px;
+  padding:9px 18px;
+  border-radius:var(--radius);
+  border:1px solid var(--border-md);
+  background:transparent;
+  color:var(--ink-60);
+  cursor:pointer;
+  font-weight:500;
+  letter-spacing:.04em;
+  transition:all .2s;
+  font-family:var(--font-body);
+}
+.sim-tab:hover{background:var(--warm)}
+.sim-tab.active{
+  background:var(--accent);
+  color:var(--white);
+  border-color:var(--accent);
+}
+
+.sim-panel{display:none}
+.sim-panel.active{display:block}
+
+.sec-label{
+  font-size:10px;
+  font-weight:500;
+  color:var(--ink-30);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin:0 0 14px;
+}
+
+/* Controls */
+.ctrls{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+  margin-bottom:24px;
+}
+.ctrl{
+  background:var(--warm);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px 18px;
+}
+.ctrl-label{
+  font-size:11px;
+  color:var(--ink-60);
+  margin:0 0 4px;
+  letter-spacing:.04em;
+  font-weight:500;
+}
+.ctrl-val{
+  font-family:var(--font-display);
+  font-size:24px;
+  font-weight:500;
+  color:var(--ink);
+  margin:0 0 10px;
+  line-height:1.1;
+}
+.ctrl input[type=range]{
+  width:100%;
+  accent-color:var(--accent);
+  cursor:pointer;
+}
+
+/* Metrics */
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:24px;
+}
+.metric{
+  background:var(--warm);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px 18px;
+}
+.metric-label{
+  font-size:11px;
+  color:var(--ink-60);
+  margin:0 0 4px;
+  letter-spacing:.04em;
+  font-weight:500;
+}
+.metric-val{
+  font-family:var(--font-display);
+  font-size:22px;
+  font-weight:500;
+  margin:0;
+  color:var(--ink);
+  line-height:1.2;
+}
+.metric-sub{font-size:11px;color:var(--ink-30);margin:3px 0 0}
+
+.green{color:var(--forest)}
+.amber{color:var(--accent)}
+.blue{color:#185FA5}
+
+/* Legend & Chart */
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  margin-bottom:12px;
+  font-size:12px;
+  color:var(--ink-60);
+}
+.legend span{display:flex;align-items:center;gap:6px}
+.ldot{
+  width:12px;
+  height:12px;
+  border-radius:2px;
+  flex-shrink:0;
+}
+.chart-wrap{
+  position:relative;
+  width:100%;
+  height:280px;
+  margin-bottom:16px;
+}
+
+/* Insight box */
+.insight{
+  background:rgba(41,79,62,.06);
+  border-left:3px solid var(--forest);
+  border-radius:var(--radius);
+  padding:14px 20px;
+  font-size:13px;
+  color:var(--forest);
+  margin-top:16px;
+  line-height:1.8;
+}
+.warn{
+  background:rgba(184,107,42,.06);
+  border-left:3px solid var(--accent);
+  border-radius:var(--radius);
+  padding:14px 20px;
+  font-size:13px;
+  color:#7a4a1a;
+  margin-top:16px;
+  line-height:1.8;
+}
+
+/* History grid */
+.hist-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;
+  margin-bottom:24px;
+}
+.hist-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 16px;
+  background:var(--warm);
+  transition:transform .2s,border-color .2s;
+}
+.hist-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--border-md);
+}
+.hist-name{font-size:11px;color:var(--ink-60);margin:0 0 4px;letter-spacing:.04em}
+.hist-ret{
+  font-family:var(--font-display);
+  font-size:20px;
+  font-weight:500;
+  margin:0;
+}
+.hist-period{font-size:10px;color:var(--ink-30);margin:3px 0 0}
+
+/* Sim Footer */
+.sim-footer{
+  margin-top:28px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+  font-size:11px;
+  color:var(--ink-30);
+  text-align:center;
+  line-height:1.8;
+}
+
+@media(max-width:480px){
+  .sim-wrapper{padding:24px 18px}
+  .ctrls{grid-template-columns:1fr 1fr}
+  .metrics{grid-template-columns:1fr 1fr}
+  .ctrl-val{font-size:20px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">指數 <span class="amp">&</span> 行旅<span style="font-family:var(--font-body);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-left:10px;opacity:.8">會員制</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">關於講師</a></li>
+    <li><a href="tools.html">旅行工具</a></li>
+    <li><a href="news.html">財經新聞</a></li>
+    <li><a href="etfrun.html" class="active">指數投資模擬器</a></li>
+    <li><a href="bkfly.html">BK飛行計算機</a></li>
+    <li><a href="health.html">健康</a></li>
+    <li><a href="mind.html">心靈</a></li>
+    <li><a href="music.html">音樂</a></li>
+    <li><a href="holdings.html">持股</a></li>
+    <li><a href="goals.html">目標</a></li>
+  </ul>
+  <a href="tools.html" class="nav-cta">開始試算</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="overline">指數投資 × 互動模擬</div>
+    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">複利的威力<br><em>看得見的長期</em></h1>
+    <p class="prose" style="max-width:440px">調整滑桿即時看到複利成長、費用率影響、指數投資 vs 主動投資的長期差距，並對照真實歷史報酬。</p>
+  </div>
+</div>
+
+<div class="section">
+<div class="etf-outer">
+
+<div class="sim-wrapper">
+
+  <div class="sim-header">
+    <h2>指數投資<em>互動模擬器</em></h2>
+    <p>調整下方滑桿，即時看到複利的威力、費用率的影響，以及指數投資 vs 主動投資的長期差距。</p>
+  </div>
+
+  <div class="sim-tabs">
+    <button class="sim-tab active" onclick="switchTab('compound',this)">複利試算</button>
+    <button class="sim-tab" onclick="switchTab('compare',this)">主動 vs 指數</button>
+    <button class="sim-tab" onclick="switchTab('fee',this)">費用率影響</button>
+    <button class="sim-tab" onclick="switchTab('history',this)">歷史報酬</button>
+  </div>
+
+  <!-- Compound -->
+  <div id="panel-compound" class="sim-panel active">
+    <p class="sec-label">設定投資條件</p>
+    <div class="ctrls">
+      <div class="ctrl">
+        <p class="ctrl-label">每月定期定額</p>
+        <p class="ctrl-val" id="c-monthly">NT$3,000</p>
+        <input type="range" min="1000" max="30000" step="500" value="3000" oninput="setVal('monthly',this.value);renderCompound()"/>
+      </div>
+      <div class="ctrl">
+        <p class="ctrl-label">投資年數</p>
+        <p class="ctrl-val" id="c-years">20 年</p>
+        <input type="range" min="5" max="40" step="1" value="20" oninput="setVal('years',this.value);renderCompound()"/>
+      </div>
+      <div class="ctrl">
+        <p class="ctrl-label">年化報酬率</p>
+        <p class="ctrl-val" id="c-rate">7%</p>
+        <input type="range" min="3" max="12" step="0.5" value="7" oninput="setVal('rate',this.value);renderCompound()"/>
+      </div>
+    </div>
+    <div class="metrics" id="metrics-compound"></div>
+    <div class="legend">
+      <span><span class="ldot" style="background:#294f3e"></span>資產總值</span>
+      <span><span class="ldot" style="background:#b86b2a;border:1px dashed #8a5a2b"></span>投入本金</span>
+    </div>
+    <div class="chart-wrap"><canvas id="chartC" role="img" aria-label="定期定額複利成長折線圖"></canvas></div>
+    <div class="insight" id="insight-c"></div>
+  </div>
+
+  <!-- Compare -->
+  <div id="panel-compare" class="sim-panel">
+    <p class="sec-label">比較設定</p>
+    <div class="ctrls">
+      <div class="ctrl">
+        <p class="ctrl-label">每月投入</p>
+        <p class="ctrl-val" id="cp-monthly">NT$3,000</p>
+        <input type="range" min="1000" max="30000" step="500" value="3000" oninput="setVal('monthly',this.value);renderCompare()"/>
+      </div>
+      <div class="ctrl">
+        <p class="ctrl-label">投資年數</p>
+        <p class="ctrl-val" id="cp-years">20 年</p>
+        <input type="range" min="5" max="40" step="1" value="20" oninput="setVal('years',this.value);renderCompare()"/>
+      </div>
+      <div class="ctrl">
+        <p class="ctrl-label">主動基金報酬假設</p>
+        <p class="ctrl-val" id="cp-active">5%</p>
+        <input type="range" min="3" max="12" step="0.5" value="5" oninput="setVal('activeRate',this.value);renderCompare()"/>
+      </div>
+    </div>
+    <div class="metrics" id="metrics-compare"></div>
+    <div class="legend">
+      <span><span class="ldot" style="background:#294f3e"></span>指數ETF（7%）</span>
+      <span><span class="ldot" style="background:#b86b2a"></span>主動基金（你設定）</span>
+      <span><span class="ldot" style="background:#c45447"></span>主動基金（實際均 4%）</span>
+    </div>
+    <div class="chart-wrap"><canvas id="chartCP" role="img" aria-label="指數ETF與主動基金長期比較折線圖"></canvas></div>
+    <div class="warn" id="insight-cp"></div>
+  </div>
+
+  <!-- Fee -->
+  <div id="panel-fee" class="sim-panel">
+    <p class="sec-label">費用率比較</p>
+    <div class="ctrls">
+      <div class="ctrl">
+        <p class="ctrl-label">每月投入</p>
+        <p class="ctrl-val" id="f-monthly">NT$3,000</p>
+        <input type="range" min="1000" max="30000" step="500" value="3000" oninput="setVal('monthly',this.value);renderFee()"/>
+      </div>
+      <div class="ctrl">
+        <p class="ctrl-label">投資年數</p>
+        <p class="ctrl-val" id="f-years">20 年</p>
+        <input type="range" min="5" max="40" step="1" value="20" oninput="setVal('years',this.value);renderFee()"/>
+      </div>
+      <div class="ctrl">
+        <p class="ctrl-label">你的費用率</p>
+        <p class="ctrl-val" id="f-fee">0.07%</p>
+        <input type="range" min="0.03" max="2.5" step="0.01" value="0.07" oninput="setVal('fee',this.value);renderFee()"/>
+      </div>
+    </div>
+    <div class="metrics" id="metrics-fee"></div>
+    <div class="legend">
+      <span><span class="ldot" style="background:#3a7a5e"></span>你實際拿到的錢</span>
+      <span><span class="ldot" style="background:#d49d6e"></span>費用吃掉的金額</span>
+    </div>
+    <div class="chart-wrap"><canvas id="chartF" role="img" aria-label="費用率侵蝕資產的堆疊長條圖"></canvas></div>
+    <div class="insight" id="insight-f"></div>
+  </div>
+
+  <!-- History -->
+  <div id="panel-history" class="sim-panel">
+    <p class="sec-label">主要指數歷史年化報酬（長期）</p>
+    <div class="hist-grid">
+      <div class="hist-card"><p class="hist-name">S&amp;P 500</p><p class="hist-ret green">10.5%</p><p class="hist-period">1928–2024 平均</p></div>
+      <div class="hist-card"><p class="hist-name">全球股市（MSCI World）</p><p class="hist-ret green">8.2%</p><p class="hist-period">1970–2024 平均</p></div>
+      <div class="hist-card"><p class="hist-name">台灣加權指數</p><p class="hist-ret green">9.1%</p><p class="hist-period">1990–2024 平均</p></div>
+      <div class="hist-card"><p class="hist-name">日本 Nikkei 225</p><p class="hist-ret amber">3.2%</p><p class="hist-period">1990–2024（失落30年）</p></div>
+      <div class="hist-card"><p class="hist-name">美國債券（彭博）</p><p class="hist-ret blue">4.8%</p><p class="hist-period">1980–2024 平均</p></div>
+      <div class="hist-card"><p class="hist-name">通貨膨脹（美國）</p><p class="hist-ret amber">3.0%</p><p class="hist-period">歷史平均</p></div>
+    </div>
+    <p class="sec-label">S&amp;P 500 各年代 10 年定期定額比較（每月 NT$3,000）</p>
+    <div class="legend">
+      <span><span class="ldot" style="background:#294f3e"></span>1990年代（黃金十年 18%）</span>
+      <span><span class="ldot" style="background:#b86b2a"></span>2000年代（失落十年 -1%）</span>
+      <span><span class="ldot" style="background:#8a5a2b"></span>2010年代（大多頭 14%）</span>
+    </div>
+    <div class="chart-wrap"><canvas id="chartH" role="img" aria-label="S&P500不同年代的10年投資成長比較"></canvas></div>
+    <div class="warn">即使遇到「失落十年」（2000年代），定期定額因為在低點持續買入，最終損失也比一次買進小很多。<strong>時間和紀律，才是指數投資的核心。</strong></div>
+  </div>
+
+  <div class="sim-footer">
+    本模擬器僅供教育用途，數字為假設情境，不構成投資建議。<br>
+    歷史報酬不代表未來績效。投資前請評估自身風險承受能力。
+  </div>
+
+</div>
+
+</div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">指數 <span class="amp">&amp;</span> 行旅</a>
+  <div class="footer-links">
+    <a href="about.html">關於</a><a href="tools.html">工具</a><a href="news.html">新聞</a>
+  </div>
+  <div class="footer-copy">&copy; 2025 指數 &amp; 行旅</div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+let S = { monthly: 3000, years: 20, rate: 7, fee: 0.07, activeRate: 5 };
+let charts = {};
+
+// 主題色變數（給 Chart.js 用）
+const COLOR_FOREST = '#294f3e';
+const COLOR_FOREST_LT = '#3a7a5e';
+const COLOR_FOREST_BG = 'rgba(41,79,62,0.08)';
+const COLOR_ACCENT = '#b86b2a';
+const COLOR_ACCENT_DEEP = '#8a5a2b';
+const COLOR_ACCENT_LT = '#d49d6e';
+const COLOR_RED = '#c45447';
+const COLOR_INK_30 = '#a39d96';
+const COLOR_GRID = 'rgba(20,18,16,0.06)';
+
+function setVal(k, v) { S[k] = parseFloat(v); }
+function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }
+function fmtM(n) { return n >= 1e6 ? 'NT$' + (n / 1e6).toFixed(1) + 'M' : 'NT$' + (n / 1000).toFixed(0) + 'K'; }
+
+function calcFV(m, y, r) {
+  const mr = r / 100 / 12, n = y * 12;
+  if (mr === 0) return m * n;
+  if (mr < 0) return m * n * (1 + mr * 6);
+  return m * (Math.pow(1 + mr, n) - 1) / mr;
+}
+
+function buildLabels(y) { return Array.from({ length: y + 1 }, (_, i) => i === 0 ? '現在' : i + '年'); }
+
+function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+function chartScales() {
+  return {
+    x: { ticks: { maxTicksLimit: 6, color: COLOR_INK_30, font:{family:'inherit'} }, grid: { display: false } },
+    y: { ticks: { callback: v => fmtM(v), color: COLOR_INK_30, font:{family:'inherit'} }, grid: { color: COLOR_GRID } }
+  };
+}
+
+function renderCompound() {
+  const { monthly, years, rate } = S;
+  document.getElementById('c-monthly').textContent = 'NT$' + Number(monthly).toLocaleString();
+  document.getElementById('c-years').textContent = years + ' 年';
+  document.getElementById('c-rate').textContent = rate + '%';
+  const principal = monthly * 12 * years;
+  const fv = calcFV(monthly, years, rate);
+  const profit = fv - principal;
+  document.getElementById('metrics-compound').innerHTML = `
+    <div class="metric"><p class="metric-label">總投入本金</p><p class="metric-val">${fmt(principal)}</p></div>
+    <div class="metric"><p class="metric-label">最終資產</p><p class="metric-val green">${fmt(fv)}</p><p class="metric-sub">成長 ${(fv / principal).toFixed(1)}x</p></div>
+    <div class="metric"><p class="metric-label">複利獲利</p><p class="metric-val green">+${fmt(profit)}</p><p class="metric-sub">佔總資產 ${Math.round(profit / fv * 100)}%</p></div>
+  `;
+  document.getElementById('insight-c').textContent = `每月存 ${fmt(monthly)}，投資 ${years} 年，以 ${rate}% 年化報酬計算，你的 ${fmt(principal)} 本金最終成長為 ${fmt(fv)}。複利讓錢幫你賺錢——越晚開始，代價越大！`;
+  const labels = buildLabels(years);
+  const dP = [], dFV = [];
+  for (let i = 0; i <= years; i++) {
+    dP.push(Math.round(monthly * 12 * i));
+    dFV.push(Math.round(calcFV(monthly, i, rate)));
+  }
+  destroyChart('C');
+  charts['C'] = new Chart(document.getElementById('chartC'), {
+    type: 'line',
+    data: {
+      labels, datasets: [
+        { label: '資產總值', data: dFV, borderColor: COLOR_FOREST, backgroundColor: COLOR_FOREST_BG, fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: '投入本金', data: dP, borderColor: COLOR_ACCENT, backgroundColor: 'transparent', borderWidth: 1.5, borderDash: [4, 3], pointRadius: 0 }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: chartScales() }
+  });
+}
+
+function renderCompare() {
+  const { monthly, years, activeRate } = S;
+  document.getElementById('cp-monthly').textContent = 'NT$' + Number(monthly).toLocaleString();
+  document.getElementById('cp-years').textContent = years + ' 年';
+  document.getElementById('cp-active').textContent = activeRate + '%';
+  const indexFV = calcFV(monthly, years, 7);
+  const activeFV = calcFV(monthly, years, activeRate);
+  const realActiveFV = calcFV(monthly, years, 4);
+  document.getElementById('metrics-compare').innerHTML = `
+    <div class="metric"><p class="metric-label">指數ETF（7%）</p><p class="metric-val green">${fmt(indexFV)}</p></div>
+    <div class="metric"><p class="metric-label">主動基金（${activeRate}%）</p><p class="metric-val amber">${fmt(activeFV)}</p><p class="metric-sub">${activeFV > indexFV ? '勝過指數 +' + fmt(activeFV - indexFV) : '輸給指數 -' + fmt(indexFV - activeFV)}</p></div>
+    <div class="metric"><p class="metric-label">主動基金（實際均 4%）</p><p class="metric-val" style="color:#c45447">${fmt(realActiveFV)}</p><p class="metric-sub">少賺 ${fmt(indexFV - realActiveFV)}</p></div>
+  `;
+  document.getElementById('insight-cp').textContent = `研究顯示，長期來看超過 80% 的主動基金無法持續打敗指數。就算短期找到高手，扣掉手續費和稅後，長期平均報酬約 4%。你的 ${years} 年差距：指數 ETF 多賺 ${fmt(indexFV - realActiveFV)}。`;
+  const labels = buildLabels(years);
+  const dI = [], dA = [], dR = [];
+  for (let i = 0; i <= years; i++) {
+    dI.push(Math.round(calcFV(monthly, i, 7)));
+    dA.push(Math.round(calcFV(monthly, i, activeRate)));
+    dR.push(Math.round(calcFV(monthly, i, 4)));
+  }
+  destroyChart('CP');
+  charts['CP'] = new Chart(document.getElementById('chartCP'), {
+    type: 'line',
+    data: {
+      labels, datasets: [
+        { label: '指數ETF', data: dI, borderColor: COLOR_FOREST, backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 0, tension: 0.3 },
+        { label: '主動（設定）', data: dA, borderColor: COLOR_ACCENT, backgroundColor: 'transparent', borderWidth: 2, borderDash: [5, 3], pointRadius: 0, tension: 0.3 },
+        { label: '主動（實際4%）', data: dR, borderColor: COLOR_RED, backgroundColor: 'transparent', borderWidth: 2, borderDash: [2, 3], pointRadius: 0, tension: 0.3 }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: chartScales() }
+  });
+}
+
+function renderFee() {
+  const { monthly, years, fee } = S;
+  document.getElementById('f-monthly').textContent = 'NT$' + Number(monthly).toLocaleString();
+  document.getElementById('f-years').textContent = years + ' 年';
+  document.getElementById('f-fee').textContent = parseFloat(fee).toFixed(2) + '%';
+  const baseRate = 7;
+  const netFV = calcFV(monthly, years, baseRate - fee);
+  const zeroFV = calcFV(monthly, years, baseRate);
+  const lost = zeroFV - netFV;
+  document.getElementById('metrics-fee').innerHTML = `
+    <div class="metric"><p class="metric-label">費用率 ${parseFloat(fee).toFixed(2)}% 後資產</p><p class="metric-val green">${fmt(netFV)}</p></div>
+    <div class="metric"><p class="metric-label">費用吃掉的錢</p><p class="metric-val amber">-${fmt(lost)}</p><p class="metric-sub">佔潛在獲利 ${Math.round(lost / zeroFV * 100)}%</p></div>
+    <div class="metric"><p class="metric-label">ETF 費用 vs 你</p><p class="metric-val">${fee <= 0.07 ? '相同等級' : '差 ' + (fee - 0.07).toFixed(2) + '%'}</p></div>
+  `;
+  document.getElementById('insight-f').textContent = `費用率看起來只差一點點，但長期複利放大差異。你的 ${parseFloat(fee).toFixed(2)}% 費用，${years} 年後總共吃掉 ${fmt(lost)}——這些錢本可以是你的退休金。VOO/VTI 等美國ETF費用率僅 0.03%~0.07%，台灣ETF如0050約 0.43%。`;
+  const labels = buildLabels(years);
+  const dY = [], dL = [];
+  for (let i = 0; i <= years; i++) {
+    const nv = Math.round(calcFV(monthly, i, baseRate - fee));
+    const zv = Math.round(calcFV(monthly, i, baseRate));
+    dY.push(nv); dL.push(Math.max(0, zv - nv));
+  }
+  destroyChart('F');
+  charts['F'] = new Chart(document.getElementById('chartF'), {
+    type: 'bar',
+    data: {
+      labels, datasets: [
+        { label: '你的錢', data: dY, backgroundColor: COLOR_FOREST_LT, borderWidth: 0 },
+        { label: '費用', data: dL, backgroundColor: COLOR_ACCENT_LT, borderWidth: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { stacked: true, ticks: { maxTicksLimit: 6, color: COLOR_INK_30 }, grid: { display: false } },
+        y: { stacked: true, ticks: { callback: v => fmtM(v), color: COLOR_INK_30 }, grid: { color: COLOR_GRID } }
+      }
+    }
+  });
+}
+
+function renderHistory() {
+  const monthly = 3000, y = 10;
+  const labels = buildLabels(y);
+  const d90 = [], d00 = [], d10 = [];
+  for (let i = 0; i <= y; i++) {
+    d90.push(Math.round(calcFV(monthly, i, 18)));
+    d00.push(Math.round(Math.max(calcFV(monthly, i, -1), monthly * 12 * i * 0.85)));
+    d10.push(Math.round(calcFV(monthly, i, 14)));
+  }
+  destroyChart('H');
+  charts['H'] = new Chart(document.getElementById('chartH'), {
+    type: 'line',
+    data: {
+      labels, datasets: [
+        { label: '1990年代 18%', data: d90, borderColor: COLOR_FOREST, backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 0, tension: 0.3 },
+        { label: '2000年代 -1%', data: d00, borderColor: COLOR_ACCENT, backgroundColor: 'transparent', borderWidth: 2, borderDash: [4, 3], pointRadius: 0, tension: 0.3 },
+        { label: '2010年代 14%', data: d10, borderColor: COLOR_ACCENT_DEEP, backgroundColor: 'transparent', borderWidth: 2, borderDash: [2, 4], pointRadius: 0, tension: 0.3 }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: chartScales() }
+  });
+}
+
+function switchTab(name, el) {
+  document.querySelectorAll('.sim-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sim-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+  if (name === 'history') renderHistory();
+}
+
+renderCompound();
+renderCompare();
+renderFee();
+</script>
+</body>
+</html>

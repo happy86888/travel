@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>指數 & 行旅 — 會員登入</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  background:#fbf8f4;
+  font-family:'Outfit',sans-serif;
+}
+.box{
+  width:100%;max-width:400px;
+  padding:56px 48px;
+  background:#fff;
+  border:1px solid rgba(20,18,16,.1);
+  text-align:center;
+}
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:400;
+  color:#1a1612;margin-bottom:8px;
+  letter-spacing:.01em;
+}
+.logo em{color:#b86b2a;font-style:italic}
+.tagline{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(20,18,16,.3);margin-bottom:40px}
+.label{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(20,18,16,.4);margin-bottom:10px;display:block;text-align:left}
+input[type=password]{
+  width:100%;padding:14px 16px;
+  border:1.5px solid rgba(20,18,16,.12);
+  font-size:16px;font-family:'Outfit',sans-serif;
+  outline:none;letter-spacing:.15em;
+  background:#fbf8f4;color:#1a1612;
+  transition:border-color .2s;
+}
+input[type=password]:focus{border-color:#b86b2a}
+.btn{
+  width:100%;padding:15px;margin-top:12px;
+  background:#1a1612;color:#fff;border:none;cursor:pointer;
+  font-size:11.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  font-family:'Outfit',sans-serif;
+  transition:background .2s;
+}
+.btn:hover{background:#b86b2a}
+.err{
+  font-size:12px;color:#c44;
+  margin-top:12px;height:16px;
+  transition:opacity .2s;
+}
+.note{font-size:11px;color:rgba(20,18,16,.22);margin-top:24px;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="logo">指數 <em>&</em> 行旅</div>
+  <div class="tagline">會員專區</div>
+  <label class="label" for="pw">輸入密碼</label>
+  <input type="password" id="pw" placeholder="••••••••" autocomplete="current-password"
+    onkeydown="if(event.key==='Enter')check()"/>
+  <button class="btn" onclick="check()">進入</button>
+  <div class="err" id="err"></div>
+  <div class="note">同一台電腦只需輸入一次</div>
+</div>
+
+<script>
+const PW = 'spy0050';
+const KEY = 'ti_auth';
+const DEST = 'index.html';
+
+if (localStorage.getItem(KEY) === 'ok') location.replace(DEST);
+
+function check() {
+  const val = document.getElementById('pw').value;
+  const err = document.getElementById('err');
+  if (val === PW) {
+    localStorage.setItem(KEY, 'ok');
+    location.replace(DEST);
+  } else {
+    err.textContent = '密碼錯誤，請再試一次';
+    document.getElementById('pw').value = '';
+    document.getElementById('pw').focus();
+    setTimeout(() => err.textContent = '', 3000);
+  }
+}
+</script>
+</body>
+</html>

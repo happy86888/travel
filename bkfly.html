@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BK飛行計算機 — 指數 & 行旅</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400;500&family=Barlow+Condensed:wght@300;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.bkfly-outer{max-width:var(--container);margin:0 auto;padding:40px 20px 80px}
+
+/* 計算機主體 */
+.calc-wrapper{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:48px 36px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* 計算機 Header */
+.calc-header{
+  text-align:center;
+  margin-bottom:40px;
+}
+.logo-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  margin-bottom:10px;
+}
+.plane-icon{
+  font-size:30px;
+  filter:drop-shadow(0 2px 6px rgba(184,107,42,.3));
+  animation:planeFly 6s ease-in-out infinite;
+}
+@keyframes planeFly{
+  0%,100%{transform:translateY(0) rotate(-5deg)}
+  50%{transform:translateY(-4px) rotate(5deg)}
+}
+.brand-title{
+  font-family:var(--font-display);
+  font-style:italic;
+  font-weight:400;
+  font-size:36px;
+  letter-spacing:.02em;
+  color:var(--ink);
+}
+.brand-title em{
+  color:var(--accent);
+  font-style:italic;
+}
+.subtitle{
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.18em;
+  color:var(--ink-30);
+  text-transform:uppercase;
+  margin-top:8px;
+}
+.route-line{
+  width:240px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  margin:18px auto 0;
+  opacity:.6;
+}
+
+/* 三欄類別 */
+.calc-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:16px;
+  margin-bottom:24px;
+}
+@media(max-width:768px){
+  .calc-grid{grid-template-columns:1fr}
+}
+
+.sec{
+  background:var(--warm);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px 22px;
+  position:relative;
+  overflow:hidden;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+}
+.sec:hover{
+  border-color:var(--border-md);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(20,18,16,.06);
+}
+.sec::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:3px;
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.sec-1::before{background:linear-gradient(90deg,#8a5a2b,var(--accent))}
+.sec-2::before{background:linear-gradient(90deg,var(--accent),#d4a574)}
+.sec-3::before{background:linear-gradient(90deg,var(--forest),#6ba089)}
+
+.sec-num{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.2em;
+  color:var(--accent);
+  margin-bottom:10px;
+  text-transform:uppercase;
+}
+.sec-3 .sec-num{color:var(--forest)}
+
+.sec-title{
+  font-family:var(--font-display);
+  font-size:20px;
+  font-weight:400;
+  color:var(--ink);
+  margin-bottom:6px;
+  line-height:1.3;
+}
+.sec-desc{
+  font-size:12px;
+  color:var(--ink-60);
+  margin-bottom:18px;
+  line-height:1.7;
+  min-height:40px;
+}
+
+.input-group{
+  display:flex;
+  align-items:center;
+  background:var(--white);
+  border:1px solid var(--border-md);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin-bottom:14px;
+  transition:border-color .2s;
+}
+.input-group:focus-within{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(184,107,42,.08);
+}
+.input-prefix{
+  padding:0 12px;
+  font-size:11px;
+  color:var(--ink-60);
+  font-weight:500;
+  letter-spacing:.06em;
+  white-space:nowrap;
+  border-right:1px solid var(--border);
+}
+.amt-input{
+  flex:1;
+  background:transparent;
+  border:none;
+  outline:none;
+  color:var(--ink);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;
+  font-weight:500;
+  padding:11px 12px;
+  text-align:right;
+  width:0;
+}
+.amt-input::placeholder{color:var(--ink-30)}
+.input-suffix{
+  padding:0 12px;
+  font-size:11px;
+  color:var(--ink-60);
+  font-weight:500;
+  border-left:1px solid var(--border);
+}
+
+.pts-row{
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+}
+.pts-val{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:32px;
+  font-weight:700;
+  color:var(--accent);
+  transition:color .3s;
+}
+.sec-3 .pts-val{color:var(--forest)}
+
+.pts-unit{
+  font-size:13px;
+  color:var(--ink-60);
+  font-weight:400;
+}
+.formula{
+  font-size:11px;
+  color:var(--ink-30);
+  margin-top:6px;
+  font-family:'Barlow Condensed',sans-serif;
+  letter-spacing:.4px;
+}
+
+/* 總計面板 */
+.total-panel{
+  background:linear-gradient(135deg,rgba(184,107,42,.08),rgba(41,79,62,.05));
+  border:1.5px solid rgba(184,107,42,.25);
+  border-radius:var(--radius);
+  padding:28px 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:32px;
+  margin-bottom:16px;
+}
+@media(max-width:600px){
+  .total-panel{flex-direction:column;text-align:center;gap:20px}
+}
+.total-left .label{
+  font-size:11px;
+  letter-spacing:.18em;
+  color:var(--ink-60);
+  text-transform:uppercase;
+  font-weight:500;
+  margin-bottom:6px;
+}
+.total-left .breakdown{
+  font-size:13px;
+  color:var(--ink-30);
+  font-family:'Barlow Condensed',sans-serif;
+  letter-spacing:.5px;
+}
+.total-num-wrap{text-align:right}
+@media(max-width:600px){
+  .total-num-wrap{text-align:center}
+}
+.total-val{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:64px;
+  font-weight:700;
+  color:var(--accent);
+  line-height:1;
+  text-shadow:0 2px 16px rgba(184,107,42,.2);
+  display:block;
+}
+.total-pts-label{
+  font-size:11px;
+  letter-spacing:.2em;
+  color:var(--accent);
+  margin-top:6px;
+  font-weight:500;
+}
+
+/* 兌換建議 */
+.redeem-bar{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:20px;
+}
+@media(max-width:600px){
+  .redeem-bar{grid-template-columns:1fr}
+}
+.rdm{
+  background:var(--warm);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px 18px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.rdm-icon{
+  font-size:22px;
+  flex-shrink:0;
+}
+.rdm-info .rdm-label{
+  font-size:11px;
+  color:var(--ink-60);
+  letter-spacing:.04em;
+}
+.rdm-info .rdm-val{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;
+  font-weight:600;
+  color:var(--ink);
+  margin-top:3px;
+}
+
+/* 注意事項 */
+.disclaimer{
+  padding:14px 22px;
+  background:var(--warm);
+  border:1px dashed var(--border-md);
+  border-radius:var(--radius);
+  font-size:13px;
+  color:var(--ink-60);
+  line-height:1.7;
+  text-align:center;
+  margin-bottom:14px;
+}
+.disclaimer strong{color:var(--accent)}
+
+.calc-footer{
+  text-align:center;
+  margin-top:24px;
+  font-size:10px;
+  letter-spacing:.18em;
+  color:var(--ink-30);
+  text-transform:uppercase;
+}
+
+.flash{animation:numFlash .3s ease}
+@keyframes numFlash{
+  0%{opacity:.4;transform:scale(.95)}
+  100%{opacity:1;transform:scale(1)}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">指數 <span class="amp">&</span> 行旅<span style="font-family:var(--font-body);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-left:10px;opacity:.8">會員制</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">關於講師</a></li>
+    <li><a href="tools.html">旅行工具</a></li>
+    <li><a href="news.html">財經新聞</a></li>
+    <li><a href="etfrun.html">指數投資模擬器</a></li>
+    <li><a href="bkfly.html" class="active">BK飛行計算機</a></li>
+    <li><a href="health.html">健康</a></li>
+    <li><a href="mind.html">心靈</a></li>
+    <li><a href="music.html">音樂</a></li>
+    <li><a href="holdings.html">持股</a></li>
+    <li><a href="goals.html">目標</a></li>
+  </ul>
+  <a href="tools.html" class="nav-cta">開始試算</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="overline">King Miles · 飛行點數</div>
+    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">BK 飛行計算機<br><em>年度點數試算</em></h1>
+    <p class="prose" style="max-width:440px">輸入你每月與每年的消費金額，快速估算可累積的 King Miles 年度總點數，看看可以兌換多少張機票。</p>
+  </div>
+</div>
+
+<div class="section">
+<div class="bkfly-outer">
+
+<div class="calc-wrapper">
+
+  <div class="calc-header">
+    <div class="logo-row">
+      <span class="plane-icon">✈</span>
+      <span class="brand-title">BK 飛行<em>計算機</em></span>
+    </div>
+    <div class="subtitle">King Miles 年度點數估算</div>
+    <div class="route-line"></div>
+  </div>
+
+  <div class="calc-grid">
+    <!-- 類別 1 -->
+    <div class="sec sec-1">
+      <div class="sec-num">Category 01</div>
+      <div class="sec-title">一般國內消費</div>
+      <div class="sec-desc">生活雜支、保險、LINE PAY、街口、行動支付 等</div>
+      <div class="input-group">
+        <span class="input-prefix">每月</span>
+        <input class="amt-input" type="number" id="c1" value="15000" min="0" step="1000" placeholder="0"/>
+        <span class="input-suffix">元</span>
+      </div>
+      <div class="pts-row">
+        <span class="pts-val" id="p1">9,000</span>
+        <span class="pts-unit">點</span>
+      </div>
+      <div class="formula" id="f1">15,000 × 12 ÷ 20</div>
+    </div>
+
+    <!-- 類別 2 -->
+    <div class="sec sec-2">
+      <div class="sec-num">Category 02</div>
+      <div class="sec-title">享較高回饋比例</div>
+      <div class="sec-desc">超市、網購、超商、餐飲、娛樂...等</div>
+      <div class="input-group">
+        <span class="input-prefix">每月</span>
+        <input class="amt-input" type="number" id="c2" value="10000" min="0" step="1000" placeholder="0"/>
+        <span class="input-suffix">元</span>
+      </div>
+      <div class="pts-row">
+        <span class="pts-val" id="p2">12,000</span>
+        <span class="pts-unit">點</span>
+      </div>
+      <div class="formula" id="f2">10,000 × 12 ÷ 10</div>
+    </div>
+
+    <!-- 類別 3 -->
+    <div class="sec sec-3">
+      <div class="sec-num">Category 03</div>
+      <div class="sec-title">出國花銷</div>
+      <div class="sec-desc">機票、旅遊及訂房平台、海外購物、出國消費</div>
+      <div class="input-group">
+        <span class="input-prefix">每年</span>
+        <input class="amt-input" type="number" id="c3" value="60000" min="0" step="5000" placeholder="0"/>
+        <span class="input-suffix">元</span>
+      </div>
+      <div class="pts-row">
+        <span class="pts-val" id="p3">6,000</span>
+        <span class="pts-unit">點</span>
+      </div>
+      <div class="formula" id="f3">60,000 ÷ 10</div>
+    </div>
+  </div>
+
+  <!-- 總計 -->
+  <div class="total-panel">
+    <div class="total-left">
+      <div class="label">預估年度總點數</div>
+      <div class="breakdown" id="breakdown">9,000 + 12,000 + 6,000</div>
+    </div>
+    <div class="total-num-wrap">
+      <span class="total-val" id="total">27,000</span>
+      <div class="total-pts-label">KING MILES</div>
+    </div>
+  </div>
+
+  <!-- 兌換建議 -->
+  <div class="redeem-bar">
+    <div class="rdm">
+      <span class="rdm-icon">🎫</span>
+      <div class="rdm-info">
+        <div class="rdm-label">短程來回（≈2萬點）</div>
+        <div class="rdm-val" id="r1">約 1.4 張</div>
+      </div>
+    </div>
+    <div class="rdm">
+      <span class="rdm-icon">🌏</span>
+      <div class="rdm-info">
+        <div class="rdm-label">短程商務艙來回（≈5萬點）</div>
+        <div class="rdm-val" id="r2">約 0.5 張</div>
+      </div>
+    </div>
+    <div class="rdm">
+      <span class="rdm-icon">⬆</span>
+      <div class="rdm-info">
+        <div class="rdm-label">台灣－歐美 經濟艙單程（≈2.7萬點）</div>
+        <div class="rdm-val" id="r3">約 1.8 次</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    本估算僅供初步旅程規劃評估，因每家航空公司規定不同，並非正確數字。<br>
+    如需取得正確數字，<strong>請跟 BK 諮詢喔</strong> ✈
+  </div>
+
+  <div class="calc-footer">© BK King Miles Calculator — 估算僅供參考</div>
+
+</div>
+
+</div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">指數 <span class="amp">&amp;</span> 行旅</a>
+  <div class="footer-links">
+    <a href="about.html">關於</a><a href="tools.html">工具</a><a href="news.html">新聞</a>
+  </div>
+  <div class="footer-copy">&copy; 2025 指數 &amp; 行旅</div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+function fmt(n) { return Math.round(n).toLocaleString('zh-TW'); }
+function flash(el) {
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
+
+function calc() {
+  const v1 = parseFloat(document.getElementById('c1').value) || 0;
+  const v2 = parseFloat(document.getElementById('c2').value) || 0;
+  const v3 = parseFloat(document.getElementById('c3').value) || 0;
+
+  const p1 = Math.round(v1 * 12 / 20);
+  const p2 = Math.round(v2 * 12 / 10);
+  const p3 = Math.round(v3 / 10);
+  const total = p1 + p2 + p3;
+
+  const els = {
+    p1: document.getElementById('p1'),
+    p2: document.getElementById('p2'),
+    p3: document.getElementById('p3'),
+    total: document.getElementById('total'),
+  };
+
+  els.p1.textContent = fmt(p1);
+  els.p2.textContent = fmt(p2);
+  els.p3.textContent = fmt(p3);
+  els.total.textContent = fmt(total);
+
+  document.getElementById('f1').textContent = fmt(v1) + ' × 12 ÷ 20';
+  document.getElementById('f2').textContent = fmt(v2) + ' × 12 ÷ 10';
+  document.getElementById('f3').textContent = fmt(v3) + ' ÷ 10';
+  document.getElementById('breakdown').textContent = fmt(p1) + ' + ' + fmt(p2) + ' + ' + fmt(p3);
+
+  document.getElementById('r1').textContent = '約 ' + (total / 20000).toFixed(1) + ' 張';
+  document.getElementById('r2').textContent = '約 ' + (total / 50000).toFixed(1) + ' 張';
+  document.getElementById('r3').textContent = '約 ' + (total / 27000).toFixed(1) + ' 次';
+
+  [els.p1, els.p2, els.p3, els.total].forEach(flash);
+}
+
+['c1','c2','c3'].forEach(id => document.getElementById(id).addEventListener('input', calc));
+</script>
+</body>
+</html>

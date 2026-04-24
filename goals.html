@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>我的目標 — 指數 & 行旅</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.goals-wrap{max-width:var(--container);margin:0 auto;padding:48px 0 100px}
+
+/* STATS */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:48px}
+.stat-box{background:var(--white);padding:28px 20px;text-align:center}
+.stat-n{font-family:var(--font-display);font-size:36px;font-weight:300;color:var(--ink);line-height:1;margin-bottom:6px}
+.stat-n .acc{color:var(--accent);font-size:22px}
+.stat-l{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-30)}
+
+/* SECTION */
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.sec-title{font-family:var(--font-display);font-size:26px;font-weight:400}
+.sec-title em{font-style:italic;color:var(--accent)}
+.add-btn{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:transparent;border:1.5px solid var(--accent);padding:8px 16px;border-radius:var(--radius);cursor:pointer;font-family:var(--font-body);transition:all var(--transition)}
+.add-btn:hover{background:var(--accent);color:var(--white)}
+.section-gap{margin-bottom:52px}
+
+/* SAVINGS SLIDER */
+.savings-card{background:var(--warm);border:1px solid var(--border);border-radius:var(--radius);padding:32px 36px;margin-bottom:48px}
+.savings-display{display:flex;align-items:baseline;gap:8px;margin-bottom:24px}
+.savings-prefix{font-family:var(--font-display);font-size:24px;color:var(--accent)}
+.savings-val{font-family:var(--font-display);font-size:52px;font-weight:300;color:var(--ink);line-height:1}
+.savings-unit{font-size:14px;color:var(--ink-60);margin-left:4px}
+.slider-row{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.slider-row input[type=range]{flex:1;accent-color:var(--accent)}
+.slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-30);letter-spacing:.06em;margin-bottom:16px}
+.savings-input-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.savings-manual{font-family:var(--font-display);font-size:18px;border:none;border-bottom:1.5px solid var(--border);background:transparent;color:var(--ink);padding:4px 0;width:200px;outline:none}
+.savings-manual:focus{border-bottom-color:var(--accent)}
+.savings-save{background:var(--ink);color:var(--white);border:none;padding:10px 24px;border-radius:var(--radius);cursor:pointer;font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;transition:background var(--transition)}
+.savings-save:hover{background:var(--accent)}
+.save-ok{font-size:12px;color:var(--forest);opacity:0;transition:opacity .3s;font-weight:500}
+.save-ok.show{opacity:1}
+
+/* MILESTONES */
+.milestones-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px}
+.ms-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:22px;position:relative;transition:border-color var(--transition)}
+.ms-card.reached{border-color:var(--forest);background:rgba(41,79,62,.03)}
+.ms-name{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px}
+.ms-amount{font-family:var(--font-display);font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px}
+.ms-amount em{font-size:16px;color:var(--accent);font-style:normal}
+.ms-note{font-size:11px;color:var(--ink-30);margin-bottom:14px;min-height:14px}
+.ms-bar-wrap{height:5px;background:var(--warm-deep);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.ms-bar{height:100%;background:var(--accent);border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.ms-bar.done{background:var(--forest)}
+.ms-pct{font-size:10px;color:var(--ink-30);font-weight:500}
+.ms-done{font-size:10px;color:var(--forest);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.ms-del{position:absolute;top:10px;right:10px;background:transparent;border:none;cursor:pointer;color:var(--ink-30);font-size:15px;opacity:0;transition:opacity var(--transition)}
+.ms-card:hover .ms-del{opacity:1}
+.ms-del:hover{color:var(--ink)}
+.ms-empty{text-align:center;padding:40px;color:var(--ink-30);font-size:13px;font-style:italic;grid-column:1/-1}
+
+/* MAP */
+.map-section{margin-bottom:48px}
+.map-pct{font-family:var(--font-display);font-size:32px;font-weight:300;color:var(--accent)}
+.map-pct span{font-size:14px;color:var(--ink-30);font-style:normal}
+.region-wrap{display:grid;grid-template-columns:1fr;gap:24px;margin-top:16px}
+.region-block{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px}
+.region-title{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font-display);font-size:18px;font-weight:400;color:var(--ink);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.region-count{font-family:var(--font-body);font-size:11px;color:var(--ink-30);letter-spacing:.08em;font-weight:500}
+.country-grid{display:flex;flex-wrap:wrap;gap:8px}
+.country-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:24px;border:1.5px solid var(--border-md);background:var(--white);font-family:var(--font-body);font-size:13px;color:var(--ink);cursor:pointer;transition:all .18s ease}
+.country-btn:hover{border-color:var(--accent);background:rgba(184,107,42,.05)}
+.country-btn.visited{background:var(--accent);border-color:var(--accent);color:var(--white)}
+.country-btn.visited::before{content:'✓ ';font-weight:600}
+.country-btn.visited:hover{background:var(--accent-lt);border-color:var(--accent-lt)}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(20,18,16,.45);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal{background:var(--white);border-radius:var(--radius);padding:36px;width:100%;max-width:420px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal h3{font-family:var(--font-display);font-size:24px;font-weight:400;margin-bottom:20px}
+.modal label{display:block;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60);margin:16px 0 6px}
+.modal input,.modal select{width:100%;box-sizing:border-box}
+.modal-btns{display:flex;gap:10px;margin-top:24px}
+.modal-btns button{flex:1}
+.modal-close{position:absolute;top:14px;right:16px;background:transparent;border:none;font-size:22px;cursor:pointer;color:var(--ink-30);line-height:1}
+
+@media(max-width:900px){.milestones-grid{grid-template-columns:1fr 1fr}.stats-bar{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.milestones-grid{grid-template-columns:1fr}.stats-bar{grid-template-columns:1fr 1fr}.savings-val{font-size:38px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">指數 <span class="amp">&</span> 行旅<span style="font-family:var(--font-body);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-left:10px;opacity:.8">會員制</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">關於講師</a></li>
+    <li><a href="tools.html">旅行工具</a></li>
+    <li><a href="news.html">財經新聞</a></li>
+    <li><a href="etfrun.html">指數投資模擬器</a></li>
+    <li><a href="bkfly.html">BK飛行計算機</a></li>
+    <li><a href="health.html">健康</a></li>
+    <li><a href="mind.html">心靈</a></li>
+    <li><a href="music.html">音樂</a></li>
+    <li><a href="holdings.html">持股</a></li>
+    <li><a href="goals.html" class="active">目標</a></li>
+  </ul>
+  <a href="tools.html" class="nav-cta">開始試算</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="overline">我的目標</div>
+    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">里程碑追蹤<br><em>存款 & 旅行足跡</em></h1>
+    <p class="prose" style="max-width:440px">記錄你的財富自由進度與走訪過的每一個國家。資料只存在你這台電腦，完全私密。</p>
+  </div>
+</div>
+
+<div class="section">
+<div class="goals-wrap">
+
+  <!-- 統計 -->
+  <div class="stats-bar">
+    <div class="stat-box"><div class="stat-n">NT$<span id="sn-savings" class="acc">0</span></div><div class="stat-l">目前累積存款</div></div>
+    <div class="stat-box"><div class="stat-n"><span id="sn-done">0</span><span class="acc">/</span><span id="sn-total">0</span></div><div class="stat-l">里程碑達成</div></div>
+    <div class="stat-box"><div class="stat-n"><span id="sn-ctry">0</span></div><div class="stat-l">走訪國家</div></div>
+    <div class="stat-box"><div class="stat-n" id="sn-next" style="font-size:18px;padding-top:8px">—</div><div class="stat-l">下一個目標</div></div>
+  </div>
+
+  <!-- 存款滑桿 -->
+  <div class="savings-card">
+    <div class="savings-display">
+      <span class="savings-prefix">NT$</span>
+      <span class="savings-val" id="sv-display">0</span>
+      <span class="savings-unit" id="sv-unit"></span>
+    </div>
+    <div class="slider-row">
+      <span style="font-size:11px;color:var(--ink-30);white-space:nowrap">100萬</span>
+      <input type="range" id="savings-slider" min="1000000" max="100000000" step="100000" value="1000000"/>
+      <span style="font-size:11px;color:var(--ink-30);white-space:nowrap">1億</span>
+    </div>
+    <div class="slider-labels">
+      <span>100萬</span><span>2,500萬</span><span>5,000萬</span><span>7,500萬</span><span>1億</span>
+    </div>
+    <div class="savings-input-row">
+      <span style="font-size:12px;color:var(--ink-60);font-weight:500">或直接輸入：NT$</span>
+      <input class="savings-manual" type="number" id="savings-manual" placeholder="輸入金額" min="0" step="100000"/>
+      <button class="savings-save" onclick="saveSavings()">儲存</button>
+      <span class="save-ok" id="save-ok">✓ 已儲存</span>
+    </div>
+  </div>
+
+  <!-- 里程碑 -->
+  <div class="section-gap">
+    <div class="sec-head">
+      <div class="sec-title">存款<em>里程碑</em></div>
+      <button class="add-btn" onclick="openModal('ms')">+ 新增</button>
+    </div>
+    <div class="milestones-grid" id="ms-grid"></div>
+  </div>
+
+  <!-- 旅行足跡 -->
+  <div class="map-section">
+    <div class="sec-head">
+      <div class="sec-title">旅行<em>足跡</em></div>
+      <div class="map-pct"><span id="map-pct-val">0</span>% <span>走訪世界</span></div>
+    </div>
+    <p style="font-size:12px;color:var(--ink-60);margin-bottom:20px">點擊任一國家來標記為已走訪，再點一次取消。資料保存在你這台電腦。</p>
+
+    <div class="region-wrap">
+
+      <div class="region-block">
+        <div class="region-title">亞洲 <span class="region-count" data-region="asia">0/14</span></div>
+        <div class="country-grid" data-region="asia">
+          <button class="country-btn" data-name="日本">🇯🇵 日本</button>
+          <button class="country-btn" data-name="韓國">🇰🇷 韓國</button>
+          <button class="country-btn" data-name="中國">🇨🇳 中國</button>
+          <button class="country-btn" data-name="香港">🇭🇰 香港</button>
+          <button class="country-btn" data-name="澳門">🇲🇴 澳門</button>
+          <button class="country-btn" data-name="泰國">🇹🇭 泰國</button>
+          <button class="country-btn" data-name="越南">🇻🇳 越南</button>
+          <button class="country-btn" data-name="新加坡">🇸🇬 新加坡</button>
+          <button class="country-btn" data-name="馬來西亞">🇲🇾 馬來西亞</button>
+          <button class="country-btn" data-name="印尼">🇮🇩 印尼</button>
+          <button class="country-btn" data-name="菲律賓">🇵🇭 菲律賓</button>
+          <button class="country-btn" data-name="柬埔寨">🇰🇭 柬埔寨</button>
+          <button class="country-btn" data-name="緬甸">🇲🇲 緬甸</button>
+          <button class="country-btn" data-name="尼泊爾">🇳🇵 尼泊爾</button>
+        </div>
+      </div>
+
+      <div class="region-block">
+        <div class="region-title">南亞 / 中東 <span class="region-count" data-region="me">0/9</span></div>
+        <div class="country-grid" data-region="me">
+          <button class="country-btn" data-name="印度">🇮🇳 印度</button>
+          <button class="country-btn" data-name="斯里蘭卡">🇱🇰 斯里蘭卡</button>
+          <button class="country-btn" data-name="馬爾地夫">🇲🇻 馬爾地夫</button>
+          <button class="country-btn" data-name="杜拜/UAE">🇦🇪 杜拜/UAE</button>
+          <button class="country-btn" data-name="卡達">🇶🇦 卡達</button>
+          <button class="country-btn" data-name="土耳其">🇹🇷 土耳其</button>
+          <button class="country-btn" data-name="以色列">🇮🇱 以色列</button>
+          <button class="country-btn" data-name="約旦">🇯🇴 約旦</button>
+          <button class="country-btn" data-name="沙烏地阿拉伯">🇸🇦 沙烏地</button>
+        </div>
+      </div>
+
+      <div class="region-block">
+        <div class="region-title">歐洲 <span class="region-count" data-region="eu">0/18</span></div>
+        <div class="country-grid" data-region="eu">
+          <button class="country-btn" data-name="英國">🇬🇧 英國</button>
+          <button class="country-btn" data-name="法國">🇫🇷 法國</button>
+          <button class="country-btn" data-name="德國">🇩🇪 德國</button>
+          <button class="country-btn" data-name="義大利">🇮🇹 義大利</button>
+          <button class="country-btn" data-name="西班牙">🇪🇸 西班牙</button>
+          <button class="country-btn" data-name="葡萄牙">🇵🇹 葡萄牙</button>
+          <button class="country-btn" data-name="荷蘭">🇳🇱 荷蘭</button>
+          <button class="country-btn" data-name="比利時">🇧🇪 比利時</button>
+          <button class="country-btn" data-name="瑞士">🇨🇭 瑞士</button>
+          <button class="country-btn" data-name="奧地利">🇦🇹 奧地利</button>
+          <button class="country-btn" data-name="捷克">🇨🇿 捷克</button>
+          <button class="country-btn" data-name="希臘">🇬🇷 希臘</button>
+          <button class="country-btn" data-name="冰島">🇮🇸 冰島</button>
+          <button class="country-btn" data-name="挪威">🇳🇴 挪威</button>
+          <button class="country-btn" data-name="瑞典">🇸🇪 瑞典</button>
+          <button class="country-btn" data-name="丹麥">🇩🇰 丹麥</button>
+          <button class="country-btn" data-name="芬蘭">🇫🇮 芬蘭</button>
+          <button class="country-btn" data-name="俄羅斯">🇷🇺 俄羅斯</button>
+        </div>
+      </div>
+
+      <div class="region-block">
+        <div class="region-title">美洲 <span class="region-count" data-region="am">0/9</span></div>
+        <div class="country-grid" data-region="am">
+          <button class="country-btn" data-name="美國">🇺🇸 美國</button>
+          <button class="country-btn" data-name="加拿大">🇨🇦 加拿大</button>
+          <button class="country-btn" data-name="墨西哥">🇲🇽 墨西哥</button>
+          <button class="country-btn" data-name="古巴">🇨🇺 古巴</button>
+          <button class="country-btn" data-name="巴西">🇧🇷 巴西</button>
+          <button class="country-btn" data-name="阿根廷">🇦🇷 阿根廷</button>
+          <button class="country-btn" data-name="秘魯">🇵🇪 秘魯</button>
+          <button class="country-btn" data-name="智利">🇨🇱 智利</button>
+          <button class="country-btn" data-name="哥倫比亞">🇨🇴 哥倫比亞</button>
+        </div>
+      </div>
+
+      <div class="region-block">
+        <div class="region-title">非洲 <span class="region-count" data-region="af">0/7</span></div>
+        <div class="country-grid" data-region="af">
+          <button class="country-btn" data-name="埃及">🇪🇬 埃及</button>
+          <button class="country-btn" data-name="摩洛哥">🇲🇦 摩洛哥</button>
+          <button class="country-btn" data-name="南非">🇿🇦 南非</button>
+          <button class="country-btn" data-name="肯亞">🇰🇪 肯亞</button>
+          <button class="country-btn" data-name="坦尚尼亞">🇹🇿 坦尚尼亞</button>
+          <button class="country-btn" data-name="衣索比亞">🇪🇹 衣索比亞</button>
+          <button class="country-btn" data-name="盧安達">🇷🇼 盧安達</button>
+        </div>
+      </div>
+
+      <div class="region-block">
+        <div class="region-title">大洋洲 <span class="region-count" data-region="oc">0/4</span></div>
+        <div class="country-grid" data-region="oc">
+          <button class="country-btn" data-name="澳洲">🇦🇺 澳洲</button>
+          <button class="country-btn" data-name="紐西蘭">🇳🇿 紐西蘭</button>
+          <button class="country-btn" data-name="斐濟">🇫🇯 斐濟</button>
+          <button class="country-btn" data-name="大溪地">🇵🇫 大溪地</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+</div>
+
+<!-- 新增里程碑 Modal -->
+<div id="modal-ms" class="modal-bg" style="display:none" onclick="if(event.target===this)closeModal('ms')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('ms')">×</button>
+    <h3>新增存款里程碑</h3>
+    <label>里程碑名稱</label>
+    <input type="text" id="ms-name" placeholder="例：第一桶金、環遊世界基金"/>
+    <label>目標金額（新台幣）</label>
+    <input type="number" id="ms-amount" placeholder="例：1000000" min="0" step="100000"/>
+    <label>備註（選填）</label>
+    <input type="text" id="ms-note" placeholder="例：預計 2027 年達成"/>
+    <div class="modal-btns">
+      <button onclick="closeModal('ms')">取消</button>
+      <button class="savings-save" style="border-radius:var(--radius)" onclick="addMS()">新增 ✓</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">指數 <span class="amp">&amp;</span> 行旅</a>
+  <div class="footer-links">
+    <a href="about.html">關於</a><a href="tools.html">工具</a><a href="news.html">新聞</a>
+  </div>
+  <div class="footer-copy">&copy; 2025 指數 &amp; 行旅</div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+const LS = { sav:'bk_savings2', ms:'bk_ms2', ctry:'bk_ctry2' };
+function ls_get(k, d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }
+function ls_set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+let savings   = ls_get(LS.sav, 1000000);
+let milestones= ls_get(LS.ms,  []);
+let visited   = ls_get(LS.ctry, []); // array of country names
+
+// ── 格式化金額 ──
+function fmtN(n){
+  if (n >= 100000000) return (n/100000000).toFixed(2)+'億';
+  if (n >= 10000000)  return (n/10000000).toFixed(1)+'千萬';
+  if (n >= 1000000)   return (n/1000000).toFixed(0)+'萬';
+  return Number(n).toLocaleString();
+}
+function fmtFull(n){ return Number(n).toLocaleString('zh-TW'); }
+
+// ── 滑桿 ──
+const slider = document.getElementById('savings-slider');
+const display = document.getElementById('sv-display');
+const manual  = document.getElementById('savings-manual');
+
+function updateDisplay(val){
+  const v = Math.round(val);
+  if (v >= 100000000) { display.textContent = (v/100000000).toFixed(2); document.getElementById('sv-unit').textContent = '億元'; }
+  else if (v >= 10000) { display.textContent = Math.round(v/10000).toLocaleString(); document.getElementById('sv-unit').textContent = '萬元'; }
+  else { display.textContent = v.toLocaleString(); document.getElementById('sv-unit').textContent = '元'; }
+}
+
+slider.value = Math.min(100000000, Math.max(1000000, savings));
+updateDisplay(savings);
+manual.value = savings;
+
+slider.addEventListener('input', function(){
+  savings = parseInt(this.value);
+  updateDisplay(savings);
+  manual.value = savings;
+  renderAll();
+});
+
+manual.addEventListener('input', function(){
+  const v = parseInt(this.value) || 0;
+  savings = v;
+  slider.value = Math.min(100000000, Math.max(1000000, v));
+  updateDisplay(v);
+  renderAll();
+});
+manual.addEventListener('keydown', e => { if(e.key==='Enter') saveSavings(); });
+
+function saveSavings(){
+  ls_set(LS.sav, savings);
+  const ok = document.getElementById('save-ok');
+  ok.classList.add('show');
+  setTimeout(()=>ok.classList.remove('show'), 2500);
+  renderAll();
+}
+
+// ── 里程碑 ──
+function addMS(){
+  const name   = document.getElementById('ms-name').value.trim();
+  const amount = parseInt(document.getElementById('ms-amount').value) || 0;
+  const note   = document.getElementById('ms-note').value.trim();
+  if (!name || !amount){ alert('請填寫名稱和目標金額'); return; }
+  milestones.push({ id:Date.now(), name, amount, note });
+  milestones.sort((a,b)=>a.amount-b.amount);
+  ls_set(LS.ms, milestones);
+  closeModal('ms');
+  ['ms-name','ms-amount','ms-note'].forEach(id=>document.getElementById(id).value='');
+  renderAll();
+}
+function delMS(id){
+  milestones = milestones.filter(m=>m.id!==id);
+  ls_set(LS.ms, milestones);
+  renderAll();
+}
+function renderMS(){
+  const grid = document.getElementById('ms-grid');
+  if (!milestones.length){
+    grid.innerHTML = '<div class="ms-empty">還沒有里程碑，點「新增」開始設定你的財富自由目標 ✦</div>';
+    return;
+  }
+  grid.innerHTML = milestones.map(m => {
+    const pct  = Math.min(100, Math.round((savings/m.amount)*100));
+    const done = savings >= m.amount;
+    return `<div class="ms-card ${done?'reached':''}">
+      <button class="ms-del" onclick="delMS(${m.id})">×</button>
+      <div class="ms-name">${m.name}</div>
+      <div class="ms-amount"><em>NT$</em>${fmtFull(m.amount)}</div>
+      <div class="ms-note">${m.note||''}</div>
+      <div class="ms-bar-wrap"><div class="ms-bar ${done?'done':''}" style="width:${pct}%"></div></div>
+      <div>${done
+        ? '<span class="ms-done">✓ 已達成！</span>'
+        : '<span class="ms-pct">'+pct+'% · 還差 NT$'+fmtFull(m.amount-savings)+'</span>'
+      }</div>
+    </div>`;
+  }).join('');
+}
+
+// ── 地圖（國家按鈕）──
+const TOTAL = document.querySelectorAll('.country-btn').length;
+
+function initMap(){
+  document.querySelectorAll('.country-btn').forEach(btn => {
+    const name = btn.dataset.name;
+    if (visited.includes(name)) btn.classList.add('visited');
+    btn.addEventListener('click', () => {
+      if (visited.includes(name)){
+        visited = visited.filter(v=>v!==name);
+        btn.classList.remove('visited');
+      } else {
+        visited.push(name);
+        btn.classList.add('visited');
+      }
+      ls_set(LS.ctry, visited);
+      renderMap();
+      renderStats();
+    });
+  });
+}
+
+function renderMap(){
+  const total = document.querySelectorAll('.country-btn').length;
+  const pct = total > 0 ? Math.round((visited.length / total)*100) : 0;
+  document.getElementById('map-pct-val').textContent = pct;
+
+  // 更新各區計數
+  document.querySelectorAll('.region-count').forEach(el => {
+    const region = el.dataset.region;
+    const grid = document.querySelector(`.country-grid[data-region="${region}"]`);
+    const all = grid.querySelectorAll('.country-btn');
+    const done = grid.querySelectorAll('.country-btn.visited').length;
+    el.textContent = done + '/' + all.length;
+  });
+}
+
+function removeCountry(name){
+  visited = visited.filter(v=>v!==name);
+  ls_set(LS.ctry, visited);
+  document.querySelectorAll('.country-btn').forEach(b=>{
+    if(b.dataset.name===name) b.classList.remove('visited');
+  });
+  renderMap();
+  renderStats();
+}
+
+// ── 統計 ──
+function renderStats(){
+  document.getElementById('sn-savings').textContent = fmtN(savings);
+  const done = milestones.filter(m=>savings>=m.amount).length;
+  document.getElementById('sn-done').textContent  = done;
+  document.getElementById('sn-total').textContent = milestones.length;
+  document.getElementById('sn-ctry').textContent  = visited.length;
+  const next = milestones.find(m=>savings<m.amount);
+  document.getElementById('sn-next').textContent = next ? 'NT$'+fmtN(next.amount) : (milestones.length?'全達成 🎉':'—');
+}
+
+function renderAll(){ renderStats(); renderMS(); renderMap(); }
+
+function openModal(t){ document.getElementById('modal-'+t).style.display='flex'; }
+function closeModal(t){ document.getElementById('modal-'+t).style.display='none'; }
+
+initMap();
+renderAll();
+</script>
+</body>
+</html>

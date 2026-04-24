@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>指數 & 行旅 — 用投資的思維探索世界</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+
+/* ══ HERO ══ */
+.hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:55% 45%;
+  position:relative;
+  padding-top:68px; /* nav height */
+}
+.hero-left{
+  padding:80px 64px 80px 52px;
+  display:flex;flex-direction:column;justify-content:center;
+  border-right:1px solid var(--border);
+}
+.hero-eyebrow{margin-bottom:36px}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(54px,7vw,90px);
+  font-weight:300;
+  line-height:1.03;
+  letter-spacing:-.02em;
+  margin-bottom:32px;
+}
+.hero-title em{font-style:italic;color:var(--accent);font-weight:300}
+.hero-sub{
+  font-family:var(--font-serif);
+  font-size:15.5px;line-height:2;color:var(--ink-60);
+  font-weight:300;max-width:440px;margin-bottom:48px;
+}
+.hero-actions{display:flex;gap:14px;margin-bottom:72px}
+.hero-stats{
+  display:grid;grid-template-columns:repeat(3,auto);
+  gap:0;border-top:1px solid var(--border);padding-top:36px;
+  width:fit-content;
+}
+.stat{padding-right:40px;margin-right:40px;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none;margin-right:0;padding-right:0}
+.stat-n{
+  font-family:var(--font-display);
+  font-size:42px;font-weight:300;color:var(--ink);
+  line-height:1;margin-bottom:6px;
+}
+.stat-l{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60)}
+
+/* Hero right — visual panel */
+.hero-right{
+  background:var(--warm);
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-right-inner{
+  position:relative;width:320px;height:320px;
+}
+.ring{
+  position:absolute;border-radius:50%;border:1px solid;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.ring-1{width:320px;height:320px;border-color:rgba(184,107,42,.18);animation:spin 40s linear infinite}
+.ring-2{width:230px;height:230px;border-color:rgba(41,79,62,.15);animation:spin 28s linear infinite reverse}
+.ring-3{width:140px;height:140px;border-color:rgba(201,161,74,.2);animation:spin 18s linear infinite}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.globe{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:76px;height:76px;border-radius:50%;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;
+  box-shadow:0 0 0 12px rgba(184,107,42,.08),0 20px 60px rgba(184,107,42,.25);
+}
+.map-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--forest)}
+.map-dot::after{
+  content:'';position:absolute;
+  top:-4px;left:-4px;width:15px;height:15px;
+  border-radius:50%;border:1px solid var(--forest);
+  animation:pulse 2.5s ease-in-out infinite;opacity:0;
+}
+.map-dot:nth-child(2){animation-delay:.5s}
+.map-dot:nth-child(3){animation-delay:1s}
+@keyframes pulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(1.8);opacity:0}}
+.map-label{
+  position:absolute;
+  font-size:10px;font-weight:500;letter-spacing:.06em;
+  color:var(--ink);white-space:nowrap;
+  background:rgba(251,248,244,.92);
+  border:1px solid var(--border);
+  padding:4px 10px;border-radius:20px;
+  backdrop-filter:blur(4px);
+}
+.hero-deco-text{
+  position:absolute;bottom:32px;right:28px;
+  font-family:var(--font-display);font-size:11px;font-weight:300;
+  color:var(--ink-30);writing-mode:vertical-rl;letter-spacing:.2em;
+}
+.hero-index-line{
+  position:absolute;top:32px;left:32px;
+  font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-30);
+}
+
+/* ══ MARQUEE ══ */
+.marquee-bar{
+  background:var(--ink);
+  padding:13px 0;overflow:hidden;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+.marquee-track{
+  display:flex;white-space:nowrap;
+  animation:marquee 30s linear infinite;
+}
+.marquee-track span{
+  font-size:10.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.38);padding:0 28px;
+}
+.marquee-track .dot-sep{color:var(--accent);opacity:.6}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ══ ABOUT STRIP ══ */
+.about-strip{
+  padding:96px 52px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0;
+  max-width:100%;
+}
+.about-left{
+  padding-right:80px;
+  border-right:1px solid var(--border);
+  padding-right:72px;
+}
+.about-left .overline{margin-bottom:28px}
+.about-left .display-lg{margin-bottom:28px}
+.about-left .prose{margin-bottom:36px}
+.about-right{
+  padding-left:72px;
+  display:flex;align-items:center;
+}
+.about-card{
+  width:100%;
+  background:var(--warm);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:40px;
+  text-align:center;
+}
+.about-avatar{
+  width:100px;height:100px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-lt));
+  margin:0 auto 20px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(184,107,42,.2);
+}
+.about-name{font-family:var(--font-display);font-size:26px;font-weight:400;margin-bottom:4px}
+.about-role{font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:20px}
+.about-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+
+/* ══ TOOLS ══ */
+.tools-section{background:var(--warm);padding:96px 52px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.tools-head{
+  max-width:var(--container);margin:0 auto 56px;
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;
+}
+.tools-head-right{display:flex;align-items:flex-end;justify-content:flex-end}
+.tools-grid-wrap{max-width:var(--container);margin:0 auto}
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.tool-card{
+  background:var(--white);
+  padding:40px 36px;
+  text-decoration:none;color:inherit;
+  display:block;
+  position:relative;overflow:hidden;
+  transition:background var(--transition);
+}
+.tool-card:hover{background:var(--ink)}
+.tool-card:hover .tool-name,.tool-card:hover .tool-desc{color:rgba(255,255,255,.85)}
+.tool-card:hover .tool-overline{color:rgba(255,255,255,.4)}
+.tool-card:hover .tool-arrow{color:var(--accent-lt);transform:translate(3px,-3px)}
+.tool-icon-wrap{
+  width:48px;height:48px;border-radius:var(--radius);
+  background:var(--warm);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:28px;
+  transition:background var(--transition);
+}
+.tool-card:hover .tool-icon-wrap{background:rgba(255,255,255,.08)}
+.tool-overline{font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-30);margin-bottom:12px;transition:color var(--transition)}
+.tool-name{font-family:var(--font-display);font-size:22px;font-weight:400;margin-bottom:12px;transition:color var(--transition)}
+.tool-desc{font-size:13px;color:var(--ink-60);line-height:1.75;transition:color var(--transition)}
+.tool-arrow{
+  position:absolute;bottom:36px;right:36px;
+  font-size:20px;color:var(--ink-30);
+  transition:transform var(--transition),color var(--transition);
+}
+
+/* ══ NEWS ══ */
+.news-section{padding:96px 52px}
+.news-inner{max-width:var(--container);margin:0 auto}
+.news-header{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:52px;padding-bottom:28px;border-bottom:1px solid var(--border);
+}
+.news-view-all{
+  font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);text-decoration:none;
+  display:flex;align-items:center;gap:8px;
+  transition:gap var(--transition);
+}
+.news-view-all:hover{gap:12px}
+.news-layout{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.news-featured{
+  background:var(--white);padding:0;
+  display:block;text-decoration:none;color:inherit;
+  transition:background var(--transition);
+}
+.news-featured:hover{background:var(--warm)}
+.news-img{
+  width:100%;height:260px;
+  background:var(--warm-deep);
+  display:flex;align-items:center;justify-content:center;
+  font-size:56px;
+  border-bottom:1px solid var(--border);
+}
+.news-body{padding:32px}
+.news-cat{font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.news-title{font-family:var(--font-display);font-size:24px;font-weight:400;line-height:1.3;margin-bottom:10px}
+.news-excerpt{font-size:13px;color:var(--ink-60);line-height:1.8;margin-bottom:16px}
+.news-date{font-size:10.5px;color:var(--ink-30);font-weight:500;letter-spacing:.06em}
+.news-stack{background:var(--white);display:flex;flex-direction:column}
+.news-item{
+  flex:1;padding:32px;
+  border-bottom:1px solid var(--border);
+  display:block;text-decoration:none;color:inherit;
+  transition:background var(--transition);
+  display:flex;gap:24px;align-items:flex-start;
+}
+.news-item:last-child{border-bottom:none}
+.news-item:hover{background:var(--warm)}
+.news-item-icon{
+  width:56px;height:56px;flex-shrink:0;
+  background:var(--warm-deep);border-radius:var(--radius);
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+}
+.news-item-body{}
+.news-item-cat{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.news-item-title{font-family:var(--font-display);font-size:18px;font-weight:400;line-height:1.35;margin-bottom:6px}
+.news-item-date{font-size:10.5px;color:var(--ink-30);font-weight:500}
+
+/* ══ CTA ══ */
+.cta-section{
+  background:var(--ink);
+  padding:96px 52px;
+  text-align:center;
+  position:relative;overflow:hidden;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+.cta-bg{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(184,107,42,.12) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cta-inner{position:relative;z-index:1;max-width:560px;margin:0 auto}
+.cta-overline{
+  font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:20px;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+}
+.cta-overline::before,.cta-overline::after{content:'';display:block;width:24px;height:1px;background:var(--accent)}
+.cta-title{
+  font-family:var(--font-display);
+  font-size:clamp(40px,5vw,62px);
+  font-weight:300;color:rgba(255,255,255,.9);
+  line-height:1.1;margin-bottom:16px;
+}
+.cta-title em{font-style:italic;color:var(--gold)}
+.cta-sub{
+  font-family:var(--font-serif);
+  font-size:14px;line-height:1.9;
+  color:rgba(255,255,255,.38);
+  margin-bottom:44px;font-weight:300;
+}
+.cta-form{display:flex;gap:0;max-width:440px;margin:0 auto;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);overflow:hidden}
+.cta-input{
+  flex:1;padding:16px 20px;
+  background:rgba(255,255,255,.05);
+  border:none;color:rgba(255,255,255,.8);
+  font-family:var(--font-body);font-size:14px;outline:none;
+}
+.cta-input::placeholder{color:rgba(255,255,255,.22)}
+.cta-submit{
+  padding:16px 28px;
+  background:var(--accent);color:var(--white);
+  border:none;cursor:pointer;
+  font-family:var(--font-body);font-size:11px;
+  font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  transition:background var(--transition);white-space:nowrap;
+}
+.cta-submit:hover{background:var(--accent-lt)}
+
+/* ── 手機版修正 ── */
+@media(max-width:768px){
+  .hero{grid-template-columns:1fr;min-height:auto;padding-top:60px}
+  .hero-left{padding:48px 24px 40px;border-right:none;border-bottom:1px solid var(--border)}
+  .hero-right{height:280px;order:-1}
+  .hero-right-inner{width:220px;height:220px}
+  .ring-1{width:220px;height:220px}
+  .ring-2{width:160px;height:160px}
+  .ring-3{width:100px;height:100px}
+  .hero-title{font-size:clamp(40px,10vw,64px)}
+  .hero-stats{grid-template-columns:1fr 1fr 1fr;gap:0}
+  .stat{padding-right:20px;margin-right:20px}
+  .stat-n{font-size:28px}
+  .about-strip{grid-template-columns:1fr;padding:48px 24px}
+  .about-strip .about-right{order:-1}
+  .tools-section{padding:48px 24px}
+  .tools-grid{grid-template-columns:1fr}
+  .marquee-bar{display:none}
+}
+@media(max-width:480px){
+  .hero-left{padding:36px 20px 32px}
+  .hero-actions{flex-direction:column}
+  .hero-stats{gap:0}
+  .stat{padding-right:12px;margin-right:12px}
+  .stat-n{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">指數 <span class="amp">&</span> 行旅<span style="font-family:var(--font-body);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-left:10px;opacity:.8">會員制</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">關於講師</a></li>
+    <li><a href="tools.html">旅行工具</a></li>
+    <li><a href="news.html">財經新聞</a></li>
+    <li><a href="etfrun.html">指數投資模擬器</a></li>
+    <li><a href="bkfly.html">BK飛行計算機</a></li>
+    <li><a href="health.html">健康</a></li>
+    <li><a href="mind.html">心靈</a></li>
+    <li><a href="music.html">音樂</a></li>
+    <li><a href="holdings.html">持股</a></li>
+    <li><a href="goals.html">目標</a></li>
+  </ul>
+  <a href="tools.html" class="nav-cta">開始試算</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="overline hero-eyebrow">指數投資 × 環遊世界</div>
+    <h1 class="hero-title">
+      用投資的思維<br>
+      <em>探索整個世界</em>
+    </h1>
+    <p class="hero-sub">財富自由不是終點，而是讓你能去任何地方的入場券。每一趟旅行，都是對生命最好的指數型投資。</p>
+    <div class="hero-actions">
+      <a href="tools.html" class="btn-primary">旅費 & 里程試算</a>
+      <a href="about.html" class="btn-outline">認識講師</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-n">30+</div>
+        <div class="stat-l">已走訪國家</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">3,000+</div>
+        <div class="stat-l">累計學員</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">7 年</div>
+        <div class="stat-l">指數投資歷程</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-index-line">Travel · Invest · Freedom</div>
+    <div class="hero-right-inner">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+      <div class="ring ring-3"></div>
+      <div class="globe">🌏</div>
+      <div class="map-dot" style="top:24px;left:168px">
+        <span class="map-label" style="top:-28px;left:10px">東京</span>
+      </div>
+      <div class="map-dot" style="top:155px;left:22px">
+        <span class="map-label" style="top:-28px;left:10px">巴黎</span>
+      </div>
+      <div class="map-dot" style="top:285px;left:205px">
+        <span class="map-label" style="bottom:-28px;left:10px">峇里島</span>
+      </div>
+      <div class="map-dot" style="top:96px;left:280px">
+        <span class="map-label" style="top:-28px;right:10px">紐約</span>
+      </div>
+      <div class="map-dot" style="top:58px;left:72px">
+        <span class="map-label" style="top:-28px;left:10px">倫敦</span>
+      </div>
+      <div class="map-dot" style="top:210px;left:290px">
+        <span class="map-label" style="top:-28px;right:10px">曼谷</span>
+      </div>
+      <div class="map-dot" style="top:250px;left:55px">
+        <span class="map-label" style="bottom:-28px;left:10px">開普敦</span>
+      </div>
+      <div class="map-dot" style="top:130px;left:155px">
+        <span class="map-label" style="top:-28px;left:10px">杜拜</span>
+      </div>
+      <div class="map-dot" style="top:300px;left:108px">
+        <span class="map-label" style="bottom:-28px;left:10px">雪梨</span>
+      </div>
+      <div class="map-dot" style="top:180px;left:118px">
+        <span class="map-label" style="top:-28px;left:10px">首爾</span>
+      </div>
+    </div>
+    <div class="hero-deco-text">Travel &amp; Index</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span>指數投資</span><span class="dot-sep">·</span>
+    <span>財富自由</span><span class="dot-sep">·</span>
+    <span>環遊世界</span><span class="dot-sep">·</span>
+    <span>里程兌換</span><span class="dot-sep">·</span>
+    <span>旅費試算</span><span class="dot-sep">·</span>
+    <span>ETF Portfolio</span><span class="dot-sep">·</span>
+    <span>被動收入</span><span class="dot-sep">·</span>
+    <span>Tokyo · Paris · Bali · New York</span><span class="dot-sep">·</span>
+    <span>指數投資</span><span class="dot-sep">·</span>
+    <span>財富自由</span><span class="dot-sep">·</span>
+    <span>環遊世界</span><span class="dot-sep">·</span>
+    <span>里程兌換</span><span class="dot-sep">·</span>
+    <span>旅費試算</span><span class="dot-sep">·</span>
+    <span>ETF Portfolio</span><span class="dot-sep">·</span>
+    <span>被動收入</span><span class="dot-sep">·</span>
+    <span>Tokyo · Paris · Bali · New York</span><span class="dot-sep">·</span>
+  </div>
+</div>
+
+<!-- ABOUT STRIP -->
+<section class="about-strip fade-up">
+  <div class="about-left">
+    <div class="overline">關於講師</div>
+    <h2 class="display-lg" style="margin-top:24px">投資讓我有選擇，<br><em>旅行讓我有靈魂</em></h2>
+    <p class="prose" style="margin-top:20px">我是一名指數投資講師，相信每個人都能透過簡單的 ETF 策略打造被動收入。走過十幾個國家後，我發現：真正的財富自由不是躺平，而是讓你能在東京的咖啡館思考資產配置，在峇里島的夕陽下感受複利的重量。</p>
+    <a href="about.html" class="btn-outline" style="margin-top:36px">了解更多</a>
+  </div>
+  <div class="about-right">
+    <div class="about-card">
+      <div class="about-avatar">
+        <svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" style="display:block">
+          <circle cx="28" cy="22" r="11" fill="rgba(255,255,255,0.9)"/>
+          <path d="M17 22 Q17 14 28 14 Q39 14 39 22" fill="#8B5E3C"/>
+          <path d="M17 22 Q16 20 18 19 Q17 22 17 22Z" fill="#8B5E3C"/>
+          <path d="M39 22 Q40 20 38 19 Q39 22 39 22Z" fill="#8B5E3C"/>
+          <path d="M28 14 Q22 12 19 16 Q17 18 17 22 Q18 14 28 13 Q38 14 39 22 Q39 18 37 16 Q34 12 28 14Z" fill="#6B4226"/>
+          <ellipse cx="28" cy="38" rx="14" ry="10" fill="rgba(255,255,255,0.85)"/>
+          <rect x="22" y="32" width="12" height="10" rx="2" fill="rgba(255,255,255,0.85)"/>
+        </svg>
+      </div>
+      <div class="about-name">BK</div>
+      <div class="about-role">指數投資講師 · 旅行者</div>
+      <div class="about-pills">
+        <span class="pill">ETF 投資</span>
+        <span class="pill">資產配置</span>
+        <span class="pill">財務規劃</span>
+        <span class="pill">30 國旅行</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule"/>
+
+<!-- TOOLS -->
+<section class="tools-section">
+  <div class="tools-head">
+    <div>
+      <div class="overline" style="margin-bottom:24px">實用工具</div>
+      <h2 class="display-lg">規劃你的<br><em>自由旅程</em></h2>
+    </div>
+    <div class="tools-head-right">
+      <p class="prose" style="max-width:340px;text-align:right">從旅費預估到里程兌換，把每一趟旅行算得清清楚楚，讓財富自由不只是夢想。</p>
+    </div>
+  </div>
+  <div class="tools-grid-wrap">
+    <div class="tools-grid">
+      <a href="tools.html#budget" class="tool-card">
+        <div class="tool-icon-wrap">🧳</div>
+        <div class="tool-overline">工具 01</div>
+        <div class="tool-name">旅費試算</div>
+        <div class="tool-desc">輸入出發地、目的地、人數與天數，自動估算機票、住宿、餐飲與交通的完整旅費，並告訴你指數投資幾個月可達標。</div>
+        <div class="tool-arrow">↗</div>
+      </a>
+      <a href="tools.html#miles" class="tool-card">
+        <div class="tool-icon-wrap">✈️</div>
+        <div class="tool-overline">工具 02</div>
+        <div class="tool-name">里程兌換計算機</div>
+        <div class="tool-desc">選擇航線、艙等、單程或來回，立即查詢長榮、華航、亞洲萬里通等五大計畫所需里程數與最划算方案。</div>
+        <div class="tool-arrow">↗</div>
+      </a>
+      <a href="tools.html#budget10k" class="tool-card">
+        <div class="tool-icon-wrap">💰</div>
+        <div class="tool-overline">工具 03</div>
+        <div class="tool-name">萬元以下推薦行程</div>
+        <div class="tool-desc">精選從台灣出發、兩位大人、新台幣一萬元以內即可成行的超值行程，讓旅行門檻不再是阻礙。</div>
+        <div class="tool-arrow">↗</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="news-section fade-up">
+  <div class="news-inner">
+    <div class="news-header">
+      <div>
+        <div class="overline" style="margin-bottom:16px">本週精選</div>
+        <h2 class="display-md">財經 &amp; 旅行動態</h2>
+      </div>
+      <a href="news.html" class="news-view-all">查看全部 →</a>
+    </div>
+    <div class="news-layout">
+      <a href="news.html" class="news-featured">
+        <div class="news-img">📈</div>
+        <div class="news-body">
+          <div class="news-cat">指數投資</div>
+          <div class="news-title">Fed 維持利率不變，全球 ETF 資金流入創今年新高</div>
+          <div class="news-excerpt">聯準會按兵不動，市場解讀為偏鴿立場。全球股市普遍回溫，ETF 單週淨流入達 420 億美元，為今年以來最大單週流入……</div>
+          <div class="news-date">2025 年 4 月 24 日</div>
+        </div>
+      </a>
+      <div class="news-stack">
+        <a href="news.html" class="news-item">
+          <div class="news-item-icon">🗼</div>
+          <div class="news-item-body">
+            <div class="news-item-cat">旅行體驗</div>
+            <div class="news-item-title">春日東京：在新宿御苑想通了資產配置這件事</div>
+            <div class="news-item-date">2025 年 4 月 22 日</div>
+          </div>
+        </a>
+        <a href="news.html" class="news-item">
+          <div class="news-item-icon">✈️</div>
+          <div class="news-item-body">
+            <div class="news-item-cat">旅行工具</div>
+            <div class="news-item-title">用 35,000 里程飛日本商務艙，完整攻略分享</div>
+            <div class="news-item-date">2025 年 4 月 18 日</div>
+          </div>
+        </a>
+        <a href="news.html" class="news-item">
+          <div class="news-item-icon">🌴</div>
+          <div class="news-item-body">
+            <div class="news-item-cat">旅行哲學</div>
+            <div class="news-item-title">峇里島日落教我的複利哲學</div>
+            <div class="news-item-date">2025 年 4 月 15 日</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html" class="footer-logo">指數 <span class="amp">&</span> 行旅</a>
+  <div class="footer-links">
+    <a href="about.html">關於</a>
+    <a href="tools.html">工具</a>
+    <a href="news.html">新聞</a>
+    <a href="#subscribe">訂閱</a>
+  </div>
+  <div class="footer-copy">© 2025 指數 & 行旅</div>
+</footer>
+
+<script src="shared.js"></script>
+</body>
+</html>

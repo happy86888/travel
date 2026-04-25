@@ -28,3 +28,60 @@ function subscribe(btn) {
   btn.style.background = '#294f3e';
   setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 3000);
 }
+
+
+// ── 手機版漢堡選單 ──
+(function() {
+  function setupMobileNav() {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+
+    const navLinks = nav.querySelector('.nav-links');
+    if (!navLinks) return;
+
+    // 動態插入漢堡按鈕
+    const toggle = document.createElement('button');
+    toggle.className = 'nav-toggle';
+    toggle.setAttribute('aria-label', '選單');
+    toggle.innerHTML = '<span></span><span></span><span></span>';
+    nav.appendChild(toggle);
+
+    // 動態插入遮罩
+    const overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+
+    function openMenu() {
+      navLinks.classList.add('open');
+      toggle.classList.add('open');
+      overlay.classList.add('show');
+      requestAnimationFrame(() => overlay.classList.add('open'));
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      navLinks.classList.remove('open');
+      toggle.classList.remove('open');
+      overlay.classList.remove('open');
+      setTimeout(() => overlay.classList.remove('show'), 300);
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', () => {
+      if (navLinks.classList.contains('open')) closeMenu();
+      else openMenu();
+    });
+
+    overlay.addEventListener('click', closeMenu);
+
+    // 點擊任一連結後自動關閉
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', closeMenu);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMobileNav);
+  } else {
+    setupMobileNav();
+  }
+})();

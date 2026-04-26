@@ -74,9 +74,9 @@
 
 <div class="page-header">
   <div class="page-header-inner">
-    <div class="overline">健康 × 生活</div>
-    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">每日健康<br><em>資訊 & 健身教學</em></h1>
-    <p class="prose" style="max-width:440px">每日更新的健康新聞，搭配無器材居家健身教學，讓你在旅行中也能保持最佳狀態。</p>
+    <div class="overline">健康 × 美食 × 生活</div>
+    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">每日健康<br><em>美食 & 健身教學</em></h1>
+    <p class="prose" style="max-width:440px">每日更新的健康與美食資訊，從養生長壽、米其林餐廳到無器材居家健身，讓你在旅行中也能享受生活、保持最佳狀態。</p>
   </div>
 </div>
 
@@ -99,7 +99,10 @@
 
   <div id="news-content" style="display:none">
     <div class="news-wrap" id="featured-section"></div>
-    <div class="sec-header"><span class="sec-label">更多文章</span></div>
+    <div class="sec-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap">
+      <span class="sec-label">健康 & 美食精選</span>
+      <button onclick="retryHealth()" style="background:var(--white);border:1px solid var(--border-md);padding:7px 14px;border-radius:var(--radius);font-size:11px;color:var(--ink-60);cursor:pointer;letter-spacing:.06em;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border-md)';this.style.color='var(--ink-60)'">↻ 換一批</button>
+    </div>
     <div class="grid3" id="articles-grid"></div>
   </div>
 

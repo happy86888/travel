@@ -102,9 +102,19 @@
 /* Metrics */
 .metrics{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(0,1fr));
+  grid-template-columns:repeat(3,1fr);
   gap:12px;
   margin-bottom:24px;
+}
+@media(max-width:600px){
+  .metrics{grid-template-columns:1fr;gap:10px}
+  .metric{padding:14px 16px}
+  .metric-val{font-size:18px}
+  .ctrls{grid-template-columns:1fr 1fr;gap:10px}
+  .ctrl{padding:12px 14px}
+  .ctrl-val{font-size:18px}
+  .sim-wrapper{padding:24px 16px}
+  .chart-wrap{height:240px}
 }
 .metric{
   background:var(--warm);
@@ -217,10 +227,9 @@
 }
 
 @media(max-width:480px){
-  .sim-wrapper{padding:24px 18px}
-  .ctrls{grid-template-columns:1fr 1fr}
-  .metrics{grid-template-columns:1fr 1fr}
-  .ctrl-val{font-size:20px}
+  .ctrls{grid-template-columns:1fr}
+  .ctrl-val{font-size:18px}
+  .metric-val{font-size:16px}
 }
 </style>
 </head>

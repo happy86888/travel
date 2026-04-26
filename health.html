@@ -339,9 +339,10 @@ function imgTag(src){const s=src&&src.startsWith('http')?src:FB;return '<img src
 async function loadNews(){
   // 三個 API 不同關鍵字同時抓，合併去重後取最多 6 篇
   const queries = [
-    ['gnews','health fitness nutrition','en',2],
-    ['currents','health wellness fitness nutrition','en',2],
-    ['newsdata','健康','zh',2],
+    ['gnews','health fitness nutrition wellness food','en',6],
+    ['currents','health wellness fitness food restaurants','en',6],
+    ['newsdata','健康 美食 養生','zh',6],
+    ['gnews','fine dining restaurant michelin food culture','en',4],
   ];
 
   const results = await Promise.all(queries.map(([api,q,lang,n]) =>
@@ -361,7 +362,7 @@ async function loadNews(){
       if(!seen.has(key)){ seen.add(key); arts.push(a); }
     }
   }
-  arts = arts.slice(0,2);
+  // arts 保留全部，render 時隨機抽 2 篇
 
   if(!arts.length){
     document.getElementById('news-skeleton').style.display='none';
@@ -369,14 +370,43 @@ async function loadNews(){
     document.getElementById('error-msg').textContent='所有新聞來源暫時無法連線，請稍後再試';
     return;
   }
-  const [a0,a1]=arts;
+  // 把全部文章存起來，給「換一批」用
+  window._allHealthArts = arts;
+  renderHealth();
+  document.getElementById('news-skeleton').style.display='none';
+  document.getElementById('news-content').style.display='block';
+}
+
+function shuffleArts(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function renderHealth(){
+  const all = window._allHealthArts || [];
+  if(!all.length) return;
+  // 從全部文章中隨機抽 2 篇
+  const picked = shuffleArts(all).slice(0,2);
+  const [a0,a1] = picked;
   document.getElementById('featured-section').innerHTML=[a0,a1].filter(Boolean).map((a,i)=>
     '<a href="'+a.url+'" target="_blank" rel="noopener" class="news-card"><div class="card-img tall">'+imgTag(a.img)+'</div><div class="card-body"><div class="card-meta"><span class="card-cat">'+a.src+'</span></div><div class="card-title lg">'+a.title+'</div><div class="card-excerpt">'+a.desc.slice(0,120)+'…</div><span class="card-read">閱讀全文 →</span></div></a>'
   ).join('');
   document.getElementById('articles-grid').innerHTML='';
-  document.getElementById('news-skeleton').style.display='none';
-  document.getElementById('news-content').style.display='block';
 }
+
+function retryHealth(){
+  // 如果有快取就只重新洗牌，沒有才重抓
+  if(window._allHealthArts && window._allHealthArts.length){
+    renderHealth();
+  } else {
+    loadNews();
+  }
+}
+
 loadNews();
 </script>
 </body>

@@ -108,6 +108,11 @@
     </div>
   </div>
 
+  <div style="display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+    <span style="font-size:11px;color:var(--ink-30);letter-spacing:.04em" id="news-tip">💡 文章每天從 3 個來源輪換，下方 4 篇隨機顯示</span>
+    <button onclick="retryLoad()" style="background:var(--white);border:1px solid var(--border-md);padding:7px 14px;border-radius:var(--radius);font-size:11px;color:var(--ink-60);cursor:pointer;letter-spacing:.06em;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border-md)';this.style.color='var(--ink-60)'">↻ 換一批</button>
+  </div>
+
   <div id="news-content" style="display:none">
     <div class="featured-wrap" id="featured-section"></div>
     <div class="more-header"><span class="more-label">更多文章</span></div>
@@ -220,7 +225,19 @@ function show(id){
   });
 }
 
+// 簡單隨機洗牌
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 function render(articles, tab){
+  // 從 10 篇中隨機抽 6 篇顯示，每次都不一樣
+  articles = shuffle(articles).slice(0, 6);
   const fb = FB[tab] || FB.global;
   const label = LABELS[tab] || '新聞';
   const [a0,a1,...rest] = articles;
@@ -269,7 +286,7 @@ async function loadTab(tab){
 
   for (const apiName of cfg.apis) {
     try {
-      const arts = await APIS[apiName].fetch(cfg.q, cfg.lang, 6);
+      const arts = await APIS[apiName].fetch(cfg.q, cfg.lang, 10);
       if (arts.length) {
         memCache[tab] = arts;
         writeSS(tab, arts);
@@ -287,7 +304,13 @@ async function loadTab(tab){
 }
 
 function retryLoad(){
-  memCache[currentTab] = null;
+  // 優先用記憶體快取的全部文章重新洗牌（10 篇抽 6 篇）
+  // 這樣不會耗 API 額度，每次點都能看到不同組合
+  if (memCache[currentTab] && memCache[currentTab].length) {
+    render(memCache[currentTab], currentTab);
+    return;
+  }
+  // 沒快取才真的重新抓
   try{ sessionStorage.removeItem(ck(currentTab)); }catch(e){}
   loadTab(currentTab);
 }

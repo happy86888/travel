@@ -86,28 +86,30 @@
 .modal-btns button{flex:1}
 .modal-close{position:absolute;top:14px;right:16px;background:transparent;border:none;font-size:22px;cursor:pointer;color:var(--ink-30);line-height:1}
 
-/* 視覺化世界地圖 */
-.world-map-section{margin-top:48px;padding-top:32px}
-.map-divider{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:24px}
-.map-divider-line{flex:1;height:1px;background:var(--border-md);max-width:80px}
-.map-divider-text{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-30);font-weight:500}
-.world-map-wrap{position:relative;width:100%;background:linear-gradient(135deg,var(--warm),#ede6d8);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;padding:24px 16px}
-.world-svg{width:100%;height:auto;display:block;max-width:1000px;margin:0 auto}
-.region-path{fill:#d4c8a8;stroke:#fff;stroke-width:.6;cursor:pointer;transition:fill .25s,filter .25s}
-.region-path:hover{fill:rgba(184,107,42,.4);filter:drop-shadow(0 2px 6px rgba(184,107,42,.3))}
-.region-path.visited{fill:var(--accent);filter:drop-shadow(0 2px 4px rgba(184,107,42,.4))}
-.region-path.visited:hover{fill:var(--accent-lt)}
-.map-tooltip{position:absolute;background:var(--ink);color:var(--white);font-size:11px;padding:5px 12px;border-radius:20px;pointer-events:none;display:none;white-space:nowrap;font-family:var(--font-body);box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:10}
-.map-stats{display:flex;justify-content:center;gap:48px;margin-top:24px;padding:20px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);flex-wrap:wrap}
-.map-stat-item{display:flex;flex-direction:column;align-items:center;gap:4px}
-.map-stat-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-30);font-weight:500}
-.map-stat-num{font-family:var(--font-display);font-size:36px;font-weight:300;color:var(--ink);line-height:1}
-.map-stat-num.accent{color:var(--accent)}
-.map-stat-unit{font-size:11px;color:var(--ink-60);letter-spacing:.04em}
+/* 夢想中的世界地圖 */
+.world-map-section{margin-top:56px;padding-top:40px;border-top:1px solid var(--border)}
+.map-divider{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:28px}
+.map-divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);max-width:120px;opacity:.6}
+.map-divider-text{font-family:var(--font-display);font-size:20px;font-style:italic;color:var(--accent);font-weight:400;letter-spacing:.04em}
+.world-illustration{
+  width:100%;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 8px 32px rgba(184,107,42,.12);
+  transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s;
+}
+.world-illustration:hover{
+  transform:translateY(-4px);
+  box-shadow:0 16px 48px rgba(184,107,42,.18);
+}
+.world-illustration img{
+  width:100%;
+  height:auto;
+  display:block;
+}
 @media(max-width:600px){
-  .world-map-wrap{padding:14px 8px}
-  .map-stats{gap:32px;padding:16px}
-  .map-stat-num{font-size:28px}
+  .map-divider-text{font-size:17px}
+  .world-illustration{border-radius:12px}
 }
 
 @media(max-width:900px){.milestones-grid{grid-template-columns:1fr 1fr}.stats-bar{grid-template-columns:1fr 1fr}}
@@ -292,100 +294,18 @@
 
     </div>
 
-    <!-- 視覺化世界地圖 -->
+    <!-- 夢想中的世界地圖 -->
     <div class="world-map-section">
       <div class="map-divider">
         <span class="map-divider-line"></span>
-        <span class="map-divider-text">我的世界足跡視覺化</span>
+        <span class="map-divider-text">夢想中的世界</span>
         <span class="map-divider-line"></span>
       </div>
-      <div class="world-map-wrap">
-        <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" class="world-svg">
-          <!-- 北美 -->
-          <path class="region-path" data-name="美國" d="M120,140 L240,135 L255,170 L235,210 L165,215 L105,195 L95,165 Z"/>
-          <path class="region-path" data-name="加拿大" d="M85,75 L260,65 L270,125 L235,135 L120,140 L95,125 Z"/>
-          <path class="region-path" data-name="墨西哥" d="M105,210 L185,210 L195,238 L165,255 L115,248 L95,228 Z"/>
-          <path class="region-path" data-name="古巴" d="M190,238 L215,236 L218,250 L192,252 Z"/>
-          <!-- 南美 -->
-          <path class="region-path" data-name="哥倫比亞" d="M180,275 L220,272 L225,300 L190,310 L175,295 Z"/>
-          <path class="region-path" data-name="巴西" d="M205,285 L290,275 L320,335 L290,395 L215,385 L185,335 L195,300 Z"/>
-          <path class="region-path" data-name="秘魯" d="M170,300 L205,295 L210,345 L175,350 L160,325 Z"/>
-          <path class="region-path" data-name="阿根廷" d="M200,375 L235,370 L240,435 L210,450 L190,425 L190,390 Z"/>
-          <path class="region-path" data-name="智利" d="M180,355 L200,350 L205,435 L190,450 L175,435 L170,385 Z"/>
-          <!-- 歐洲 -->
-          <path class="region-path" data-name="英國" d="M425,100 L440,95 L445,115 L430,123 L420,113 Z"/>
-          <path class="region-path" data-name="法國" d="M435,120 L465,117 L473,140 L450,150 L430,143 Z"/>
-          <path class="region-path" data-name="西班牙" d="M425,145 L470,143 L475,170 L435,173 L420,160 Z"/>
-          <path class="region-path" data-name="葡萄牙" d="M415,145 L430,143 L430,170 L415,173 Z"/>
-          <path class="region-path" data-name="德國" d="M460,110 L495,107 L500,133 L465,137 Z"/>
-          <path class="region-path" data-name="義大利" d="M460,140 L480,135 L485,175 L467,183 L455,167 Z"/>
-          <path class="region-path" data-name="荷蘭" d="M450,105 L463,103 L465,117 L451,119 Z"/>
-          <path class="region-path" data-name="比利時" d="M448,117 L461,115 L463,127 L449,129 Z"/>
-          <path class="region-path" data-name="瑞士" d="M455,135 L473,133 L475,145 L457,147 Z"/>
-          <path class="region-path" data-name="奧地利" d="M470,130 L497,127 L500,141 L472,143 Z"/>
-          <path class="region-path" data-name="捷克" d="M473,117 L497,115 L499,129 L475,131 Z"/>
-          <path class="region-path" data-name="希臘" d="M483,160 L505,157 L510,177 L485,180 Z"/>
-          <path class="region-path" data-name="挪威" d="M450,65 L485,60 L495,90 L467,97 L445,85 Z"/>
-          <path class="region-path" data-name="瑞典" d="M465,67 L495,63 L500,95 L473,100 Z"/>
-          <path class="region-path" data-name="丹麥" d="M455,92 L473,90 L475,105 L457,107 Z"/>
-          <path class="region-path" data-name="芬蘭" d="M480,60 L515,57 L520,90 L483,93 Z"/>
-          <path class="region-path" data-name="冰島" d="M390,65 L420,60 L423,80 L393,83 Z"/>
-          <!-- 東歐 -->
-          <path class="region-path" data-name="俄羅斯" d="M495,55 L755,45 L765,125 L645,140 L515,130 L500,85 Z"/>
-          <path class="region-path" data-name="土耳其" d="M505,160 L565,155 L575,180 L510,185 Z"/>
-          <path class="region-path" data-name="以色列" d="M540,180 L550,177 L552,193 L541,195 Z"/>
-          <path class="region-path" data-name="約旦" d="M547,180 L563,177 L565,195 L549,197 Z"/>
-          <!-- 非洲 -->
-          <path class="region-path" data-name="埃及" d="M525,190 L570,187 L573,225 L527,228 Z"/>
-          <path class="region-path" data-name="摩洛哥" d="M425,180 L465,177 L467,215 L427,218 Z"/>
-          <path class="region-path" data-name="南非" d="M495,365 L550,360 L555,415 L515,430 L490,415 Z"/>
-          <path class="region-path" data-name="肯亞" d="M560,275 L595,270 L600,310 L562,313 Z"/>
-          <path class="region-path" data-name="坦尚尼亞" d="M557,310 L597,305 L601,345 L559,348 Z"/>
-          <path class="region-path" data-name="衣索比亞" d="M553,250 L595,245 L600,275 L555,278 Z"/>
-          <!-- 中東 -->
-          <path class="region-path" data-name="杜拜/UAE" d="M585,205 L620,202 L623,223 L587,225 Z"/>
-          <!-- 南亞 -->
-          <path class="region-path" data-name="印度" d="M620,190 L685,185 L700,255 L665,280 L623,270 L610,235 Z"/>
-          <path class="region-path" data-name="斯里蘭卡" d="M665,275 L680,273 L682,295 L666,297 Z"/>
-          <path class="region-path" data-name="尼泊爾" d="M655,180 L695,177 L697,193 L657,195 Z"/>
-          <!-- 東南亞 -->
-          <path class="region-path" data-name="泰國" d="M685,225 L720,220 L725,260 L700,265 L683,250 Z"/>
-          <path class="region-path" data-name="越南" d="M723,215 L743,213 L747,265 L725,268 Z"/>
-          <path class="region-path" data-name="馬來西亞" d="M705,270 L745,265 L750,290 L707,293 Z"/>
-          <path class="region-path" data-name="新加坡" d="M723,290 L733,288 L735,297 L724,298 Z"/>
-          <path class="region-path" data-name="印尼" d="M725,295 L825,290 L830,320 L727,323 Z"/>
-          <path class="region-path" data-name="菲律賓" d="M750,235 L780,230 L785,270 L752,273 Z"/>
-          <path class="region-path" data-name="緬甸" d="M685,200 L720,195 L723,227 L687,230 Z"/>
-          <path class="region-path" data-name="柬埔寨" d="M715,260 L740,257 L743,277 L717,280 Z"/>
-          <path class="region-path" data-name="馬爾地夫" d="M633,273 L645,270 L647,285 L634,287 Z"/>
-          <!-- 東亞 -->
-          <path class="region-path" data-name="中國" d="M685,135 L795,130 L805,200 L755,225 L705,220 L690,190 Z"/>
-          <path class="region-path" data-name="日本" d="M805,150 L835,145 L840,185 L810,190 Z"/>
-          <path class="region-path" data-name="韓國" d="M783,165 L805,162 L808,185 L785,188 Z"/>
-          <path class="region-path" data-name="香港" d="M767,205 L780,203 L782,215 L768,217 Z"/>
-          <path class="region-path" data-name="澳門" d="M761,210 L769,208 L770,217 L762,218 Z"/>
-          <!-- 大洋洲 -->
-          <path class="region-path" data-name="澳洲" d="M795,315 L905,310 L915,395 L855,415 L790,395 Z"/>
-          <path class="region-path" data-name="紐西蘭" d="M900,395 L930,390 L933,430 L902,433 Z"/>
-          <path class="region-path" data-name="斐濟" d="M925,335 L940,333 L942,347 L926,349 Z"/>
-          <path class="region-path" data-name="大溪地" d="M960,355 L975,353 L977,367 L961,369 Z"/>
-        </svg>
-        <div class="map-tooltip" id="world-tooltip"></div>
+      <div class="world-illustration">
+        <img src="images/world-map.jpg" alt="夢想中的世界地圖" loading="lazy"/>
       </div>
-      <div class="map-stats">
-        <div class="map-stat-item">
-          <span class="map-stat-label">已走訪</span>
-          <span class="map-stat-num" id="map-visited-num">0</span>
-          <span class="map-stat-unit">個國家</span>
-        </div>
-        <div class="map-stat-item">
-          <span class="map-stat-label">完成度</span>
-          <span class="map-stat-num accent" id="map-visited-pct">0%</span>
-          <span class="map-stat-unit">世界足跡</span>
-        </div>
-      </div>
+      <p style="text-align:center;font-size:13px;color:var(--ink-30);margin-top:18px;letter-spacing:.06em;font-style:italic;font-family:var(--font-display)">願你的足跡，遍及這張地圖上的每一片大陸 ✈</p>
     </div>
-
   </div>
 
 
@@ -521,117 +441,7 @@ function renderMS(){
 // ── 地圖（國家按鈕）──
 const TOTAL = document.querySelectorAll('.country-btn').length;
 
-function syncSVG() {
-  document.querySelectorAll('.region-path').forEach(p => {
-    if (visited.includes(p.dataset.name)) p.classList.add('visited');
-    else p.classList.remove('visited');
-  });
-  document.getElementById('map-visited-num').textContent = visited.length;
-  const total = document.querySelectorAll('.country-btn').length;
-  const pct = total > 0 ? Math.round((visited.length / total) * 100) : 0;
-  document.getElementById('map-visited-pct').textContent = pct + '%';
-}
-
-function initWorldSVG() {
-  const tooltip = document.getElementById('world-tooltip');
-  const wrap = document.querySelector('.world-map-wrap');
-  document.querySelectorAll('.region-path').forEach(p => {
-    const name = p.dataset.name;
-    p.addEventListener('mouseenter', () => {
-      tooltip.style.display = 'block';
-      tooltip.textContent = name + (visited.includes(name) ? ' ✓' : '');
-    });
-    p.addEventListener('mousemove', e => {
-      const rect = wrap.getBoundingClientRect();
-      tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
-      tooltip.style.top = (e.clientY - rect.top + 12) + 'px';
-    });
-    p.addEventListener('mouseleave', () => tooltip.style.display = 'none');
-    p.addEventListener('click', () => {
-      if (visited.includes(name)) {
-        visited = visited.filter(v => v !== name);
-      } else {
-        visited.push(name);
-      }
-      ls_set(LS.ctry, visited);
-      // 同步按鈕狀態
-      document.querySelectorAll('.country-btn').forEach(btn => {
-        if (btn.dataset.name === name) {
-          if (visited.includes(name)) btn.classList.add('visited');
-          else btn.classList.remove('visited');
-        }
-      });
-      syncSVG();
-      renderMap();
-      renderStats();
-    });
-  });
-  syncSVG();
-}
-
-function initMap(){
-  document.querySelectorAll('.country-btn').forEach(btn => {
-    const name = btn.dataset.name;
-    if (visited.includes(name)) btn.classList.add('visited');
-    btn.addEventListener('click', () => {
-      if (visited.includes(name)){
-        visited = visited.filter(v=>v!==name);
-        btn.classList.remove('visited');
-      } else {
-        visited.push(name);
-        btn.classList.add('visited');
-      }
-      ls_set(LS.ctry, visited);
-      syncSVG();
-      renderMap();
-      renderStats();
-    });
-  });
-}
-
-function renderMap(){
-  const total = document.querySelectorAll('.country-btn').length;
-  const pct = total > 0 ? Math.round((visited.length / total)*100) : 0;
-  document.getElementById('map-pct-val').textContent = pct;
-
-  // 更新各區計數
-  document.querySelectorAll('.region-count').forEach(el => {
-    const region = el.dataset.region;
-    const grid = document.querySelector(`.country-grid[data-region="${region}"]`);
-    const all = grid.querySelectorAll('.country-btn');
-    const done = grid.querySelectorAll('.country-btn.visited').length;
-    el.textContent = done + '/' + all.length;
-  });
-}
-
-function removeCountry(name){
-  visited = visited.filter(v=>v!==name);
-  ls_set(LS.ctry, visited);
-  document.querySelectorAll('.country-btn').forEach(b=>{
-    if(b.dataset.name===name) b.classList.remove('visited');
-  });
-  renderMap();
-  renderStats();
-}
-
-// ── 統計 ──
-function renderStats(){
-  document.getElementById('sn-savings').textContent = fmtN(savings);
-  const done = milestones.filter(m=>savings>=m.amount).length;
-  document.getElementById('sn-done').textContent  = done;
-  document.getElementById('sn-total').textContent = milestones.length;
-  document.getElementById('sn-ctry').textContent  = visited.length;
-  const next = milestones.find(m=>savings<m.amount);
-  document.getElementById('sn-next').textContent = next ? 'NT$'+fmtN(next.amount) : (milestones.length?'全達成 🎉':'—');
-}
-
-function renderAll(){ renderStats(); renderMS(); renderMap(); }
-
-function openModal(t){ document.getElementById('modal-'+t).style.display='flex'; }
-function closeModal(t){ document.getElementById('modal-'+t).style.display='none'; }
-
 initMap();
-initWorldSVG();
 renderAll();
 </script>
 </body>

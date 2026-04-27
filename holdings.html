@@ -99,20 +99,20 @@
   <!-- 總覽統計 -->
   <div class="stats-bar">
     <div class="stat-box">
-      <div class="stat-n" id="stat-mv"><span class="acc">$</span>0</div>
-      <div class="stat-l">總市值</div>
+      <div class="stat-n" id="stat-count">0</div>
+      <div class="stat-l">追蹤檔數</div>
     </div>
     <div class="stat-box">
-      <div class="stat-n" id="stat-cost"><span class="acc">$</span>0</div>
-      <div class="stat-l">總成本</div>
+      <div class="stat-n" id="stat-up" style="color:#dc3545">0</div>
+      <div class="stat-l">今日上漲</div>
     </div>
     <div class="stat-box">
-      <div class="stat-n" id="stat-pl">$0</div>
-      <div class="stat-l">總損益</div>
+      <div class="stat-n" id="stat-down" style="color:#16a34a">0</div>
+      <div class="stat-l">今日下跌</div>
     </div>
     <div class="stat-box">
-      <div class="stat-n" id="stat-today">$0</div>
-      <div class="stat-l">今日漲跌</div>
+      <div class="stat-n" id="stat-flat" style="font-size:18px;line-height:1.2;padding-top:6px">—</div>
+      <div class="stat-l">最後更新</div>
     </div>
   </div>
 
@@ -122,17 +122,13 @@
   </div>
 
   <div class="add-form">
-    <div class="add-field">
+    <div class="add-field" style="flex:2">
       <label>股票代碼</label>
-      <input type="text" id="in-symbol" placeholder="例：2330.TW 或 VOO" autocomplete="off"/>
+      <input type="text" id="in-symbol" placeholder="例：2330 或 VOO" autocomplete="off"/>
     </div>
-    <div class="add-field">
-      <label>股數</label>
-      <input type="number" id="in-shares" placeholder="例：1000" min="0" step="1"/>
-    </div>
-    <div class="add-field">
-      <label>平均成本價</label>
-      <input type="number" id="in-cost" placeholder="例：580" min="0" step="0.01"/>
+    <div class="add-field" style="flex:1">
+      <label>股數（選填）</label>
+      <input type="number" id="in-shares" placeholder="持有股數" min="0" step="1"/>
     </div>
     <button class="add-btn" onclick="addHolding()">+ 新增</button>
   </div>
@@ -142,19 +138,16 @@
     <table class="holdings-table" id="holdings-table" style="display:none">
       <thead>
         <tr>
-          <th>代碼</th>
+          <th>代碼 / 名稱</th>
           <th class="right">股數</th>
-          <th class="right">成本</th>
           <th class="right">現價</th>
           <th class="right">今日漲跌</th>
-          <th class="right">市值</th>
-          <th class="right">損益</th>
           <th></th>
         </tr>
       </thead>
       <tbody id="holdings-body"></tbody>
     </table>
-    <div class="empty-state" id="empty-state">還沒有持股，新增第一檔股票開始追蹤吧 📊</div>
+    <div class="empty-state" id="empty-state">還沒有股票，新增第一檔開始追蹤吧 📊</div>
   </div>
 
   <div class="refresh-row">
@@ -196,9 +189,7 @@ async function fetchTWSE(symbol) {
               prefix + code + '.tw&_=' + Date.now();
   const proxies = [
     { url: 'https://api.allorigins.win/raw?url=', encode: true },
-    { url: 'https://corsproxy.io/?url=', encode: true },
     { url: 'https://api.codetabs.com/v1/proxy?quest=', encode: true },
-    { url: 'https://proxy.cors.sh/', encode: false },
   ];
   let lastErr;
   for (const p of proxies) {
@@ -233,9 +224,7 @@ async function fetchStooq(symbol) {
   const url = 'https://stooq.com/q/l/?s=' + encodeURIComponent(stq) + '&f=sd2t2ohlcvn&h&e=csv';
   const proxies = [
     { url: 'https://api.allorigins.win/raw?url=', encode: true },
-    { url: 'https://corsproxy.io/?url=', encode: true },
     { url: 'https://api.codetabs.com/v1/proxy?quest=', encode: true },
-    { url: 'https://proxy.cors.sh/', encode: false },
   ];
   let lastErr;
   for (const p of proxies) {
@@ -273,9 +262,7 @@ async function fetchYahoo(symbol) {
   const chartUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(symbol);
   const proxies = [
     { url: 'https://api.allorigins.win/raw?url=', encode: true },
-    { url: 'https://corsproxy.io/?url=', encode: true },
     { url: 'https://api.codetabs.com/v1/proxy?quest=', encode: true },
-    { url: 'https://proxy.cors.sh/', encode: false },
   ];
   let lastErr;
   // 先試 chart API（廣泛支援）
@@ -360,18 +347,27 @@ function priceClass(n) {
 
 function addHolding() {
   const sym = normalizeSymbol(document.getElementById('in-symbol').value);
-  const sh = parseFloat(document.getElementById('in-shares').value);
-  const co = parseFloat(document.getElementById('in-cost').value);
+  const sh = parseFloat(document.getElementById('in-shares').value) || 0;
   if (!sym) { alert('請輸入股票代碼'); return; }
-  if (!sh || sh <= 0) { alert('請輸入正確股數'); return; }
-  if (!co || co <= 0) { alert('請輸入正確成本價'); return; }
   if (holdings.find(h => h.symbol === sym)) { alert('已經有這檔股票了，請先刪除舊的再新增'); return; }
-  holdings.push({ id: Date.now(), symbol: sym, shares: sh, cost: co });
+  holdings.push({ id: Date.now(), symbol: sym, shares: sh });
   save(holdings);
   document.getElementById('in-symbol').value = '';
   document.getElementById('in-shares').value = '';
-  document.getElementById('in-cost').value = '';
-  refreshAll();
+  // 即時新增到表格（不等抓價）
+  render();
+  // 只抓新加入的這檔
+  fetchOne(sym);
+}
+
+async function fetchOne(symbol) {
+  try {
+    priceCache[symbol] = await fetchPrice(symbol);
+  } catch (e) {
+    priceCache[symbol] = { error: e.message };
+  }
+  render();
+  updateLastTime();
 }
 
 function delHolding(id) {
@@ -397,44 +393,35 @@ function render() {
 
   body.innerHTML = holdings.map(h => {
     const p = priceCache[h.symbol];
+    const sharesText = h.shares > 0 ? fmt(h.shares, 0) : '—';
     if (!p) {
       return `<tr>
         <td><div class="symbol">${h.symbol}</div></td>
-        <td class="right">${fmt(h.shares, 0)}</td>
-        <td class="right">${fmt(h.cost)}</td>
-        <td class="right" colspan="4"><span class="loading"></span> 載入中...</td>
+        <td class="right">${sharesText}</td>
+        <td class="right" colspan="2"><span class="loading"></span> <span style="color:var(--ink-30);font-size:12px">載入中</span></td>
         <td class="right"><button class="del-btn" onclick="delHolding(${h.id})">×</button></td>
       </tr>`;
     }
     if (p.error) {
       return `<tr>
         <td><div class="symbol">${h.symbol}</div></td>
-        <td class="right">${fmt(h.shares, 0)}</td>
-        <td class="right">${fmt(h.cost)}</td>
-        <td class="right" colspan="4" style="color:#dc3545;font-size:12px">⚠ 無法取得：${p.error}</td>
-        <td class="right"><button class="del-btn" onclick="delHolding(${h.id})">×</button></td>
+        <td class="right">${sharesText}</td>
+        <td class="right" colspan="2" style="color:#dc3545;font-size:12px">⚠ ${p.error.slice(0,30)}</td>
+        <td class="right">
+          <button onclick="fetchOne('${h.symbol}')" style="background:transparent;border:none;cursor:pointer;color:var(--accent);font-size:14px;padding:4px 8px;margin-right:4px" title="重試">↻</button>
+          <button class="del-btn" onclick="delHolding(${h.id})">×</button>
+        </td>
       </tr>`;
     }
-    const mv = p.price * h.shares;
-    const cost = h.cost * h.shares;
-    const pl = mv - cost;
-    const plPct = (pl / cost) * 100;
-    const todayPL = p.change * h.shares;
     return `<tr>
       <td>
         <div class="symbol">${h.symbol}<span class="sub">${(p.name || '').slice(0,30)}</span></div>
       </td>
-      <td class="right">${fmt(h.shares, 0)}</td>
-      <td class="right">${fmt(h.cost)}</td>
-      <td class="right ${priceClass(p.change)}">${fmt(p.price)}</td>
+      <td class="right">${sharesText}</td>
+      <td class="right ${priceClass(p.change)}" style="font-weight:600">${fmt(p.price)}</td>
       <td class="right ${priceClass(p.change)}">
         ${(p.change >= 0 ? '▲' : '▼')} ${fmt(Math.abs(p.change))}<br>
         <span style="font-size:11px">${fmtPct(p.changePct)}</span>
-      </td>
-      <td class="right">${fmtCurr(mv, p.currency)}</td>
-      <td class="right ${priceClass(pl)}">
-        ${(pl >= 0 ? '+' : '')}${fmtCurr(pl, p.currency)}<br>
-        <span style="font-size:11px">${fmtPct(plPct)}</span>
       </td>
       <td class="right"><button class="del-btn" onclick="delHolding(${h.id})">×</button></td>
     </tr>`;
@@ -444,29 +431,21 @@ function render() {
 }
 
 function updateStats() {
-  let totalMV = 0, totalCost = 0, totalToday = 0;
-  let currency = null;
-  let allLoaded = true;
+  let up = 0, down = 0;
   holdings.forEach(h => {
     const p = priceCache[h.symbol];
-    if (!p || p.error) { allLoaded = false; return; }
-    totalMV += p.price * h.shares;
-    totalCost += h.cost * h.shares;
-    totalToday += p.change * h.shares;
-    currency = currency || p.currency;
+    if (!p || p.error) return;
+    if (p.change > 0.001) up++;
+    else if (p.change < -0.001) down++;
   });
-  const totalPL = totalMV - totalCost;
-  const sym = currency === 'TWD' ? 'NT$' : '$';
+  document.getElementById('stat-count').textContent = holdings.length;
+  document.getElementById('stat-up').textContent = up;
+  document.getElementById('stat-down').textContent = down;
+}
 
-  document.getElementById('stat-mv').innerHTML = '<span class="acc">' + sym + '</span>' + (allLoaded ? fmt(totalMV, 0) : '—');
-  document.getElementById('stat-cost').innerHTML = '<span class="acc">' + sym + '</span>' + (allLoaded ? fmt(totalCost, 0) : '—');
-
-  const plEl = document.getElementById('stat-pl');
-  const todayEl = document.getElementById('stat-today');
-  plEl.className = 'stat-n ' + priceClass(totalPL);
-  todayEl.className = 'stat-n ' + priceClass(totalToday);
-  plEl.textContent = allLoaded ? ((totalPL >= 0 ? '+' : '') + sym + fmt(totalPL, 0)) : '—';
-  todayEl.textContent = allLoaded ? ((totalToday >= 0 ? '+' : '') + sym + fmt(totalToday, 0)) : '—';
+function updateLastTime() {
+  const el = document.getElementById('stat-flat');
+  if (el) el.textContent = new Date().toLocaleTimeString('zh-TW', {hour:'2-digit', minute:'2-digit'});
 }
 
 async function refreshAll() {
@@ -479,22 +458,31 @@ async function refreshAll() {
   priceCache = {};
   render();
 
+  // 並行抓取，每檔有獨立 timeout 8 秒
   await Promise.all(holdings.map(async h => {
     try {
-      priceCache[h.symbol] = await fetchPrice(h.symbol);
+      priceCache[h.symbol] = await Promise.race([
+        fetchPrice(h.symbol),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('逾時')), 8000))
+      ]);
     } catch (e) {
       priceCache[h.symbol] = { error: e.message };
     }
+    // 每抓完一檔就更新（漸進顯示，不用等全部）
+    render();
   }));
 
-  render();
+  updateLastTime();
   document.getElementById('last-update').textContent = '最後更新：' + new Date().toLocaleTimeString('zh-TW');
   btn.disabled = false;
   btn.textContent = '↻ 重新整理';
 }
 
 // Enter 快速新增
-document.getElementById('in-cost').addEventListener('keydown', e => {
+document.getElementById('in-shares').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addHolding();
+});
+document.getElementById('in-symbol').addEventListener('keydown', e => {
   if (e.key === 'Enter') addHolding();
 });
 

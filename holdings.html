@@ -10,16 +10,17 @@
 <link rel="stylesheet" href="shared.css"/>
 <style>
 .holdings-wrap{max-width:var(--container);margin:0 auto;padding:48px 0 100px}
-
-.stats-bar{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);margin-bottom:36px}
-.stat-box{background:var(--white);padding:24px 20px;text-align:center}
-.stat-n{font-family:var(--font-display);font-size:30px;font-weight:300;color:var(--ink);line-height:1;margin-bottom:6px}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:36px}
+.stat-box{background:var(--white);padding:28px 20px;text-align:center}
+.stat-n{font-family:var(--font-display);font-size:30px;font-weight:300;color:var(--ink);line-height:1;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-n.up{color:#dc3545}
+.stat-n.down{color:#16a34a}
 .stat-l{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-30)}
 
-.add-form{background:var(--warm);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.add-form{background:var(--warm);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:32px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
 .add-field{flex:1;min-width:130px}
 .add-field label{display:block;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-60);margin-bottom:6px}
-.add-field input{width:100%;box-sizing:border-box;padding:10px 14px;border:1px solid var(--border-md);border-radius:var(--radius);background:var(--white);font-family:var(--font-body);font-size:14px;color:var(--ink);outline:none;transition:border-color var(--transition)}
+.add-field input{width:100%;box-sizing:border-box;padding:9px 12px;border:1px solid var(--border-md);border-radius:var(--radius);background:var(--white);font-family:var(--font-body);font-size:14px;color:var(--ink);outline:none;transition:border-color var(--transition)}
 .add-field input:focus{border-color:var(--accent)}
 .add-btn{background:var(--ink);color:var(--white);border:none;padding:11px 24px;border-radius:var(--radius);font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background var(--transition);white-space:nowrap}
 .add-btn:hover{background:var(--accent)}
@@ -27,29 +28,37 @@
 .example-tip{font-size:11px;color:var(--ink-30);margin-bottom:24px;padding:12px 16px;background:var(--white);border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;line-height:1.8}
 .example-tip code{background:var(--warm-deep);padding:2px 6px;border-radius:3px;font-size:11px;color:var(--ink);margin:0 2px}
 
-.holdings-list{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:24px}
-.holding-row{display:grid;grid-template-columns:90px 1fr 100px 36px;align-items:center;padding:0 18px;height:64px;border-bottom:1px solid var(--border);transition:background .15s}
-.holding-row:last-child{border-bottom:none}
-.holding-row:hover{background:var(--warm)}
-.h-symbol{font-family:var(--font-display);font-size:16px;font-weight:500;color:var(--ink);line-height:1}
-.h-quote{height:40px;overflow:hidden;position:relative}
-.h-quote iframe{border:0;width:100%;height:90px;margin-top:-25px;display:block}
-.h-shares{text-align:right;font-size:13px;color:var(--ink-60);font-weight:500}
-.h-del{text-align:right}
-.h-del button{background:transparent;border:none;color:var(--ink-30);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:50%;transition:all var(--transition);width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center}
-.h-del button:hover{background:var(--warm-deep);color:var(--ink)}
+.holdings-table{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.holdings-table th{background:var(--warm);padding:14px 16px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-60);border-bottom:1px solid var(--border)}
+.holdings-table th.right{text-align:right}
+.holdings-table td{padding:18px 16px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle}
+.holdings-table td.right{text-align:right;font-family:var(--font-display);font-size:16px;font-weight:400}
+.holdings-table tr:last-child td{border-bottom:none}
+.holdings-table tr:hover{background:var(--warm)}
+.symbol{font-family:var(--font-display);font-size:16px;font-weight:500;color:var(--ink)}
+.symbol .sub{font-size:10px;color:var(--ink-30);font-weight:400;letter-spacing:.06em;text-transform:uppercase;display:block;margin-top:2px}
+.price-up{color:#dc3545;font-weight:500}
+.price-down{color:#16a34a;font-weight:500}
+.price-flat{color:var(--ink-30)}
+.del-btn{background:transparent;border:none;cursor:pointer;color:var(--ink-30);font-size:16px;padding:4px 8px;border-radius:50%;transition:all var(--transition)}
+.del-btn:hover{background:var(--warm-deep);color:var(--ink)}
+.refresh-row{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+.refresh-btn{background:var(--white);color:var(--ink);border:1.5px solid var(--accent);padding:9px 20px;border-radius:var(--radius);font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all var(--transition)}
+.refresh-btn:hover{background:var(--accent);color:var(--white)}
+.refresh-btn:disabled{opacity:.5;cursor:wait}
+.last-update{font-size:11px;color:var(--ink-30)}
 
-.empty-state{text-align:center;padding:60px 24px;color:var(--ink-30);font-style:italic;font-size:14px}
+.empty-state{text-align:center;padding:80px 24px;color:var(--ink-30);font-style:italic;font-size:14px}
+.loading{display:inline-block;width:14px;height:14px;border:2px solid var(--warm-deep);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.info-tip{font-size:11px;color:var(--ink-30);text-align:center;margin-top:16px;letter-spacing:.04em;line-height:1.8}
-.info-tip strong{color:var(--accent)}
-
+@media(max-width:900px){.stats-bar{grid-template-columns:1fr 1fr}}
 @media(max-width:768px){
   .holdings-wrap{padding:24px 16px 60px}
-  .holding-row{grid-template-columns:70px 1fr 70px 30px;padding:0 12px;height:60px}
-  .h-symbol{font-size:14px}
-  .h-shares{font-size:12px}
-  .stat-n{font-size:24px}
+  .holdings-table{font-size:12px}
+  .holdings-table th,.holdings-table td{padding:10px 8px}
+  .holdings-table td.right{font-size:13px}
+  .stat-n{font-size:22px}
 }
 </style>
 </head>
@@ -75,7 +84,7 @@
   <div class="page-header-inner">
     <div class="overline">我的持股</div>
     <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">即時追蹤<br><em>持倉漲跌</em></h1>
-    <p class="prose" style="max-width:440px">記錄你的股票與 ETF，由 TradingView 提供即時報價。資料只存在你這台電腦，完全私密。</p>
+    <p class="prose" style="max-width:440px">記錄你的股票與 ETF，自動抓取當日漲跌與市值變化。資料只存在你這台電腦，完全私密。</p>
   </div>
 </div>
 
@@ -88,13 +97,21 @@
       <div class="stat-l">追蹤檔數</div>
     </div>
     <div class="stat-box">
-      <div class="stat-n" id="stat-time" style="font-size:18px;line-height:1.4;padding-top:6px">—</div>
-      <div class="stat-l">資料來源</div>
+      <div class="stat-n up" id="stat-up">0</div>
+      <div class="stat-l">今日上漲</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-n down" id="stat-down">0</div>
+      <div class="stat-l">今日下跌</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-n" id="stat-time" style="font-size:18px;line-height:1.2;padding-top:6px">—</div>
+      <div class="stat-l">最後更新</div>
     </div>
   </div>
 
   <div class="example-tip">
-    💡 台股直接輸入 4 位數字（例：<code>2330</code>、<code>0050</code>），系統會自動辨識；美股、ETF 直接輸入英文代碼（例：<code>VOO</code>、<code>AAPL</code>、<code>QQQ</code>、<code>SPY</code>）
+    💡 台股直接輸入 4 位數字（例：<code>2330</code>、<code>0050</code>），系統會自動加 .TW；美股直接輸入英文代碼（例：<code>VOO</code>、<code>AAPL</code>、<code>QQQ</code>）
   </div>
 
   <div class="add-form">
@@ -109,14 +126,26 @@
     <button class="add-btn" onclick="addHolding()">+ 新增</button>
   </div>
 
-  <div id="list-wrap">
-    <div class="holdings-list" id="holdings-list" style="display:none"></div>
+  <div id="table-wrap">
+    <table class="holdings-table" id="holdings-table" style="display:none">
+      <thead>
+        <tr>
+          <th>代碼 / 名稱</th>
+          <th class="right">股數</th>
+          <th class="right">現價</th>
+          <th class="right">今日漲跌</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="holdings-body"></tbody>
+    </table>
     <div class="empty-state" id="empty-state">還沒有股票，新增第一檔開始追蹤吧 📊</div>
   </div>
 
-  <p class="info-tip">
-    報價由 <strong>TradingView</strong> 提供 · 點擊任一檔可放大查看完整 K 線圖
-  </p>
+  <div class="refresh-row">
+    <span class="last-update" id="last-update">尚未更新</span>
+    <button class="refresh-btn" onclick="refreshAll()" id="refresh-btn">↻ 重新整理</button>
+  </div>
 
 </div>
 </div>
@@ -135,32 +164,132 @@ const LS_KEY = 'bk_holdings';
 
 function normalizeSymbol(input) {
   let s = input.trim().toUpperCase();
-  s = s.replace(/\.(TW|TWO)$/i, '');
+  if (/^\d{4,6}$/.test(s)) s += '.TW';
   return s;
 }
 
-function toTradingViewSymbol(symbol) {
-  if (/^\d{4,6}$/.test(symbol)) {
-    return 'TPE:' + symbol;
+// ── API: TWSE / Stooq / Yahoo ──
+async function fetchTWSE(symbol) {
+  const code = symbol.replace(/\.(TW|TWO)$/i, '').toLowerCase();
+  const isOTC = /\.TWO$/i.test(symbol);
+  const prefix = isOTC ? 'otc_' : 'tse_';
+  const url = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch=' +
+              prefix + code + '.tw&_=' + Date.now();
+  const proxies = [
+    { url: 'https://api.allorigins.win/raw?url=', encode: true },
+    { url: 'https://api.codetabs.com/v1/proxy?quest=', encode: true },
+  ];
+  let lastErr;
+  for (const p of proxies) {
+    try {
+      const finalUrl = p.url + (p.encode ? encodeURIComponent(url) : url);
+      const r = await fetch(finalUrl);
+      if (!r.ok) throw new Error('twse http ' + r.status);
+      const d = await r.json();
+      const info = d?.msgArray?.[0];
+      if (!info) throw new Error('twse no data');
+      const price = parseFloat(info.z) || parseFloat(info.c) || parseFloat(info.l) || parseFloat(info.b);
+      const prev = parseFloat(info.y);
+      if (!price || !prev) throw new Error('twse no valid price');
+      return {
+        price, prev,
+        change: price - prev,
+        changePct: ((price - prev) / prev) * 100,
+        currency: 'TWD',
+        name: info.n || symbol
+      };
+    } catch (e) { lastErr = e; }
   }
-  if (symbol.startsWith('^')) {
-    return symbol;
-  }
-  const KNOWN = {
-    'VOO':'AMEX','VTI':'AMEX','VXUS':'NASDAQ','BND':'NASDAQ','VWO':'AMEX',
-    'SPY':'AMEX','QQQ':'NASDAQ','DIA':'AMEX','IWM':'AMEX','SCHD':'NASDAQ',
-    'AAPL':'NASDAQ','MSFT':'NASDAQ','GOOGL':'NASDAQ','GOOG':'NASDAQ',
-    'AMZN':'NASDAQ','META':'NASDAQ','TSLA':'NASDAQ','NVDA':'NASDAQ',
-    'NFLX':'NASDAQ','AMD':'NASDAQ','INTC':'NASDAQ','ADBE':'NASDAQ',
-    'BRK.B':'NYSE','JPM':'NYSE','BAC':'NYSE','WMT':'NYSE','DIS':'NYSE',
-    'KO':'NYSE','PG':'NYSE','JNJ':'NYSE','V':'NYSE','MA':'NYSE',
-  };
-  if (KNOWN[symbol]) {
-    return KNOWN[symbol] + ':' + symbol;
-  }
-  return 'NASDAQ:' + symbol;
+  throw lastErr || new Error('twse all proxies failed');
 }
 
+async function fetchStooq(symbol) {
+  let stq = symbol.toLowerCase();
+  if (!stq.includes('.')) stq += '.us';
+  const url = 'https://stooq.com/q/l/?s=' + encodeURIComponent(stq) + '&f=sd2t2ohlcvn&h&e=csv';
+  const proxies = [
+    { url: 'https://api.allorigins.win/raw?url=', encode: true },
+    { url: 'https://api.codetabs.com/v1/proxy?quest=', encode: true },
+  ];
+  let lastErr;
+  for (const p of proxies) {
+    try {
+      const finalUrl = p.url + (p.encode ? encodeURIComponent(url) : url);
+      const r = await fetch(finalUrl);
+      if (!r.ok) throw new Error('stooq http ' + r.status);
+      const text = await r.text();
+      if (text.includes('N/D')) throw new Error('stooq 無此股票');
+      const lines = text.trim().split('\n');
+      if (lines.length < 2) throw new Error('stooq no data');
+      const cols = lines[1].split(',');
+      const open = parseFloat(cols[3]);
+      const close = parseFloat(cols[6]);
+      if (isNaN(close) || close === 0) throw new Error('stooq 價格無效');
+      const prev = open || close;
+      return {
+        price: close, prev: prev,
+        change: close - prev,
+        changePct: prev ? ((close - prev) / prev) * 100 : 0,
+        currency: stq.endsWith('.tw') ? 'TWD' : 'USD',
+        name: cols[8] || symbol
+      };
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr || new Error('stooq failed');
+}
+
+async function fetchYahoo(symbol) {
+  const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(symbol);
+  const proxies = [
+    { url: 'https://api.allorigins.win/raw?url=', encode: true },
+    { url: 'https://api.codetabs.com/v1/proxy?quest=', encode: true },
+  ];
+  let lastErr;
+  for (const p of proxies) {
+    try {
+      const finalUrl = p.url + (p.encode ? encodeURIComponent(url) : url);
+      const r = await fetch(finalUrl);
+      if (!r.ok) throw new Error('yahoo http ' + r.status);
+      const d = await r.json();
+      const result = d?.chart?.result?.[0];
+      if (!result) throw new Error('yahoo no data');
+      const meta = result.meta;
+      const price = meta.regularMarketPrice;
+      const prev = meta.chartPreviousClose || meta.previousClose;
+      if (!price) throw new Error('yahoo invalid');
+      return {
+        price, prev,
+        change: price - prev,
+        changePct: ((price - prev) / prev) * 100,
+        currency: meta.currency || 'USD',
+        name: meta.longName || meta.shortName || symbol
+      };
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr;
+}
+
+async function fetchPrice(symbolRaw) {
+  const symbol = normalizeSymbol(symbolRaw);
+  const isTW = /\.(TW|TWO)$/i.test(symbol);
+  const order = isTW
+    ? [fetchYahoo, fetchStooq, fetchTWSE]
+    : [fetchYahoo, fetchStooq];
+  let lastErr = null;
+  for (const fn of order) {
+    try {
+      const res = await fn(symbol);
+      if (res && res.price) return res;
+    } catch (e) {
+      lastErr = e;
+      console.warn('[' + symbol + '] ' + fn.name + ' failed:', e.message);
+    }
+  }
+  const errMsg = lastErr ? lastErr.message : '所有來源失敗';
+  throw new Error(errMsg.length > 30 ? errMsg.slice(0,30) : errMsg);
+}
+
+// ── localStorage ──
 function load() {
   try { const v = localStorage.getItem(LS_KEY); return v ? JSON.parse(v) : []; }
   catch (e) { return []; }
@@ -169,36 +298,50 @@ function save(arr) {
   try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch (e) {}
 }
 
-let holdings = load();
-holdings = holdings.map(h => ({ id: h.id, symbol: h.symbol.replace(/\.(TW|TWO)$/i, ''), shares: h.shares || 0 }));
+let holdings = load().map(h => ({ id: h.id, symbol: h.symbol, shares: h.shares || 0 }));
 save(holdings);
+let priceCache = {};
 
-function fmt(n) {
-  if (!n) return '—';
-  return Number(n).toLocaleString('zh-TW');
+// ── UI ──
+function fmt(n, dec) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  const d = dec === undefined ? 2 : dec;
+  return Number(n).toLocaleString('zh-TW', { minimumFractionDigits: d, maximumFractionDigits: d });
 }
-
-function buildQuoteUrl(tvSymbol) {
-  const config = {
-    symbol: tvSymbol,
-    width: '100%',
-    isTransparent: true,
-    colorTheme: 'light'
-  };
-  return 'https://s.tradingview.com/embed-widget/single-quote/?locale=zh_TW#' + encodeURIComponent(JSON.stringify(config));
+function fmtPct(n) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return (n >= 0 ? '+' : '') + fmt(n) + '%';
+}
+function priceClass(n) {
+  if (n > 0.001) return 'price-up';
+  if (n < -0.001) return 'price-down';
+  return 'price-flat';
 }
 
 function addHolding() {
-  const raw = document.getElementById('in-symbol').value.trim();
+  const sym = normalizeSymbol(document.getElementById('in-symbol').value);
   const sh = parseFloat(document.getElementById('in-shares').value) || 0;
-  if (!raw) { alert('請輸入股票代碼'); return; }
-  const sym = normalizeSymbol(raw);
+  if (!sym) { alert('請輸入股票代碼'); return; }
   if (holdings.find(h => h.symbol === sym)) { alert('已經有這檔股票了'); return; }
   holdings.push({ id: Date.now(), symbol: sym, shares: sh });
   save(holdings);
   document.getElementById('in-symbol').value = '';
   document.getElementById('in-shares').value = '';
   render();
+  fetchOne(sym);
+}
+
+async function fetchOne(symbol) {
+  try {
+    priceCache[symbol] = await Promise.race([
+      fetchPrice(symbol),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('逾時')), 10000))
+    ]);
+  } catch (e) {
+    priceCache[symbol] = { error: e.message };
+  }
+  render();
+  updateLastTime();
 }
 
 function delHolding(id) {
@@ -209,51 +352,111 @@ function delHolding(id) {
 }
 
 function render() {
-  const list = document.getElementById('holdings-list');
+  const table = document.getElementById('holdings-table');
+  const body = document.getElementById('holdings-body');
   const empty = document.getElementById('empty-state');
 
   if (holdings.length === 0) {
-    list.style.display = 'none';
+    table.style.display = 'none';
     empty.style.display = 'block';
-    document.getElementById('stat-count').textContent = '0';
-    document.getElementById('stat-time').textContent = '—';
+    updateStats();
     return;
   }
-  list.style.display = '';
+  table.style.display = '';
   empty.style.display = 'none';
 
-  list.innerHTML = holdings.map(h => {
-    const tvSym = toTradingViewSymbol(h.symbol);
-    const url = buildQuoteUrl(tvSym);
-    const sharesText = h.shares > 0 ? fmt(h.shares) + ' 股' : '—';
-    return `
-      <div class="holding-row">
-        <div>
-          <div class="h-symbol">${h.symbol}</div>
-        </div>
-        <div class="h-quote">
-          <iframe scrolling="no" allowtransparency="true" frameborder="0" src="${url}" loading="lazy"></iframe>
-        </div>
-        <div class="h-shares">${sharesText}</div>
-        <div class="h-del">
-          <button onclick="delHolding(${h.id})" title="刪除">×</button>
-        </div>
-      </div>
-    `;
+  body.innerHTML = holdings.map(h => {
+    const p = priceCache[h.symbol];
+    const sharesText = h.shares > 0 ? fmt(h.shares, 0) : '—';
+    if (!p) {
+      return `<tr>
+        <td><div class="symbol">${h.symbol}</div></td>
+        <td class="right">${sharesText}</td>
+        <td class="right" colspan="2"><span class="loading"></span> <span style="color:var(--ink-30);font-size:12px">載入中</span></td>
+        <td class="right"><button class="del-btn" onclick="delHolding(${h.id})">×</button></td>
+      </tr>`;
+    }
+    if (p.error) {
+      return `<tr>
+        <td><div class="symbol">${h.symbol}</div></td>
+        <td class="right">${sharesText}</td>
+        <td class="right" colspan="2" style="color:#dc3545;font-size:12px">⚠ ${p.error.slice(0,30)}</td>
+        <td class="right">
+          <button onclick="fetchOne('${h.symbol}')" style="background:transparent;border:none;cursor:pointer;color:var(--accent);font-size:14px;padding:4px 8px;margin-right:4px" title="重試">↻</button>
+          <button class="del-btn" onclick="delHolding(${h.id})">×</button>
+        </td>
+      </tr>`;
+    }
+    return `<tr>
+      <td>
+        <div class="symbol">${h.symbol}<span class="sub">${(p.name || '').slice(0,30)}</span></div>
+      </td>
+      <td class="right">${sharesText}</td>
+      <td class="right ${priceClass(p.change)}" style="font-weight:600">${fmt(p.price)}</td>
+      <td class="right ${priceClass(p.change)}">
+        ${(p.change >= 0 ? '▲' : '▼')} ${fmt(Math.abs(p.change))}<br>
+        <span style="font-size:11px">${fmtPct(p.changePct)}</span>
+      </td>
+      <td class="right"><button class="del-btn" onclick="delHolding(${h.id})">×</button></td>
+    </tr>`;
   }).join('');
 
-  document.getElementById('stat-count').textContent = holdings.length;
-  document.getElementById('stat-time').textContent = 'TradingView';
+  updateStats();
 }
 
-document.getElementById('in-symbol').addEventListener('keydown', e => {
-  if (e.key === 'Enter') addHolding();
-});
+function updateStats() {
+  let up = 0, down = 0;
+  holdings.forEach(h => {
+    const p = priceCache[h.symbol];
+    if (!p || p.error) return;
+    if (p.change > 0.001) up++;
+    else if (p.change < -0.001) down++;
+  });
+  document.getElementById('stat-count').textContent = holdings.length;
+  document.getElementById('stat-up').textContent = up;
+  document.getElementById('stat-down').textContent = down;
+}
+
+function updateLastTime() {
+  const el = document.getElementById('stat-time');
+  if (el) el.textContent = new Date().toLocaleTimeString('zh-TW', {hour:'2-digit', minute:'2-digit'});
+}
+
+async function refreshAll() {
+  if (holdings.length === 0) { render(); return; }
+  const btn = document.getElementById('refresh-btn');
+  btn.disabled = true;
+  btn.textContent = '↻ 載入中...';
+
+  priceCache = {};
+  render();
+
+  await Promise.all(holdings.map(async h => {
+    try {
+      priceCache[h.symbol] = await Promise.race([
+        fetchPrice(h.symbol),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('逾時')), 10000))
+      ]);
+    } catch (e) {
+      priceCache[h.symbol] = { error: e.message };
+    }
+    render();
+  }));
+
+  updateLastTime();
+  document.getElementById('last-update').textContent = '最後更新：' + new Date().toLocaleTimeString('zh-TW');
+  btn.disabled = false;
+  btn.textContent = '↻ 重新整理';
+}
+
 document.getElementById('in-shares').addEventListener('keydown', e => {
   if (e.key === 'Enter') addHolding();
 });
+document.getElementById('in-symbol').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addHolding();
+});
 
-render();
+refreshAll();
 </script>
 </body>
 </html>

@@ -441,6 +441,68 @@ function renderMS(){
 // ── 地圖（國家按鈕）──
 const TOTAL = document.querySelectorAll('.country-btn').length;
 
+function initMap(){
+  document.querySelectorAll('.country-btn').forEach(btn => {
+    const name = btn.dataset.name;
+    if (visited.includes(name)) btn.classList.add('visited');
+    btn.addEventListener('click', () => {
+      if (visited.includes(name)){
+        visited = visited.filter(v=>v!==name);
+        btn.classList.remove('visited');
+      } else {
+        visited.push(name);
+        btn.classList.add('visited');
+      }
+      ls_set(LS.ctry, visited);
+      renderMap();
+      renderStats();
+    });
+  });
+}
+
+function renderMap(){
+  document.querySelectorAll('.region-count').forEach(el => {
+    const region = el.dataset.region;
+    const grid = document.querySelector(`.country-grid[data-region="${region}"]`);
+    if (!grid) return;
+    const all = grid.querySelectorAll('.country-btn');
+    const done = grid.querySelectorAll('.country-btn.visited').length;
+    el.textContent = done + '/' + all.length;
+  });
+}
+
+// ── 統計 ──
+function renderStats(){
+  // 存款
+  const savEl = document.getElementById('sn-savings');
+  if (savEl) savEl.textContent = fmtFull(savings);
+
+  // 里程碑達成數 / 總數
+  const done = milestones.filter(m => savings >= m.amount).length;
+  const doneEl = document.getElementById('sn-done');
+  const totalEl = document.getElementById('sn-total');
+  if (doneEl) doneEl.textContent = done;
+  if (totalEl) totalEl.textContent = milestones.length;
+
+  // 走訪國家數
+  const ctryEl = document.getElementById('sn-ctry');
+  if (ctryEl) ctryEl.textContent = visited.length;
+
+  // 下一個目標
+  const nextEl = document.getElementById('sn-next');
+  if (nextEl) {
+    const next = milestones.filter(m => savings < m.amount)
+                           .sort((a,b) => a.amount - b.amount)[0];
+    nextEl.textContent = next ? next.name : (milestones.length ? '✓ 全部達成' : '—');
+  }
+}
+
+function renderAll(){
+  renderMS();
+  renderMap();
+  renderStats();
+}
+
 initMap();
 renderAll();
 </script>

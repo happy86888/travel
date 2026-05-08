@@ -109,8 +109,8 @@
   </div>
 
   <div style="display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-    <span style="font-size:11px;color:var(--ink-30);letter-spacing:.04em" id="news-tip">💡 文章每天從 3 個來源輪換，下方 4 篇隨機顯示</span>
-    <button onclick="retryLoad()" style="background:var(--white);border:1px solid var(--border-md);padding:7px 14px;border-radius:var(--radius);font-size:11px;color:var(--ink-60);cursor:pointer;letter-spacing:.06em;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border-md)';this.style.color='var(--ink-60)'">↻ 換一批</button>
+    <span style="font-size:11px;color:var(--ink-30);letter-spacing:.04em" id="news-tip">💡 點「載入最新」會強制從 API 抓最新文章</span>
+    <button onclick="retryLoad()" style="background:var(--white);border:1px solid var(--border-md);padding:7px 14px;border-radius:var(--radius);font-size:11px;color:var(--ink-60);cursor:pointer;letter-spacing:.06em;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border-md)';this.style.color='var(--ink-60)'">↻ 載入最新</button>
   </div>
 
   <div id="news-content" style="display:none">
@@ -304,16 +304,33 @@ async function loadTab(tab){
 }
 
 function retryLoad(){
-  // 優先用記憶體快取的全部文章重新洗牌（10 篇抽 6 篇）
-  // 這樣不會耗 API 額度，每次點都能看到不同組合
-  if (memCache[currentTab] && memCache[currentTab].length) {
-    render(memCache[currentTab], currentTab);
-    return;
-  }
-  // 沒快取才真的重新抓
+  // 強制清掉所有快取，重新從 API 抓最新
+  memCache[currentTab] = null;
   try{ sessionStorage.removeItem(ck(currentTab)); }catch(e){}
+  // 額外清掉所有舊日期的 key（避免累積過期資料）
+  try{
+    for(let i = sessionStorage.length - 1; i >= 0; i--){
+      const k = sessionStorage.key(i);
+      if(k && k.startsWith('news_'+currentTab+'_')) sessionStorage.removeItem(k);
+    }
+  }catch(e){}
   loadTab(currentTab);
 }
+
+// 第一次載入時也清掉昨天的快取
+function clearOldCache(){
+  try{
+    const today = new Date().toISOString().split('T')[0];
+    for(let i = sessionStorage.length - 1; i >= 0; i--){
+      const k = sessionStorage.key(i);
+      // 清掉所有 news_xxx_yyyy-mm-dd 但日期不是今天的
+      if(k && k.startsWith('news_') && !k.endsWith(today)){
+        sessionStorage.removeItem(k);
+      }
+    }
+  }catch(e){}
+}
+clearOldCache();
 
 function switchTab(tab, btn){
   currentTab = tab;

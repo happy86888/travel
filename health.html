@@ -101,7 +101,7 @@
     <div class="news-wrap" id="featured-section"></div>
     <div class="sec-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap">
       <span class="sec-label">健康 & 美食精選</span>
-      <button onclick="retryHealth()" style="background:var(--white);border:1px solid var(--border-md);padding:7px 14px;border-radius:var(--radius);font-size:11px;color:var(--ink-60);cursor:pointer;letter-spacing:.06em;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border-md)';this.style.color='var(--ink-60)'">↻ 換一批</button>
+      <button onclick="retryHealth()" style="background:var(--white);border:1px solid var(--border-md);padding:7px 14px;border-radius:var(--radius);font-size:11px;color:var(--ink-60);cursor:pointer;letter-spacing:.06em;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border-md)';this.style.color='var(--ink-60)'">↻ 載入最新</button>
     </div>
     <div class="grid3" id="articles-grid"></div>
   </div>
@@ -402,12 +402,9 @@ function renderHealth(){
 }
 
 function retryHealth(){
-  // 如果有快取就只重新洗牌，沒有才重抓
-  if(window._allHealthArts && window._allHealthArts.length){
-    renderHealth();
-  } else {
-    loadNews();
-  }
+  // 強制重新從 API 抓最新文章
+  window._allHealthArts = null;
+  loadNews();
 }
 
 loadNews();

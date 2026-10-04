@@ -62,6 +62,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // /news/*.json（GitHub Actions 每小時更新）：永遠走網路，不快取
+  if (url.pathname.startsWith('/news/')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // 其他靜態資源：cache-first
   event.respondWith(
     caches.match(event.request).then((cached) => {

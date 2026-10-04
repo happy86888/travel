@@ -110,7 +110,7 @@
   </div>
 
   <div style="display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-    <span style="font-size:11px;color:var(--ink-30);letter-spacing:.04em" id="news-tip">💡 點「載入最新」會強制從 API 抓最新文章</span>
+    <span style="font-size:11px;color:var(--ink-30);letter-spacing:.04em" id="news-tip">💡 點「載入最新」會重新抓取最新文章（每小時更新）</span>
     <button onclick="retryLoad()" style="background:var(--white);border:1px solid var(--border-md);padding:7px 14px;border-radius:var(--radius);font-size:11px;color:var(--ink-60);cursor:pointer;letter-spacing:.06em;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border-md)';this.style.color='var(--ink-60)'">↻ 載入最新</button>
   </div>
 
@@ -140,14 +140,10 @@
 
 <script src="shared.js"></script>
 <script>
-// ── 新聞來源：後端 /api/news（Google News RSS 代理，免 key）──
-const TABS = ['global', 'taiwan', 'metalcomm', 'realestate'];
-
+// ── 新聞來源：shared.js 的 fetchNewsArticles（雙來源：/api/news 或靜態 news/*.json）──
 async function fetchTopic(tab){
-  const r = await fetch('/api/news?topic=' + encodeURIComponent(tab));
-  const d = await r.json();
-  if(!r.ok) throw new Error(d.error || 'news api error');
-  return (d.articles || []).map(a => ({
+  const arts = await fetchNewsArticles(tab);
+  return (arts || []).map(a => ({
     title: a.title, url: a.url,
     desc: '', img: '',
     src: a.source || '', date: a.publishedAt || ''
@@ -253,7 +249,7 @@ async function loadTab(tab){
     throw new Error('沒有新聞資料');
   } catch(e) {
     console.warn('['+tab+'] news failed:', e.message);
-    document.getElementById('error-msg').textContent = e.message || '請稍後再試';
+    document.getElementById('error-msg').textContent = '新聞暫時無法載入，請稍後再試';
     show('error-state');
   }
 }

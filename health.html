@@ -501,12 +501,10 @@
 <script>
 const FB = 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=75&auto=format&fit=crop';
 
-// ── 新聞來源：後端 /api/news（Google News RSS 代理，免 key）──
+// ── 新聞來源：shared.js 的 fetchNewsArticles（雙來源：/api/news 或靜態 news/*.json）──
 async function fetchHealth(){
-  const r = await fetch('/api/news?topic=health');
-  const d = await r.json();
-  if(!r.ok) throw new Error(d.error || 'news api error');
-  return (d.articles || []).map(a => ({
+  const arts = await fetchNewsArticles('health');
+  return (arts || []).map(a => ({
     title: a.title, desc: '', url: a.url, img: '', src: a.source || ''
   }));
 }

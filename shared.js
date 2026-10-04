@@ -305,3 +305,21 @@ window.BKBackup = (function() {
     navigator.serviceWorker.register('sw.js').catch(function(){});
   });
 })();
+
+/* ── 新聞：雙來源抓取 ──
+ * 1) /api/news（Vercel serverless，部署在 Vercel 時用）
+ * 2) news/<topic>.json（GitHub Actions 每小時產生的靜態檔，GitHub Pages 用）
+ * 回傳 [{title, url, publishedAt, source}]，兩邊都掛才丟錯。 */
+async function fetchNewsArticles(topic){
+  try {
+    const r = await fetch('/api/news?topic=' + encodeURIComponent(topic));
+    if (r.ok) {
+      const d = await r.json();
+      if (d && d.articles && d.articles.length) return d.articles;
+    }
+  } catch (e) { /* 不是 Vercel 環境就走靜態檔 */ }
+  const r2 = await fetch('news/' + encodeURIComponent(topic) + '.json', { cache: 'no-store' });
+  if (!r2.ok) throw new Error('news unavailable');
+  const d2 = await r2.json();
+  return (d2 && d2.articles) || [];
+}

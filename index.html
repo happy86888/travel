@@ -2,7 +2,11 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#001141"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
 <title>指數 & 行旅 — 用投資的思維探索世界</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -17,11 +21,13 @@
   grid-template-columns:55% 45%;
   position:relative;
   padding-top:68px; /* nav height */
+  background:#faf8f4;
+  color:var(--ink);
 }
 .hero-left{
   padding:80px 64px 80px 52px;
   display:flex;flex-direction:column;justify-content:center;
-  border-right:1px solid var(--border);
+  border-right:1px solid rgba(201,162,74,.4);
 }
 .hero-eyebrow{margin-bottom:36px}
 .hero-title{
@@ -31,81 +37,51 @@
   line-height:1.03;
   letter-spacing:-.02em;
   margin-bottom:32px;
+  color:var(--ink);
 }
-.hero-title em{font-style:italic;color:var(--accent);font-weight:300}
+.hero-title em{font-style:italic;color:var(--gold-deep);font-weight:300}
 .hero-sub{
   font-family:var(--font-serif);
-  font-size:15.5px;line-height:2;color:var(--ink-60);
+  font-size:15.5px;line-height:2;color:var(--ink-soft);
   font-weight:300;max-width:440px;margin-bottom:48px;
 }
 .hero-actions{display:flex;gap:14px;margin-bottom:72px}
 .hero-stats{
   display:grid;grid-template-columns:repeat(3,auto);
-  gap:0;border-top:1px solid var(--border);padding-top:36px;
+  gap:0;border-top:1px solid rgba(201,162,74,.45);padding-top:36px;
   width:fit-content;
 }
-.stat{padding-right:40px;margin-right:40px;border-right:1px solid var(--border)}
+.stat{padding-right:40px;margin-right:40px;border-right:1px solid rgba(201,162,74,.35)}
 .stat:last-child{border-right:none;margin-right:0;padding-right:0}
 .stat-n{
   font-family:var(--font-display);
   font-size:42px;font-weight:300;color:var(--ink);
   line-height:1;margin-bottom:6px;
 }
-.stat-l{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60)}
+.stat-l{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#5f7587}
 
-/* Hero right — visual panel */
+/* Hero right — luxury image panel */
 .hero-right{
-  background:var(--warm);
   position:relative;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
+  min-height:100%;
 }
-.hero-right-inner{
-  position:relative;width:320px;height:320px;
+.hero-right img{
+  position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;display:block;
 }
-.ring{
-  position:absolute;border-radius:50%;border:1px solid;
-  top:50%;left:50%;transform:translate(-50%,-50%);
+.hero-right::after{
+  content:'';
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(250,248,244,.5) 0%,rgba(250,248,244,0) 24%);
 }
-.ring-1{width:320px;height:320px;border-color:rgba(184,107,42,.18);animation:spin 40s linear infinite}
-.ring-2{width:230px;height:230px;border-color:rgba(41,79,62,.15);animation:spin 28s linear infinite reverse}
-.ring-3{width:140px;height:140px;border-color:rgba(201,161,74,.2);animation:spin 18s linear infinite}
-@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-.globe{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:76px;height:76px;border-radius:50%;
-  background:var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  font-size:30px;
-  box-shadow:0 0 0 12px rgba(184,107,42,.08),0 20px 60px rgba(184,107,42,.25);
-}
-.map-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--forest)}
-.map-dot::after{
-  content:'';position:absolute;
-  top:-4px;left:-4px;width:15px;height:15px;
-  border-radius:50%;border:1px solid var(--forest);
-  animation:pulse 2.5s ease-in-out infinite;opacity:0;
-}
-.map-dot:nth-child(2){animation-delay:.5s}
-.map-dot:nth-child(3){animation-delay:1s}
-@keyframes pulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(1.8);opacity:0}}
-.map-label{
-  position:absolute;
-  font-size:10px;font-weight:500;letter-spacing:.06em;
-  color:var(--ink);white-space:nowrap;
-  background:rgba(251,248,244,.92);
-  border:1px solid var(--border);
-  padding:4px 10px;border-radius:20px;
-  backdrop-filter:blur(4px);
-}
-.hero-deco-text{
-  position:absolute;bottom:32px;right:28px;
-  font-family:var(--font-display);font-size:11px;font-weight:300;
-  color:var(--ink-30);writing-mode:vertical-rl;letter-spacing:.2em;
-}
-.hero-index-line{
-  position:absolute;top:32px;left:32px;
-  font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink-30);
+.hero-img-tag{
+  position:absolute;top:32px;left:32px;z-index:2;
+  font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);
+  background:rgba(250,248,244,.88);
+  border:1px solid rgba(201,162,74,.55);
+  padding:8px 16px;border-radius:20px;
+  backdrop-filter:blur(4px);white-space:nowrap;
 }
 
 /* ══ MARQUEE ══ */
@@ -158,7 +134,7 @@
   margin:0 auto 20px;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
-  box-shadow:0 8px 24px rgba(184,107,42,.2);
+  box-shadow:0 8px 24px rgba(201,162,74,.2);
 }
 .about-name{font-family:var(--font-display);font-size:26px;font-weight:400;margin-bottom:4px}
 .about-role{font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:20px}
@@ -267,16 +243,16 @@
   position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
   width:700px;height:700px;border-radius:50%;
-  background:radial-gradient(circle,rgba(184,107,42,.12) 0%,transparent 65%);
+  background:radial-gradient(circle,rgba(201,162,74,.12) 0%,transparent 65%);
   pointer-events:none;
 }
 .cta-inner{position:relative;z-index:1;max-width:560px;margin:0 auto}
 .cta-overline{
   font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:20px;
+  color:var(--gold);margin-bottom:20px;
   display:flex;align-items:center;justify-content:center;gap:12px;
 }
-.cta-overline::before,.cta-overline::after{content:'';display:block;width:24px;height:1px;background:var(--accent)}
+.cta-overline::before,.cta-overline::after{content:'';display:block;width:24px;height:1px;background:var(--gold)}
 .cta-title{
   font-family:var(--font-display);
   font-size:clamp(40px,5vw,62px);
@@ -287,7 +263,7 @@
 .cta-sub{
   font-family:var(--font-serif);
   font-size:14px;line-height:1.9;
-  color:rgba(255,255,255,.38);
+  color:rgba(255,255,255,.62);
   margin-bottom:44px;font-weight:300;
 }
 .cta-form{display:flex;gap:0;max-width:440px;margin:0 auto;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);overflow:hidden}
@@ -312,11 +288,8 @@
 @media(max-width:768px){
   .hero{grid-template-columns:1fr;min-height:auto;padding-top:60px}
   .hero-left{padding:48px 24px 40px;border-right:none;border-bottom:1px solid var(--border)}
-  .hero-right{height:280px;order:-1}
-  .hero-right-inner{width:220px;height:220px}
-  .ring-1{width:220px;height:220px}
-  .ring-2{width:160px;height:160px}
-  .ring-3{width:100px;height:100px}
+  .hero-right{height:300px;order:-1;min-height:auto}
+  .hero-right::after{background:linear-gradient(180deg,rgba(250,248,244,0) 60%,rgba(250,248,244,.6) 100%)}
   .hero-title{font-size:clamp(40px,10vw,64px)}
   .hero-stats{grid-template-columns:1fr 1fr 1fr;gap:0}
   .stat{padding-right:20px;margin-right:20px}
@@ -345,13 +318,10 @@
     <li><a href="about.html">關於講師</a></li>
     <li><a href="tools.html">旅行工具</a></li>
     <li><a href="news.html">財經新聞</a></li>
-    <li><a href="etfrun.html">指數投資模擬器</a></li>
     <li><a href="bkfly.html">BK飛行計算機</a></li>
-    <li><a href="health.html">健康</a></li>
-    <li><a href="mind.html">心靈</a></li>
+    <li><a href="finance.html">個人理財</a></li>
+    <li><a href="health.html">身心靈</a></li>
     <li><a href="music.html">音樂</a></li>
-    <li><a href="holdings.html">持股</a></li>
-    <li><a href="goals.html">目標</a></li>
   </ul>
   <a href="tools.html" class="nav-cta">開始試算</a>
 </nav>
@@ -366,7 +336,7 @@
     </h1>
     <p class="hero-sub">財富自由不是終點，而是讓你能去任何地方的入場券。每一趟旅行，都是對生命最好的指數型投資。</p>
     <div class="hero-actions">
-      <a href="tools.html" class="btn-primary">旅費 & 里程試算</a>
+      <a href="tools.html" class="btn-primary">旅費試算</a>
       <a href="about.html" class="btn-outline">認識講師</a>
     </div>
     <div class="hero-stats">
@@ -379,50 +349,14 @@
         <div class="stat-l">累計學員</div>
       </div>
       <div class="stat">
-        <div class="stat-n">7 年</div>
+        <div class="stat-n">10年+</div>
         <div class="stat-l">指數投資歷程</div>
       </div>
     </div>
   </div>
   <div class="hero-right">
-    <div class="hero-index-line">Travel · Invest · Freedom</div>
-    <div class="hero-right-inner">
-      <div class="ring ring-1"></div>
-      <div class="ring ring-2"></div>
-      <div class="ring ring-3"></div>
-      <div class="globe">🌏</div>
-      <div class="map-dot" style="top:24px;left:168px">
-        <span class="map-label" style="top:-28px;left:10px">東京</span>
-      </div>
-      <div class="map-dot" style="top:155px;left:22px">
-        <span class="map-label" style="top:-28px;left:10px">巴黎</span>
-      </div>
-      <div class="map-dot" style="top:285px;left:205px">
-        <span class="map-label" style="bottom:-28px;left:10px">峇里島</span>
-      </div>
-      <div class="map-dot" style="top:96px;left:280px">
-        <span class="map-label" style="top:-28px;right:10px">紐約</span>
-      </div>
-      <div class="map-dot" style="top:58px;left:72px">
-        <span class="map-label" style="top:-28px;left:10px">倫敦</span>
-      </div>
-      <div class="map-dot" style="top:210px;left:290px">
-        <span class="map-label" style="top:-28px;right:10px">曼谷</span>
-      </div>
-      <div class="map-dot" style="top:250px;left:55px">
-        <span class="map-label" style="bottom:-28px;left:10px">開普敦</span>
-      </div>
-      <div class="map-dot" style="top:130px;left:155px">
-        <span class="map-label" style="top:-28px;left:10px">杜拜</span>
-      </div>
-      <div class="map-dot" style="top:300px;left:108px">
-        <span class="map-label" style="bottom:-28px;left:10px">雪梨</span>
-      </div>
-      <div class="map-dot" style="top:180px;left:118px">
-        <span class="map-label" style="top:-28px;left:10px">首爾</span>
-      </div>
-    </div>
-    <div class="hero-deco-text">Travel &amp; Index</div>
+    <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600&q=75&auto=format&fit=crop" alt="飛機翼尖上的日落 — 指數 & 行旅" fetchpriority="high" onerror="this.style.display='none'"/>
+    <div class="hero-img-tag">Travel · Invest · Freedom</div>
   </div>
 </section>
 
@@ -453,7 +387,7 @@
   <div class="about-left">
     <div class="overline">關於講師</div>
     <h2 class="display-lg" style="margin-top:24px">投資讓我有選擇，<br><em>旅行讓我有靈魂</em></h2>
-    <p class="prose" style="margin-top:20px">我是一名指數投資講師，相信每個人都能透過簡單的 ETF 策略打造被動收入。走過十幾個國家後，我發現：真正的財富自由不是躺平，而是讓你能在東京的咖啡館思考資產配置，在峇里島的夕陽下感受複利的重量。</p>
+    <p class="prose" style="margin-top:20px">198x 後創業者，談論旅行與金錢相關的一切：投資、飛行里程、飯店點數，還有怎麼存錢提早退休。我按照自己的方式過生活——投資讓我有選擇，旅行讓我有靈魂。</p>
     <a href="about.html" class="btn-outline" style="margin-top:36px">了解更多</a>
   </div>
   <div class="about-right">
@@ -461,20 +395,20 @@
       <div class="about-avatar">
         <svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" style="display:block">
           <circle cx="28" cy="22" r="11" fill="rgba(255,255,255,0.9)"/>
-          <path d="M17 22 Q17 14 28 14 Q39 14 39 22" fill="#8B5E3C"/>
-          <path d="M17 22 Q16 20 18 19 Q17 22 17 22Z" fill="#8B5E3C"/>
-          <path d="M39 22 Q40 20 38 19 Q39 22 39 22Z" fill="#8B5E3C"/>
-          <path d="M28 14 Q22 12 19 16 Q17 18 17 22 Q18 14 28 13 Q38 14 39 22 Q39 18 37 16 Q34 12 28 14Z" fill="#6B4226"/>
+          <path d="M17 22 Q17 14 28 14 Q39 14 39 22" fill="#1e3a6e"/>
+          <path d="M17 22 Q16 20 18 19 Q17 22 17 22Z" fill="#1e3a6e"/>
+          <path d="M39 22 Q40 20 38 19 Q39 22 39 22Z" fill="#1e3a6e"/>
+          <path d="M28 14 Q22 12 19 16 Q17 18 17 22 Q18 14 28 13 Q38 14 39 22 Q39 18 37 16 Q34 12 28 14Z" fill="#001141"/>
           <ellipse cx="28" cy="38" rx="14" ry="10" fill="rgba(255,255,255,0.85)"/>
           <rect x="22" y="32" width="12" height="10" rx="2" fill="rgba(255,255,255,0.85)"/>
         </svg>
       </div>
       <div class="about-name">BK</div>
-      <div class="about-role">指數投資講師 · 旅行者</div>
+      <div class="about-role">創業者 · 旅行者</div>
       <div class="about-pills">
-        <span class="pill">ETF 投資</span>
-        <span class="pill">資產配置</span>
-        <span class="pill">財務規劃</span>
+        <span class="pill">指數投資</span>
+        <span class="pill">飛行里程</span>
+        <span class="pill">飯店點數</span>
         <span class="pill">30 國旅行</span>
       </div>
     </div>
@@ -491,7 +425,7 @@
       <h2 class="display-lg">規劃你的<br><em>自由旅程</em></h2>
     </div>
     <div class="tools-head-right">
-      <p class="prose" style="max-width:340px;text-align:right">從旅費預估到里程兌換，把每一趟旅行算得清清楚楚，讓財富自由不只是夢想。</p>
+      <p class="prose" style="max-width:340px;text-align:right">從旅費預估到<a href="bkfly.html#redeem" style="color:var(--accent)">里程兌換</a>，把每一趟旅行算得清清楚楚，讓財富自由不只是夢想。</p>
     </div>
   </div>
   <div class="tools-grid-wrap">
@@ -503,18 +437,18 @@
         <div class="tool-desc">輸入出發地、目的地、人數與天數，自動估算機票、住宿、餐飲與交通的完整旅費，並告訴你指數投資幾個月可達標。</div>
         <div class="tool-arrow">↗</div>
       </a>
-      <a href="tools.html#miles" class="tool-card">
-        <div class="tool-icon-wrap">✈️</div>
-        <div class="tool-overline">工具 02</div>
-        <div class="tool-name">里程兌換計算機</div>
-        <div class="tool-desc">選擇航線、艙等、單程或來回，立即查詢長榮、華航、亞洲萬里通等五大計畫所需里程數與最划算方案。</div>
-        <div class="tool-arrow">↗</div>
-      </a>
       <a href="tools.html#budget10k" class="tool-card">
         <div class="tool-icon-wrap">💰</div>
-        <div class="tool-overline">工具 03</div>
+        <div class="tool-overline">工具 02</div>
         <div class="tool-name">萬元以下推薦行程</div>
         <div class="tool-desc">精選從台灣出發、兩位大人、新台幣一萬元以內即可成行的超值行程，讓旅行門檻不再是阻礙。</div>
+        <div class="tool-arrow">↗</div>
+      </a>
+      <a href="tools.html#roadtrip" class="tool-card">
+        <div class="tool-icon-wrap">👑</div>
+        <div class="tool-overline">工具 03</div>
+        <div class="tool-name">奢華旅行推薦</div>
+        <div class="tool-desc">精選 15 條 7–14 天奢華旅行路線，含商務艙機票、五星住宿與私人導覽的完整概估。</div>
         <div class="tool-arrow">↗</div>
       </a>
     </div>

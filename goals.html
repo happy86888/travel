@@ -2,9 +2,13 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#001141"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
 <title>我的目標 — 指數 & 行旅</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="shared.css"/>
@@ -46,7 +50,7 @@
 /* MILESTONES */
 .milestones-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px}
 .ms-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:22px;position:relative;transition:border-color var(--transition)}
-.ms-card.reached{border-color:var(--forest);background:rgba(41,79,62,.03)}
+.ms-card.reached{border-color:var(--forest);background:rgba(0,109,122,.03)}
 .ms-name{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px}
 .ms-amount{font-family:var(--font-display);font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px}
 .ms-amount em{font-size:16px;color:var(--accent);font-style:normal}
@@ -71,7 +75,7 @@
 .region-count{font-family:var(--font-body);font-size:11px;color:var(--ink-30);letter-spacing:.08em;font-weight:500}
 .country-grid{display:flex;flex-wrap:wrap;gap:8px}
 .country-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:24px;border:1.5px solid var(--border-md);background:var(--white);font-family:var(--font-body);font-size:13px;color:var(--ink);cursor:pointer;transition:all .18s ease}
-.country-btn:hover{border-color:var(--accent);background:rgba(184,107,42,.05)}
+.country-btn:hover{border-color:var(--accent);background:rgba(201,162,74,.05)}
 .country-btn.visited{background:var(--accent);border-color:var(--accent);color:var(--white)}
 .country-btn.visited::before{content:'✓ ';font-weight:600}
 .country-btn.visited:hover{background:var(--accent-lt);border-color:var(--accent-lt)}
@@ -95,12 +99,12 @@
   width:100%;
   border-radius:16px;
   overflow:hidden;
-  box-shadow:0 8px 32px rgba(184,107,42,.12);
+  box-shadow:0 8px 32px rgba(201,162,74,.12);
   transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s;
 }
 .world-illustration:hover{
   transform:translateY(-4px);
-  box-shadow:0 16px 48px rgba(184,107,42,.18);
+  box-shadow:0 16px 48px rgba(201,162,74,.18);
 }
 .world-illustration img{
   width:100%;
@@ -123,13 +127,10 @@
     <li><a href="about.html">關於講師</a></li>
     <li><a href="tools.html">旅行工具</a></li>
     <li><a href="news.html">財經新聞</a></li>
-    <li><a href="etfrun.html">指數投資模擬器</a></li>
     <li><a href="bkfly.html">BK飛行計算機</a></li>
-    <li><a href="health.html">健康</a></li>
-    <li><a href="mind.html">心靈</a></li>
+    <li><a href="finance.html">個人理財</a></li>
+    <li><a href="health.html">身心靈</a></li>
     <li><a href="music.html">音樂</a></li>
-    <li><a href="holdings.html">持股</a></li>
-    <li><a href="goals.html" class="active">目標</a></li>
   </ul>
   <a href="tools.html" class="nav-cta">開始試算</a>
 </nav>

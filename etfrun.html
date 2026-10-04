@@ -2,9 +2,13 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#001141"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
 <title>指數投資模擬器 — 指數 & 行旅</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="shared.css"/>
@@ -168,7 +172,7 @@
 
 /* Insight box */
 .insight{
-  background:rgba(41,79,62,.06);
+  background:rgba(0,109,122,.06);
   border-left:3px solid var(--forest);
   border-radius:var(--radius);
   padding:14px 20px;
@@ -178,12 +182,12 @@
   line-height:1.8;
 }
 .warn{
-  background:rgba(184,107,42,.06);
+  background:rgba(201,162,74,.06);
   border-left:3px solid var(--accent);
   border-radius:var(--radius);
   padding:14px 20px;
   font-size:13px;
-  color:#7a4a1a;
+  color:#8a6d1f;
   margin-top:16px;
   line-height:1.8;
 }
@@ -240,13 +244,10 @@
     <li><a href="about.html">關於講師</a></li>
     <li><a href="tools.html">旅行工具</a></li>
     <li><a href="news.html">財經新聞</a></li>
-    <li><a href="etfrun.html" class="active">指數投資模擬器</a></li>
     <li><a href="bkfly.html">BK飛行計算機</a></li>
-    <li><a href="health.html">健康</a></li>
-    <li><a href="mind.html">心靈</a></li>
+    <li><a href="finance.html">個人理財</a></li>
+    <li><a href="health.html">身心靈</a></li>
     <li><a href="music.html">音樂</a></li>
-    <li><a href="holdings.html">持股</a></li>
-    <li><a href="goals.html">目標</a></li>
   </ul>
   <a href="tools.html" class="nav-cta">開始試算</a>
 </nav>
@@ -298,8 +299,8 @@
     </div>
     <div class="metrics" id="metrics-compound"></div>
     <div class="legend">
-      <span><span class="ldot" style="background:#294f3e"></span>資產總值</span>
-      <span><span class="ldot" style="background:#b86b2a;border:1px dashed #8a5a2b"></span>投入本金</span>
+      <span><span class="ldot" style="background:#006d7a"></span>資產總值</span>
+      <span><span class="ldot" style="background:#c9a24a;border:1px dashed #c9a24a"></span>投入本金</span>
     </div>
     <div class="chart-wrap"><canvas id="chartC" role="img" aria-label="定期定額複利成長折線圖"></canvas></div>
     <div class="insight" id="insight-c"></div>
@@ -327,8 +328,8 @@
     </div>
     <div class="metrics" id="metrics-compare"></div>
     <div class="legend">
-      <span><span class="ldot" style="background:#294f3e"></span>指數ETF（7%）</span>
-      <span><span class="ldot" style="background:#b86b2a"></span>主動基金（你設定）</span>
+      <span><span class="ldot" style="background:#006d7a"></span>指數ETF（7%）</span>
+      <span><span class="ldot" style="background:#c9a24a"></span>主動基金（你設定）</span>
       <span><span class="ldot" style="background:#c45447"></span>主動基金（實際均 4%）</span>
     </div>
     <div class="chart-wrap"><canvas id="chartCP" role="img" aria-label="指數ETF與主動基金長期比較折線圖"></canvas></div>
@@ -358,7 +359,7 @@
     <div class="metrics" id="metrics-fee"></div>
     <div class="legend">
       <span><span class="ldot" style="background:#3a7a5e"></span>你實際拿到的錢</span>
-      <span><span class="ldot" style="background:#d49d6e"></span>費用吃掉的金額</span>
+      <span><span class="ldot" style="background:#e3c77f"></span>費用吃掉的金額</span>
     </div>
     <div class="chart-wrap"><canvas id="chartF" role="img" aria-label="費用率侵蝕資產的堆疊長條圖"></canvas></div>
     <div class="insight" id="insight-f"></div>
@@ -377,9 +378,9 @@
     </div>
     <p class="sec-label">S&amp;P 500 各年代 10 年定期定額比較（每月 NT$3,000）</p>
     <div class="legend">
-      <span><span class="ldot" style="background:#294f3e"></span>1990年代（黃金十年 18%）</span>
-      <span><span class="ldot" style="background:#b86b2a"></span>2000年代（失落十年 -1%）</span>
-      <span><span class="ldot" style="background:#8a5a2b"></span>2010年代（大多頭 14%）</span>
+      <span><span class="ldot" style="background:#006d7a"></span>1990年代（黃金十年 18%）</span>
+      <span><span class="ldot" style="background:#c9a24a"></span>2000年代（失落十年 -1%）</span>
+      <span><span class="ldot" style="background:#c9a24a"></span>2010年代（大多頭 14%）</span>
     </div>
     <div class="chart-wrap"><canvas id="chartH" role="img" aria-label="S&P500不同年代的10年投資成長比較"></canvas></div>
     <div class="warn">即使遇到「失落十年」（2000年代），定期定額因為在低點持續買入，最終損失也比一次買進小很多。<strong>時間和紀律，才是指數投資的核心。</strong></div>
@@ -409,12 +410,12 @@ let S = { monthly: 3000, years: 20, rate: 7, fee: 0.07, activeRate: 5 };
 let charts = {};
 
 // 主題色變數（給 Chart.js 用）
-const COLOR_FOREST = '#294f3e';
+const COLOR_FOREST = '#006d7a';
 const COLOR_FOREST_LT = '#3a7a5e';
-const COLOR_FOREST_BG = 'rgba(41,79,62,0.08)';
-const COLOR_ACCENT = '#b86b2a';
-const COLOR_ACCENT_DEEP = '#8a5a2b';
-const COLOR_ACCENT_LT = '#d49d6e';
+const COLOR_FOREST_BG = 'rgba(0,109,122,0.08)';
+const COLOR_ACCENT = '#c9a24a';
+const COLOR_ACCENT_DEEP = '#c9a24a';
+const COLOR_ACCENT_LT = '#e3c77f';
 const COLOR_RED = '#c45447';
 const COLOR_INK_30 = '#a39d96';
 const COLOR_GRID = 'rgba(20,18,16,0.06)';

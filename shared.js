@@ -257,3 +257,51 @@ window.BKBackup = (function() {
 
   return { exportData, importData, clearData };
 })();
+
+/* ── 每頁底部心靈語錄（health.html 自有語錄 tab，跳過）── */
+(function(){
+  var PAGE_QUOTES = {
+    'index.html': '真正的奢侈不是花多少錢，而是時間跟自由都握在自己手上。',
+    'about.html': '我用了十年證明：系統化的方法，比天賦可靠得多。',
+    'tools.html': '旅行最貴的不是機票，是你一直沒出發的那幾年。',
+    'news.html': '別被資訊焦慮牽著走，看懂趨勢，比追著新聞跑重要。',
+    'bkfly.html': '點數不會自己變成機票，會規劃的人才飛得遠。',
+    'finance.html': '先讓錢為你工作，再讓哩程帶你出發。',
+    'music.html': '好的音樂跟好的旅行一樣，都是讓時間慢下來的方法。',
+    'etfrun.html': '複利最公平：它不在乎你聰不聰明，只在乎你待得夠不夠久。',
+    'holdings.html': '每天看盤不會讓你變有錢，抱得住才會。',
+    'goals.html': '目標不是拿來許願的，是拿來拆成每個月該做的事。',
+    'article.html': '讀完一篇好文章，最好的回報是做出一個小改變。'
+  };
+  var pg = location.pathname.split('/').pop() || 'index.html';
+  var text = PAGE_QUOTES[pg];
+  if(!text) return;
+  var foot = document.querySelector('footer');
+  if(!foot) return;
+  var style = document.createElement('style');
+  style.textContent =
+    '.page-quote{max-width:680px;margin:0 auto;padding:64px 32px;text-align:center;' +
+    'border-top:1px solid rgba(201,162,74,.35);border-bottom:1px solid rgba(201,162,74,.35)}' +
+    '.page-quote-overline{font-family:\'Outfit\',sans-serif;font-size:10px;letter-spacing:.22em;' +
+    'text-transform:uppercase;color:var(--gold-deep);margin-bottom:20px}' +
+    '.page-quote-text{font-family:\'Noto Serif TC\',serif;font-style:italic;font-size:20px;' +
+    'line-height:1.9;color:var(--ink)}' +
+    '@media(max-width:680px){.page-quote-text{font-size:17px}}';
+  document.head.appendChild(style);
+  var el = document.createElement('div');
+  el.className = 'page-quote';
+  el.innerHTML = '<div class="page-quote-overline">每日一句</div>' +
+    '<div class="page-quote-text">\u201c' + text + '\u201d</div>';
+  foot.parentNode.insertBefore(el, foot);
+})();
+
+/* ── PWA：Service Worker 註冊（僅 https / localhost）── */(function(){
+  if (!('serviceWorker' in navigator)) return;
+  const proto = location.protocol;
+  const host = location.hostname;
+  const ok = proto === 'https:' || host === 'localhost' || host === '127.0.0.1';
+  if (!ok) return;
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+})();

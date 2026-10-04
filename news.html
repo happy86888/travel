@@ -2,9 +2,13 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#001141"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
 <title>財經 & 旅行新聞 — 指數 & 行旅</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="shared.css"/>
@@ -66,13 +70,10 @@
     <li><a href="about.html">關於講師</a></li>
     <li><a href="tools.html">旅行工具</a></li>
     <li><a href="news.html" class="active">財經新聞</a></li>
-    <li><a href="etfrun.html">指數投資模擬器</a></li>
     <li><a href="bkfly.html">BK飛行計算機</a></li>
-    <li><a href="health.html">健康</a></li>
-    <li><a href="mind.html">心靈</a></li>
+    <li><a href="finance.html">個人理財</a></li>
+    <li><a href="health.html">身心靈</a></li>
     <li><a href="music.html">音樂</a></li>
-    <li><a href="holdings.html">持股</a></li>
-    <li><a href="goals.html">目標</a></li>
   </ul>
   <a href="tools.html" class="nav-cta">開始試算</a>
 </nav>
@@ -139,60 +140,19 @@
 
 <script src="shared.js"></script>
 <script>
-// ── 三 API 設定 ──
-const APIS = {
-  newsdata: {
-    key: 'pub_69a32e9abcd349dfb907ce59e36af4f6',
-    fetch: async function(q, lang, size) {
-      const url = 'https://newsdata.io/api/1/news?apikey=' + this.key +
-        '&q=' + encodeURIComponent(q) + '&language=' + lang + '&size=' + size;
-      const r = await fetch(url);
-      const d = await r.json();
-      if (d.status !== 'success') throw new Error('newsdata: ' + (d.message||'error'));
-      return (d.results||[]).filter(a=>a.title&&a.link).map(a=>({
-        title:a.title, desc:a.description||'', url:a.link,
-        img:a.image_url||'', src:a.source_id||'', date:a.pubDate||''
-      }));
-    }
-  },
-  currents: {
-    key: 'bDe9Cbtj4Rac8D_lDUoKV07nZ8hpmbB9EAxSL80cFAOi52ln',
-    fetch: async function(q, lang, size) {
-      const lm = {zh:'zh_TW', en:'en'};
-      const url = 'https://api.currentsapi.services/v1/search?apiKey=' + this.key +
-        '&keywords=' + encodeURIComponent(q) + '&language=' + (lm[lang]||lang) + '&limit=' + size;
-      const r = await fetch(url);
-      const d = await r.json();
-      if (d.status !== 'ok') throw new Error('currents: ' + (d.message||'error'));
-      return (d.news||[]).filter(a=>a.title&&a.url).map(a=>({
-        title:a.title, desc:a.description||'', url:a.url,
-        img:(a.image&&a.image!=='None')?a.image:'', src:a.author||'', date:a.published||''
-      }));
-    }
-  },
-  gnews: {
-    key: 'f38a98371cdbc0a4654cee95ca11e910',
-    fetch: async function(q, lang, size) {
-      const url = 'https://gnews.io/api/v4/search?q=' + encodeURIComponent(q) +
-        '&lang=' + lang + '&max=' + size + '&token=' + this.key;
-      const r = await fetch(url);
-      const d = await r.json();
-      if (!d.articles) throw new Error('gnews: no articles');
-      return (d.articles||[]).filter(a=>a.title&&a.url).map(a=>({
-        title:a.title, desc:a.description||'', url:a.url,
-        img:a.image||'', src:a.source?.name||'', date:a.publishedAt||''
-      }));
-    }
-  }
-};
+// ── 新聞來源：後端 /api/news（Google News RSS 代理，免 key）──
+const TABS = ['global', 'taiwan', 'metalcomm', 'realestate'];
 
-// 每個頁籤的主要 API 順序（第一個失敗自動用第二個，以此類推）
-const TAB_CFG = {
-  global:     { q:'stock market wall street fed',                       lang:'en', apis:['gnews','newsdata','currents'] },
-  taiwan:     { q:'台灣 股市 投資 經濟 財經 ETF',                        lang:'zh', apis:['newsdata','currents','gnews'] },
-  metalcomm:  { q:'gold price commodity oil', lang:'en', apis:['gnews','currents','newsdata'] },
-  realestate: { q:'real estate housing market', lang:'en', apis:['gnews','currents','newsdata'] },
-};
+async function fetchTopic(tab){
+  const r = await fetch('/api/news?topic=' + encodeURIComponent(tab));
+  const d = await r.json();
+  if(!r.ok) throw new Error(d.error || 'news api error');
+  return (d.articles || []).map(a => ({
+    title: a.title, url: a.url,
+    desc: '', img: '',
+    src: a.source || '', date: a.publishedAt || ''
+  }));
+}
 
 const FB = {
   global:     'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=70&auto=format&fit=crop',
@@ -281,26 +241,21 @@ async function loadTab(tab){
   if (cached && cached.length) { memCache[tab]=cached; render(cached, tab); return; }
 
   show('skeleton');
-  const cfg = TAB_CFG[tab];
-  let lastErr = null;
 
-  for (const apiName of cfg.apis) {
-    try {
-      const arts = await APIS[apiName].fetch(cfg.q, cfg.lang, 10);
-      if (arts.length) {
-        memCache[tab] = arts;
-        writeSS(tab, arts);
-        
-        render(arts, tab);
-        return;
-      }
-    } catch(e) {
-      lastErr = e;
-      console.warn('['+tab+'] '+apiName+' failed:', e.message);
+  try {
+    const arts = await fetchTopic(tab);
+    if (arts.length) {
+      memCache[tab] = arts;
+      writeSS(tab, arts);
+      render(arts, tab);
+      return;
     }
+    throw new Error('沒有新聞資料');
+  } catch(e) {
+    console.warn('['+tab+'] news failed:', e.message);
+    document.getElementById('error-msg').textContent = e.message || '請稍後再試';
+    show('error-state');
   }
-  document.getElementById('error-msg').textContent = lastErr?.message || '請稍後再試';
-  show('error-state');
 }
 
 function retryLoad(){

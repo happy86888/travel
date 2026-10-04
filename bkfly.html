@@ -2,9 +2,13 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#001141"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
 <title>BK飛行計算機 — 指數 & 行旅</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400;500&family=Barlow+Condensed:wght@300;500;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="shared.css"/>
@@ -35,7 +39,7 @@
 }
 .plane-icon{
   font-size:30px;
-  filter:drop-shadow(0 2px 6px rgba(184,107,42,.3));
+  filter:drop-shadow(0 2px 6px rgba(201,162,74,.3));
   animation:planeFly 6s ease-in-out infinite;
 }
 @keyframes planeFly{
@@ -104,9 +108,9 @@
   height:3px;
   border-radius:var(--radius) var(--radius) 0 0;
 }
-.sec-1::before{background:linear-gradient(90deg,#8a5a2b,var(--accent))}
-.sec-2::before{background:linear-gradient(90deg,var(--accent),#d4a574)}
-.sec-3::before{background:linear-gradient(90deg,var(--forest),#6ba089)}
+.sec-1::before{background:linear-gradient(90deg,#c9a24a,var(--accent))}
+.sec-2::before{background:linear-gradient(90deg,var(--accent),#e3c77f)}
+.sec-3::before{background:linear-gradient(90deg,var(--forest),#4d9aa6)}
 
 .sec-num{
   font-family:'Barlow Condensed',sans-serif;
@@ -147,7 +151,7 @@
 }
 .input-group:focus-within{
   border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(184,107,42,.08);
+  box-shadow:0 0 0 3px rgba(201,162,74,.08);
 }
 .input-prefix{
   padding:0 12px;
@@ -209,8 +213,8 @@
 
 /* 總計面板 */
 .total-panel{
-  background:linear-gradient(135deg,rgba(184,107,42,.08),rgba(41,79,62,.05));
-  border:1.5px solid rgba(184,107,42,.25);
+  background:linear-gradient(135deg,rgba(201,162,74,.08),rgba(0,109,122,.05));
+  border:1.5px solid rgba(201,162,74,.25);
   border-radius:var(--radius);
   padding:28px 32px;
   display:flex;
@@ -246,7 +250,7 @@
   font-weight:700;
   color:var(--accent);
   line-height:1;
-  text-shadow:0 2px 16px rgba(184,107,42,.2);
+  text-shadow:0 2px 16px rgba(201,162,74,.2);
   display:block;
 }
 .total-pts-label{
@@ -321,6 +325,80 @@
   0%{opacity:.4;transform:scale(.95)}
   100%{opacity:1;transform:scale(1)}
 }
+/* 分頁切換 */
+.bk-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:36px}
+.bk-tab{flex:1;padding:14px 10px;font-size:14px;letter-spacing:.08em;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;color:var(--mid);font-family:'Outfit',sans-serif;transition:all .2s}
+.bk-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.bk-tab:hover{color:var(--ink)}
+
+/* 反向查詢・刷卡規劃共用 */
+.card-disclaimer{
+  padding:14px 20px;margin-bottom:20px;
+  background:rgba(201,162,74,.1);border:1px solid rgba(201,162,74,.45);
+  border-radius:var(--radius);font-size:13px;color:var(--ink);
+  line-height:1.8;
+}
+.card-disclaimer b{color:#8a6d1f}
+.rev-route{font-family:var(--font-display);font-size:20px;margin-bottom:4px}
+.rev-route .dist{font-family:'Outfit',sans-serif;font-size:12px;color:var(--mid);margin-left:8px}
+.plan-hero{
+  display:flex;gap:0;margin:24px 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+}
+.plan-cell{flex:1;padding:20px;text-align:center;background:#fff}
+.plan-cell+.plan-cell{border-left:1px solid var(--border)}
+.plan-cell.hl{background:var(--accent);color:#fff}
+.plan-cell.hl .plan-l{color:rgba(255,255,255,.65)}
+.plan-num{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:700;color:var(--accent);line-height:1.1}
+.plan-cell.hl .plan-num{color:var(--gold-lt)}
+.plan-l{font-size:11px;letter-spacing:.1em;color:var(--ink-60);margin-top:6px}
+.plan-sub{font-size:12px;color:var(--ink-60);margin-top:4px}
+.plan-cell.hl .plan-sub{color:rgba(255,255,255,.7)}
+@media(max-width:600px){.plan-hero{flex-direction:column}.plan-cell+.plan-cell{border-left:none;border-top:1px solid var(--border)}}
+
+/* 里程兌換試算（由旅行工具遷入） */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.form-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.field label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);display:block;margin-bottom:8px}
+.field select,.field input{width:100%;padding:12px 14px;border:1px solid var(--border);background:#fff;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);border-radius:2px;outline:none;transition:border-color .2s;box-sizing:border-box}
+.field select:focus,.field input:focus{border-color:var(--accent)}
+.seg-wrap{display:flex}
+.seg-btn{flex:1;padding:12px 0;font-size:13px;background:var(--warm);border:1px solid var(--border);cursor:pointer;color:var(--mid);transition:all .15s;font-family:'DM Sans',sans-serif}
+.seg-btn:first-child{border-radius:2px 0 0 2px}
+.seg-btn:last-child{border-radius:0 2px 2px 0;border-left:none}
+.seg-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:500}
+.note{font-size:11px;color:var(--mid);line-height:1.8;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.table-scroll{overflow-x:auto;margin-top:24px;border:1px solid var(--border);border-radius:2px;background:#fff}
+.miles-table{width:100%;border-collapse:collapse;min-width:640px;font-size:14px}
+.miles-table thead th{background:var(--warm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);font-weight:500;text-align:left;padding:14px 16px;border-bottom:2px solid var(--border);white-space:nowrap}
+.miles-table thead th.sortable{cursor:pointer;user-select:none}
+.miles-table thead th.sortable:hover{color:var(--ink)}
+.miles-table thead th .arr{color:var(--accent);font-size:10px;margin-left:4px}
+.miles-table tbody td{padding:14px 16px;border-top:1px solid var(--border);vertical-align:top}
+.miles-table tbody tr:first-child td{border-top:none}
+.miles-table tbody tr:hover{background:rgba(200,120,58,.04)}
+.mp-name{font-weight:500;font-size:14px}
+.mp-sub{font-size:11px;color:var(--mid);margin-top:3px}
+.m-num{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);white-space:nowrap}
+.m-tag{display:block;font-size:11px;color:var(--accent);margin-top:2px}
+.m-na{font-size:12px;color:var(--mid)}
+.m-min{display:inline-block;font-size:10px;letter-spacing:.06em;background:rgba(45,90,78,.12);color:#006d7a;padding:2px 10px;border-radius:20px;margin-left:8px;vertical-align:middle;font-family:'Outfit',sans-serif}
+.m-sub{font-size:11px;color:var(--mid);margin-top:4px}
+.m-sub.ok{color:#006d7a;font-weight:500}
+.m-sub.no{color:#c44}
+.m-note{font-size:11px;color:var(--mid);line-height:1.7}
+.m-route{font-family:'Noto Serif TC',serif;font-size:16px;margin:24px 0 4px}
+.m-route .dist{font-size:12px;color:var(--mid);font-family:'Outfit',sans-serif}
+.status-ok{background:rgba(45,90,78,.08);border:1px solid rgba(45,90,78,.2);border-radius:2px;padding:16px 20px;margin-top:16px}
+.status-no{background:rgba(200,80,60,.06);border:1px solid rgba(200,80,60,.15);border-radius:2px;padding:16px 20px;margin-top:16px}
+.status-ok .st{font-weight:500;color:#006d7a}
+.status-no .st{font-weight:500;color:#c44}
+.status-ok .ss,.status-no .ss{font-size:12px;color:var(--mid);margin-top:4px}
+@media(max-width:768px){
+  .form-grid3{grid-template-columns:1fr}
+  .miles-table{min-width:560px;font-size:13px}
+  .miles-table thead th,.miles-table tbody td{padding:10px 10px}
+  .m-num{font-size:19px}
+}
 </style>
 </head>
 <body>
@@ -330,13 +408,10 @@
     <li><a href="about.html">關於講師</a></li>
     <li><a href="tools.html">旅行工具</a></li>
     <li><a href="news.html">財經新聞</a></li>
-    <li><a href="etfrun.html">指數投資模擬器</a></li>
     <li><a href="bkfly.html" class="active">BK飛行計算機</a></li>
-    <li><a href="health.html">健康</a></li>
-    <li><a href="mind.html">心靈</a></li>
+    <li><a href="finance.html">個人理財</a></li>
+    <li><a href="health.html">身心靈</a></li>
     <li><a href="music.html">音樂</a></li>
-    <li><a href="holdings.html">持股</a></li>
-    <li><a href="goals.html">目標</a></li>
   </ul>
   <a href="tools.html" class="nav-cta">開始試算</a>
 </nav>
@@ -344,8 +419,8 @@
 <div class="page-header">
   <div class="page-header-inner">
     <div class="overline">King Miles · 飛行點數</div>
-    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">BK 飛行計算機<br><em>年度點數試算</em></h1>
-    <p class="prose" style="max-width:440px">輸入你每月與每年的消費金額，快速估算可累積的 King Miles 年度總點數，看看可以兌換多少張機票。</p>
+    <h1 class="display-lg" style="margin-top:20px;margin-bottom:16px">BK 飛行計算機<br><em>點數累積＋里程兌換</em></h1>
+    <p class="prose" style="max-width:440px">一頁搞定飛行點數四件事：年度消費能累積多少點、28 個哩程計畫比價、點數能飛去哪、刷哪張卡累積最快。</p>
   </div>
 </div>
 
@@ -354,6 +429,14 @@
 
 <div class="calc-wrapper">
 
+  <div class="bk-tabs">
+    <button class="bk-tab active" id="bk-tabbtn-earn" onclick="bkTab('earn')">💰 點數累積試算</button>
+    <button class="bk-tab" id="bk-tabbtn-redeem" onclick="bkTab('redeem')">✈️ 里程兌換試算</button>
+    <button class="bk-tab" id="bk-tabbtn-reverse" onclick="bkTab('reverse')">🔍 點數能飛哪</button>
+    <button class="bk-tab" id="bk-tabbtn-cards" onclick="bkTab('cards')">💳 刷卡累積規劃</button>
+  </div>
+
+  <div id="bk-tab-earn">
   <div class="calc-header">
     <div class="logo-row">
       <span class="plane-icon">✈</span>
@@ -457,6 +540,78 @@
     本估算僅供初步旅程規劃評估，因每家航空公司規定不同，並非正確數字。<br>
     如需取得正確數字，<strong>請跟 BK 諮詢喔</strong> ✈
   </div>
+  </div><!-- /bk-tab-earn -->
+
+  <div id="bk-tab-redeem" style="display:none">
+    <div class="form-grid">
+      <div class="field"><label>出發地</label>
+        <input id="m-orig" list="m-airports" placeholder="例如 TPE / 台北 / Tokyo" autocomplete="off" value="TPE"/></div>
+      <div class="field"><label>目的地</label>
+        <input id="m-dest" list="m-airports" placeholder="例如 LHR / 倫敦 / London" autocomplete="off" value="NRT"/></div>
+    </div>
+    <datalist id="m-airports"></datalist>
+    <div class="form-grid3">
+      <div class="field"><label>行程</label>
+        <div class="seg-wrap">
+          <button class="seg-btn active" id="m-btn-rt" onclick="milesSetTrip('rt')">來回</button>
+          <button class="seg-btn" id="m-btn-ow" onclick="milesSetTrip('ow')">單程</button>
+        </div></div>
+      <div class="field"><label>人數</label><input type="number" id="m-pax" value="1" min="1" max="9"/></div>
+      <div class="field"><label>我現有里程數</label>
+        <input type="number" id="m-mymiles" value="0" min="0" step="1000" placeholder="0"/></div>
+    </div>
+
+    <div id="miles-out"></div>
+    <p class="note" id="miles-note" style="margin-top:20px"></p>
+  </div><!-- /bk-tab-redeem -->
+
+  <div id="bk-tab-reverse" style="display:none">
+    <div class="form-grid">
+      <div class="field"><label>出發地</label>
+        <input id="r-orig" list="m-airports" placeholder="例如 TPE / 台北" autocomplete="off" value="TPE"/></div>
+      <div class="field"><label>哩程計畫</label>
+        <select id="r-prog"></select></div>
+    </div>
+    <div class="form-grid3">
+      <div class="field"><label>我有幾點</label>
+        <input type="number" id="r-held" value="20000" min="0" step="1000"/></div>
+      <div class="field"><label>艙等</label>
+        <div class="seg-wrap">
+          <button class="seg-btn active" id="r-btn-eco" onclick="revSetCabin('eco')">經濟艙</button>
+          <button class="seg-btn" id="r-btn-biz" onclick="revSetCabin('biz')">商務艙</button>
+        </div></div>
+      <div class="field"><label>行程</label>
+        <div class="seg-wrap">
+          <button class="seg-btn active" id="r-btn-ow" onclick="revSetTrip('ow')">單程</button>
+          <button class="seg-btn" id="r-btn-rt" onclick="revSetTrip('rt')">來回</button>
+        </div></div>
+    </div>
+    <div id="rev-out"></div>
+    <p class="note" style="margin-top:20px">※ 以各計畫兌換表試算，動態定價計畫以下限估算；實際所需點數與機位供應以各航空官網查詢為準。</p>
+    <p class="note" style="margin-top:8px">※ 以下距離及點數可能因距離、區域、放票邏輯等制度因素而有所差異，不一定準確，僅供參考；實際所需點數須依各航司而定。</p>
+  </div><!-- /bk-tab-reverse -->
+
+  <div id="bk-tab-cards" style="display:none">
+    <div class="card-disclaimer">※ 以下回饋率為公開資訊整理，僅供參考；<b>實際點數累積跟情況需依銀行而定</b>，辦卡前請以各銀行官網最新公告為準。</div>
+    <div class="form-grid">
+      <div class="field"><label>選擇信用卡</label>
+        <select id="c-card"></select></div>
+      <div class="field"><label>目標哩程點數</label>
+        <input type="number" id="c-target" value="15000" min="1" step="1000"/></div>
+    </div>
+    <div class="form-grid3" id="c-custom" style="display:none">
+      <div class="field"><label>自訂・國內幾元一點</label><input type="number" id="c-r-dom" value="20" min="1"/></div>
+      <div class="field"><label>自訂・國外幾元一點</label><input type="number" id="c-r-intl" value="15" min="1"/></div>
+      <div class="field"><label>自訂・指定通路幾元一點</label><input type="number" id="c-r-sp" value="10" min="1"/></div>
+    </div>
+    <div class="form-grid3">
+      <div class="field"><label>每月國內消費（元）</label><input type="number" id="c-dom" value="30000" min="0" step="1000"/></div>
+      <div class="field"><label>每月國外消費（元）</label><input type="number" id="c-intl" value="10000" min="0" step="1000"/></div>
+      <div class="field"><label>每月指定通路消費（元）</label><input type="number" id="c-sp" value="5000" min="0" step="1000"/></div>
+    </div>
+    <div id="card-out"></div>
+    <p class="note" style="margin-top:20px">※ 試算為無條件捨去至整數點；實際點數累積跟情況需依銀行而定。</p>
+  </div><!-- /bk-tab-cards -->
 
   <div class="calc-footer">© BK King Miles Calculator — 估算僅供參考</div>
 
@@ -474,6 +629,7 @@
 </footer>
 
 <script src="shared.js"></script>
+<script src="miles-pro.js"></script>
 <script>
 function fmt(n) { return Math.round(n).toLocaleString('zh-TW'); }
 function flash(el) {
@@ -517,6 +673,272 @@ function calc() {
 }
 
 ['c1','c2','c3'].forEach(id => document.getElementById(id).addEventListener('input', calc));
+
+/* ── 分頁切換 ── */
+function bkTab(name){
+  const tabs=['earn','redeem','reverse','cards'];
+  tabs.forEach(function(t){
+    const p=document.getElementById('bk-tab-'+t);
+    if(p) p.style.display=(t===name?'block':'none');
+    const b=document.getElementById('bk-tabbtn-'+t);
+    if(b) b.className='bk-tab'+(t===name?' active':'');
+  });
+  if(name==='redeem') milesCalcMiles();
+  if(name==='reverse') revCalc();
+  if(name==='cards') cardCalc();
+}
+
+/* ── 里程兌換試算（由旅行工具遷入；函數加 miles 前綴避免與本頁 fmt/calc 衝突）── */
+let milesTripType='rt';
+let milesSortKey='eco';
+function milesSetTrip(t){
+  milesTripType=t;
+  document.getElementById('m-btn-rt').className='seg-btn'+(t==='rt'?' active':'');
+  document.getElementById('m-btn-ow').className='seg-btn'+(t==='ow'?' active':'');
+  milesCalcMiles();
+}
+function milesSetSort(k){ milesSortKey=k; milesCalcMiles(); }
+function milesResolveAirport(v){
+  if(!v) return null;
+  const s=String(v).trim().toUpperCase();
+  if(AIRPORTS[s]) return s;
+  const m=s.match(/^([A-Z]{3})[^A-Z0-9]/);
+  if(m&&AIRPORTS[m[1]]) return m[1];
+  const q=String(v).trim().toLowerCase();
+  for(const code of Object.keys(AIRPORTS)){
+    const a=AIRPORTS[code];
+    if(a.zh&&a.zh===q) return code;
+  }
+  for(const code of Object.keys(AIRPORTS)){
+    const a=AIRPORTS[code];
+    if(a.c&&a.c.toLowerCase()===q) return code;
+  }
+  return null;
+}
+function milesBuildDatalist(){
+  const dl=document.getElementById('m-airports');
+  if(!dl||dl.children.length) return;
+  let html='';
+  for(const code of Object.keys(AIRPORTS)){
+    html+='<option value="'+code+'｜'+AIRPORTS[code].zh+'">';
+  }
+  dl.innerHTML=html;
+}
+function milesCell(v,dyn,mult,pax,myMiles,isMin){
+  if(v==null){
+    return dyn?'<span class="m-na">待查（動態、需驗證）</span>':'<span class="m-na">待查</span>';
+  }
+  const per=v*mult, total=per*pax;
+  let s='<span class="m-num">'+per.toLocaleString()+'</span>';
+  if(isMin) s+='<span class="m-min">最低</span>';
+  if(dyn) s+='<span class="m-tag">（動態、需驗證）</span>';
+  if(myMiles>0){
+    const ok=myMiles>=total;
+    s+='<div class="m-sub '+(ok?'ok':'no')+'">共 '+total.toLocaleString()+'（'+pax+'人）'+(ok?' ✓':'・差 '+(total-myMiles).toLocaleString())+'</div>';
+  }else if(mult>1||pax>1){
+    s+='<div class="m-sub">共 '+total.toLocaleString()+'（'+pax+'人'+(mult>1?'・來回':'')+'）</div>';
+  }
+  return s;
+}
+function milesCalcMiles(){
+  milesBuildDatalist();
+  const out=document.getElementById('miles-out');
+  const orig=milesResolveAirport(document.getElementById('m-orig').value);
+  const dest=milesResolveAirport(document.getElementById('m-dest').value);
+  const pax=Math.max(1,parseInt(document.getElementById('m-pax').value)||1);
+  const myMiles=parseInt(document.getElementById('m-mymiles').value)||0;
+  const mult=milesTripType==='rt'?2:1;
+  const empty='<p style="color:var(--mid);padding:24px 0;text-align:center">';
+  if(!orig||!dest){out.innerHTML=empty+'請輸入有效的出發地與目的地（可打 IATA 代碼或中英文城市名）。</p>';return;}
+  if(orig===dest){out.innerHTML=empty+'出發地與目的地相同，請重新輸入。</p>';return;}
+  const dist=Math.round(gcMiles(orig,dest));
+  const rows=PROGRAMS.map(p=>({p:p,r:computeMile(p.id,orig,dest)}));
+  const val=(row,k)=>row.r&&row.r[k]!=null?row.r[k]:Infinity;
+  rows.sort((a,b)=>val(a,milesSortKey)-val(b,milesSortKey));
+  const nums=k=>rows.map(r=>val(r,k)).filter(v=>v!==Infinity);
+  const minEco=Math.min.apply(null,nums('eco').concat([Infinity]));
+  const minBiz=Math.min.apply(null,nums('biz').concat([Infinity]));
+  const oA=AIRPORTS[orig],dA=AIRPORTS[dest];
+  let html='<div class="m-route">'+orig+' '+(oA?oA.zh:'')+' → '+dest+' '+(dA?dA.zh:'')+
+    '<span class="dist">・約 '+dist.toLocaleString()+' 英里・'+(milesTripType==='rt'?'來回':'單程')+'每人</span></div>';
+  html+='<div class="table-scroll"><table class="miles-table"><thead><tr><th>計畫</th>'+
+    '<th class="sortable" onclick="milesSetSort(\'eco\')">經濟艙<span class="arr">'+(milesSortKey==='eco'?'▲':'')+'</span></th>'+
+    '<th class="sortable" onclick="milesSetSort(\'biz\')">商務艙<span class="arr">'+(milesSortKey==='biz'?'▲':'')+'</span></th>'+
+    '<th>備註</th></tr></thead><tbody>';
+  for(const row of rows){
+    const r=row.r;
+    const eV=r?r.eco:null, bV=r?r.biz:null;
+    const dyn=r?!!r.dyn:false;
+    html+='<tr><td><div class="mp-name">'+row.p.name+'</div><div class="mp-sub">'+row.p.sub+'</div></td>'+
+      '<td>'+milesCell(eV,dyn,mult,pax,myMiles,eV!==null&&eV===minEco)+'</td>'+
+      '<td>'+milesCell(bV,dyn,mult,pax,myMiles,bV!==null&&bV===minBiz)+'</td>'+
+      '<td><div class="m-note">'+row.p.note+(r&&r.user?'・<b>用戶實測</b>':'')+'</div></td></tr>';
+  }
+  html+='</tbody></table></div>';
+  if(myMiles>0){
+    const totals=rows.filter(r=>r.r&&r.r.eco!=null).map(r=>({p:r.p,total:r.r.eco*mult*pax}));
+    if(totals.length){
+      const minT=Math.min.apply(null,totals.map(t=>t.total));
+      const ok=totals.filter(t=>myMiles>=t.total);
+      if(ok.length){
+        html+='<div class="status-ok"><div class="st">里程足夠出發！</div><div class="ss">可用計畫（經濟艙）：'+ok.map(t=>t.p.name).join('、')+'</div></div>';
+      }else{
+        const ch=totals.filter(t=>t.total===minT)[0];
+        html+='<div class="status-no"><div class="st">里程尚不足</div><div class="ss">最便宜：'+ch.p.name+'，還差 '+(minT-myMiles).toLocaleString()+' 里</div></div>';
+      }
+    }
+  }
+  out.innerHTML=html;
+  document.getElementById('miles-note').textContent='※ 單程每人所需里程；來回為單程 × 2。稅金另計。動態定價計畫實際所需以各航空官網查詢為準。實際機位供應以各航空官網查詢為準。';
+}
+['m-orig','m-dest','m-pax','m-mymiles'].forEach(function(id){
+  const el=document.getElementById(id);
+  if(el){ el.addEventListener('input',milesCalcMiles); el.addEventListener('change',milesCalcMiles); }
+});
+
+// init：支援 bkfly.html#redeem 直達兌換分頁
+milesBuildDatalist();
+
+/* ── 🔍 反向里程查詢：點數能飛哪 ── */
+let revCabin='eco', revTrip='ow';
+function revSetCabin(c){
+  revCabin=c;
+  document.getElementById('r-btn-eco').className='seg-btn'+(c==='eco'?' active':'');
+  document.getElementById('r-btn-biz').className='seg-btn'+(c==='biz'?' active':'');
+  revCalc();
+}
+function revSetTrip(t){
+  revTrip=t;
+  document.getElementById('r-btn-ow').className='seg-btn'+(t==='ow'?' active':'');
+  document.getElementById('r-btn-rt').className='seg-btn'+(t==='rt'?' active':'');
+  revCalc();
+}
+function revBuildProg(){
+  const sel=document.getElementById('r-prog');
+  if(!sel||sel.options.length) return;
+  PROGRAMS.forEach(function(p){
+    const o=document.createElement('option');
+    o.value=p.id; o.textContent=p.name+'（'+p.sub+'）';
+    sel.appendChild(o);
+  });
+  sel.value='as';
+}
+function revCalc(){
+  revBuildProg(); milesBuildDatalist();
+  const out=document.getElementById('rev-out');
+  const orig=milesResolveAirport(document.getElementById('r-orig').value);
+  const progId=document.getElementById('r-prog').value;
+  const held=Math.max(0,parseInt(document.getElementById('r-held').value)||0);
+  const mult=revTrip==='rt'?2:1;
+  const empty='<p style="color:var(--mid);padding:24px 0;text-align:center">';
+  if(!orig){out.innerHTML=empty+'請輸入有效的出發地（可打 IATA 代碼或中英文城市名）。</p>';return;}
+  const prog=PROGRAMS.find(function(p){return p.id===progId;});
+  const rows=[];
+  Object.keys(AIRPORTS).forEach(function(code){
+    if(code===orig) return;
+    let r=null;
+    try{ r=computeMile(progId,orig,code); }catch(e){ r=null; }
+    if(!r) return;
+    const v=revCabin==='eco'?r.eco:r.biz;
+    if(v==null) return;
+    const need=v*mult;
+    if(need<=held) rows.push({code:code,a:AIRPORTS[code],need:need,dist:r.dist,dyn:!!r.dyn});
+  });
+  rows.sort(function(a,b){return a.need-b.need;});
+  const oA=AIRPORTS[orig];
+  const cabinName=revCabin==='eco'?'經濟艙':'商務艙';
+  let html='<div class="rev-route">'+orig+' '+(oA?oA.zh:'')+' → 點數能飛哪<span class="dist">'+(prog?prog.name:'')+'・'+cabinName+'・'+(revTrip==='rt'?'來回':'單程')+'・持有 '+held.toLocaleString()+' 點</span></div>';
+  if(!rows.length){
+    html+=empty+'以目前點數換不到'+cabinName+'機位。<br>試試：換一個哩程計畫、改查單程或經濟艙、或提高持有點數。</p>';
+  }else{
+    html+='<div class="table-scroll"><table class="miles-table"><thead><tr><th>目的地</th><th>距離</th><th>所需點數</th><th>用後剩餘</th><th>備註</th></tr></thead><tbody>';
+    rows.forEach(function(row){
+      html+='<tr><td><div class="mp-name">'+row.code+'</div><div class="mp-sub">'+(row.a.zh||row.a.c||'')+'</div></td>'+
+        '<td><span class="m-num">'+row.dist.toLocaleString()+'</span> <span class="m-sub">英里</span></td>'+
+        '<td><span class="m-num">'+row.need.toLocaleString()+'</span>'+(row.dyn?'<span class="m-tag">（動態、需驗證）</span>':'')+'</td>'+
+        '<td><span class="m-num">'+(held-row.need).toLocaleString()+'</span></td>'+
+        '<td><div class="m-note">'+(revTrip==='rt'?'來回':'單程')+'・'+cabinName+'</div></td></tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  out.innerHTML=html;
+}
+['r-orig','r-held'].forEach(function(id){
+  const el=document.getElementById(id);
+  if(el){ el.addEventListener('input',revCalc); el.addEventListener('change',revCalc); }
+});
+document.getElementById('r-prog').addEventListener('change',revCalc);
+
+/* ── 💳 刷卡累積規劃器 ── */
+// 回饋率來源（2026 年公開資訊整理，僅供參考）：
+// 匯豐旅人卡 Money101 比較（無限卡 海外10/國內18、御璽卡 海外15/國內18、輕旅卡 國內外20）
+// 玉山星宇聯名卡 工商時報 2026-06-01（世界之極卡 國內15/國外10、世界卡 國內20/國外10）
+// 台新國泰航空聯名卡 工商時報 2026-06-01（國內最優22/國外最優15）
+const CARDS=[
+  {id:'hsbc-lite', name:'匯豐旅人輕旅卡', dom:20, intl:20, sp:20, note:'國內外一般消費 20 元一點'},
+  {id:'hsbc-sig',  name:'匯豐旅人御璽卡', dom:18, intl:15, sp:15, note:'國內 18 元、海外 15 元一點'},
+  {id:'esun-jx',   name:'玉山星宇聯名世界卡', dom:20, intl:10, sp:10, note:'國內 20 元、國外 10 元一哩'},
+  {id:'taishin-cx',name:'台新國泰航空聯名卡', dom:22, intl:15, sp:15, note:'國內最優 22 元、國外最優 15 元一里'},
+  {id:'custom',    name:'自訂回饋率', custom:true, note:'自己填寫每類消費幾元累積一點'}
+];
+function cardBuildSel(){
+  const sel=document.getElementById('c-card');
+  if(!sel||sel.options.length) return;
+  CARDS.forEach(function(c){
+    const o=document.createElement('option');
+    o.value=c.id; o.textContent=c.name+' — '+c.note;
+    sel.appendChild(o);
+  });
+}
+function cardRates(){
+  const id=document.getElementById('c-card').value;
+  if(id==='custom'){
+    return {
+      dom:Math.max(1,parseInt(document.getElementById('c-r-dom').value)||1),
+      intl:Math.max(1,parseInt(document.getElementById('c-r-intl').value)||1),
+      sp:Math.max(1,parseInt(document.getElementById('c-r-sp').value)||1)
+    };
+  }
+  const c=CARDS.find(function(x){return x.id===id;})||CARDS[0];
+  return {dom:c.dom,intl:c.intl,sp:c.sp};
+}
+function cardCalc(){
+  cardBuildSel();
+  const custom=document.getElementById('c-card').value==='custom';
+  document.getElementById('c-custom').style.display=custom?'grid':'none';
+  const r=cardRates();
+  const dom=Math.max(0,parseInt(document.getElementById('c-dom').value)||0);
+  const intl=Math.max(0,parseInt(document.getElementById('c-intl').value)||0);
+  const sp=Math.max(0,parseInt(document.getElementById('c-sp').value)||0);
+  const target=Math.max(1,parseInt(document.getElementById('c-target').value)||1);
+  const monthly=Math.floor(dom/r.dom)+Math.floor(intl/r.intl)+Math.floor(sp/r.sp);
+  const out=document.getElementById('card-out');
+  if(monthly<=0){
+    out.innerHTML='<p style="color:var(--mid);padding:24px 0;text-align:center">請輸入每月消費金額開始試算。</p>';
+    return;
+  }
+  const months=Math.ceil(target/monthly);
+  const d=new Date(); d.setMonth(d.getMonth()+months);
+  const ym=d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月';
+  out.innerHTML='<div class="plan-hero">'+
+    '<div class="plan-cell"><div class="plan-num">'+monthly.toLocaleString()+'</div><div class="plan-l">每月預估累積</div><div class="plan-sub">點</div></div>'+
+    '<div class="plan-cell hl"><div class="plan-num">'+months+'</div><div class="plan-l">幾個月達標</div><div class="plan-sub">目標 '+target.toLocaleString()+' 點</div></div>'+
+    '<div class="plan-cell"><div class="plan-num" style="font-size:30px;padding-top:6px">'+ym+'</div><div class="plan-l">預計達標年月</div><div class="plan-sub">以本月起算</div></div>'+
+    '</div>';
+}
+['c-dom','c-intl','c-sp','c-target','c-r-dom','c-r-intl','c-r-sp'].forEach(function(id){
+  const el=document.getElementById(id);
+  if(el){ el.addEventListener('input',cardCalc); el.addEventListener('change',cardCalc); }
+});
+document.getElementById('c-card').addEventListener('change',cardCalc);
+
+// init：支援 bkfly.html#redeem / #reverse / #cards 直達
+(function(){
+  const h=location.hash;
+  if(h==='#redeem') bkTab('redeem');
+  else if(h==='#reverse') bkTab('reverse');
+  else if(h==='#cards') bkTab('cards');
+})();
 </script>
 </body>
 </html>

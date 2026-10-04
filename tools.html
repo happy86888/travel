@@ -2,9 +2,13 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#001141"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
 <title>旅行工具 — 指數 & 行旅</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+TC:wght@200;300;400&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="shared.css"/>
@@ -16,7 +20,6 @@
   .form-grid4{grid-template-columns:1fr 1fr}
   .result-grid{grid-template-columns:1fr}
   .result-grid4{grid-template-columns:1fr 1fr;gap:8px}
-  .miles-results{grid-template-columns:1fr}
   .budget10k-grid{grid-template-columns:1fr;gap:12px}
 }
 @media(max-width:480px){
@@ -60,17 +63,34 @@
 .invest-row .iv{font-family:'Playfair Display',serif;font-size:24px;color:var(--accent)}
 .note{font-size:11px;color:var(--mid);line-height:1.8;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
 
-/* MILES CARDS */
-.miles-results{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:24px}
-.mcard{background:#fff;border:1px solid var(--border);border-radius:2px;padding:20px;position:relative;transition:border-color .2s}
-.mcard.best{border:2px solid var(--accent2)}
-.mcard .best-tag{position:absolute;top:12px;right:12px;font-size:10px;background:rgba(45,90,78,.1);color:var(--accent2);padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase}
-.mcard .mc-airline{font-size:12px;font-weight:500;color:var(--mid);margin-bottom:8px;letter-spacing:.04em}
-.mcard .mc-main{font-family:'Playfair Display',serif;font-size:24px;color:var(--ink);margin-bottom:4px}
-.mcard .mc-total{font-size:12px;color:var(--mid);margin-bottom:8px}
-.mcard .mc-status{font-size:12px;font-weight:500;margin-bottom:10px}
-.mcard .mc-all{font-size:11px;color:var(--mid);border-top:1px solid var(--border);padding-top:10px;margin-top:4px;line-height:1.8}
-.mcard .mc-prog{font-size:10px;color:var(--mid);margin-top:6px;opacity:.7}
+/* MILES TABLE */
+:root{--accent2:#006d7a}
+.table-scroll{overflow-x:auto;margin-top:24px;border:1px solid var(--border);border-radius:2px;background:#fff}
+.miles-table{width:100%;border-collapse:collapse;min-width:640px;font-size:14px}
+.miles-table thead th{background:var(--warm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);font-weight:500;text-align:left;padding:14px 16px;border-bottom:2px solid var(--border);white-space:nowrap}
+.miles-table thead th.sortable{cursor:pointer;user-select:none}
+.miles-table thead th.sortable:hover{color:var(--ink)}
+.miles-table thead th .arr{color:var(--accent);font-size:10px;margin-left:4px}
+.miles-table tbody td{padding:14px 16px;border-top:1px solid var(--border);vertical-align:top}
+.miles-table tbody tr:first-child td{border-top:none}
+.miles-table tbody tr:hover{background:rgba(200,120,58,.04)}
+.mp-name{font-weight:500;font-size:14px}
+.mp-sub{font-size:11px;color:var(--mid);margin-top:3px}
+.m-num{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);white-space:nowrap}
+.m-tag{display:block;font-size:11px;color:var(--accent);margin-top:2px}
+.m-na{font-size:12px;color:var(--mid)}
+.m-min{display:inline-block;font-size:10px;letter-spacing:.06em;background:rgba(45,90,78,.12);color:var(--accent2);padding:2px 10px;border-radius:20px;margin-left:8px;vertical-align:middle;font-family:'Outfit',sans-serif}
+.m-sub{font-size:11px;color:var(--mid);margin-top:4px}
+.m-sub.ok{color:var(--accent2);font-weight:500}
+.m-sub.no{color:#c44}
+.m-note{font-size:11px;color:var(--mid);line-height:1.7}
+.m-route{font-family:'Noto Serif TC',serif;font-size:16px;margin:24px 0 4px}
+.m-route .dist{font-size:12px;color:var(--mid);font-family:'Outfit',sans-serif}
+@media(max-width:768px){
+  .miles-table{min-width:560px;font-size:13px}
+  .miles-table thead th,.miles-table tbody td{padding:10px 10px}
+  .m-num{font-size:19px}
+}
 .status-ok{background:rgba(45,90,78,.08);border:1px solid rgba(45,90,78,.2);border-radius:2px;padding:16px 20px;margin-top:16px}
 .status-no{background:rgba(200,80,60,.06);border:1px solid rgba(200,80,60,.15);border-radius:2px;padding:16px 20px;margin-top:16px}
 .status-ok .st{font-weight:500;color:var(--accent2)}
@@ -101,13 +121,10 @@
     <li><a href="about.html">關於講師</a></li>
     <li><a href="tools.html" class="active">旅行工具</a></li>
     <li><a href="news.html">財經新聞</a></li>
-    <li><a href="etfrun.html">指數投資模擬器</a></li>
     <li><a href="bkfly.html">BK飛行計算機</a></li>
-    <li><a href="health.html">健康</a></li>
-    <li><a href="mind.html">心靈</a></li>
+    <li><a href="finance.html">個人理財</a></li>
+    <li><a href="health.html">身心靈</a></li>
     <li><a href="music.html">音樂</a></li>
-    <li><a href="holdings.html">持股</a></li>
-    <li><a href="goals.html">目標</a></li>
   </ul>
   <a href="tools.html" class="nav-cta">開始試算</a>
 </nav>
@@ -123,7 +140,6 @@
 <div class="tools-wrap">
   <div class="tab-bar">
     <div class="tab active" onclick="switchTab('budget',this)">🧳 旅費試算</div>
-    <div class="tab" onclick="switchTab('miles',this)">✈️ 里程兌換計算機</div>
     <div class="tab" onclick="switchTab('budget10k',this)">💰 萬元以下推薦</div>
     <div class="tab" onclick="switchTab('roadtrip',this)">👑 奢華旅行推薦</div>
   </div>
@@ -181,48 +197,7 @@
     </div>
   </div>
 
-  <!-- TAB 2: MILES -->
-  <div class="tab-panel" id="tab-miles">
-    <div class="form-grid">
-      <div class="field"><label>出發地</label>
-        <select id="m-orig" onchange="calcMiles()">
-          <option value="TPE">台灣（桃園/松山）</option><option value="KHH">台灣（高雄）</option>
-          <option value="TYO">日本・東京</option><option value="OSA">日本・大阪</option>
-          <option value="SEL">韓國・首爾</option><option value="BKK">泰國・曼谷</option>
-          <option value="SIN">新加坡</option><option value="HKG">香港</option>
-          <option value="LAX">美國・洛杉磯</option><option value="NYC">美國・紐約</option>
-        </select></div>
-      <div class="field"><label>目的地</label>
-        <select id="m-dest" onchange="calcMiles()">
-          <option value="TYO">日本・東京</option><option value="OSA">日本・大阪</option><option value="OKA">日本・沖繩</option>
-          <option value="SEL">韓國・首爾</option><option value="BKK">泰國・曼谷</option><option value="HKT">泰國・普吉島</option>
-          <option value="SIN">新加坡</option><option value="KUL">馬來西亞・吉隆坡</option>
-          <option value="HAN">越南・河內</option><option value="SGN">越南・胡志明市</option>
-          <option value="DPS">印尼・峇里島</option><option value="CDG">法國・巴黎</option>
-          <option value="FCO">義大利・羅馬</option><option value="LHR">英國・倫敦</option>
-          <option value="LAX">美國・洛杉磯</option><option value="NYC">美國・紐約</option><option value="SYD">澳洲・雪梨</option>
-        </select></div>
-    </div>
-    <div class="form-grid3">
-      <div class="field"><label>行程</label>
-        <div class="seg-wrap">
-          <button class="seg-btn active" id="m-btn-rt" onclick="setTrip('rt')">來回</button>
-          <button class="seg-btn" id="m-btn-ow" onclick="setTrip('ow')">單程</button>
-        </div></div>
-      <div class="field"><label>艙等</label>
-        <select id="m-cabin" onchange="calcMiles()">
-          <option value="eco">經濟艙</option><option value="prem">豪華經濟</option><option value="biz">商務艙</option>
-        </select></div>
-      <div class="field"><label>人數</label><input type="number" id="m-pax" value="1" min="1" max="9" onchange="calcMiles()"/></div>
-    </div>
-    <div class="field" style="max-width:300px;margin-bottom:32px"><label>我現有里程數</label>
-      <input type="number" id="m-mymiles" value="0" min="0" step="1000" onchange="calcMiles()" placeholder="0"/></div>
-
-    <div id="miles-out"></div>
-    <p class="note" id="miles-note" style="margin-top:20px"></p>
-  </div>
-
-  <!-- TAB 3: 萬元以下推薦 -->
+  <!-- TAB 2: 萬元以下推薦 -->
   <div class="tab-panel" id="tab-budget10k">
     <p class="prose" style="margin-bottom:32px">以下行程以台灣出發、2 位大人、平價住宿為基準估算，含機票與住宿，餐飲交通景點請自理，總預算可控制在新台幣 10,000 元以內。點選行程可帶入旅費試算工具做進一步計算。</p>
     <div class="budget10k-grid">
@@ -305,15 +280,67 @@
         <div class="b10k-cta">帶入旅費試算 →</div>
       </div>
 
+      <div class="b10k-card" onclick="goBudget('KR_SEL',2,0,3,'eco','budget')">
+        <div class="b10k-badge">韓流首選</div>
+        <div class="b10k-dest">韓國・首爾</div>
+        <div class="b10k-sub">3天2夜 · 1人估算 · 廉航 + 平價飯店</div>
+        <div class="b10k-price">約 NT$9,500</div>
+        <div class="b10k-detail">
+          ✈ 機票來回 約 4,800（廉航淡季）<br>
+          🏨 住宿 約 NT$1,800/晚 × 2 晚<br>
+          🍜 餐飲・交通・景點 自理
+        </div>
+        <div class="b10k-cta">帶入旅費試算 →</div>
+      </div>
+
+      <div class="b10k-card" onclick="goBudget('TH_PUK',2,0,5,'eco','budget')">
+        <div class="b10k-badge">海島放空</div>
+        <div class="b10k-dest">泰國・普吉島</div>
+        <div class="b10k-sub">5天4夜 · 1人估算 · 廉航 + 平價飯店</div>
+        <div class="b10k-price">約 NT$9,800</div>
+        <div class="b10k-detail">
+          ✈ 機票來回 約 6,500（廉航淡季）<br>
+          🏨 住宿 約 NT$900/晚 × 4 晚<br>
+          🍜 餐飲・交通・景點 自理
+        </div>
+        <div class="b10k-cta">帶入旅費試算 →</div>
+      </div>
+
+      <div class="b10k-card" onclick="goBudget('JP_OSA',2,0,3,'eco','budget')">
+        <div class="b10k-badge">關西經典</div>
+        <div class="b10k-dest">日本・大阪</div>
+        <div class="b10k-sub">3天2夜 · 1人估算 · 廉航 + 平價飯店</div>
+        <div class="b10k-price">約 NT$9,800</div>
+        <div class="b10k-detail">
+          ✈ 機票來回 約 6,000（廉航淡季）<br>
+          🏨 住宿 約 NT$1,800/晚 × 2 晚<br>
+          🍜 餐飲・交通・景點 自理
+        </div>
+        <div class="b10k-cta">帶入旅費試算 →</div>
+      </div>
+
+      <div class="b10k-card" onclick="goBudget('MY_KUL',2,0,4,'eco','budget')">
+        <div class="b10k-badge">美食古城</div>
+        <div class="b10k-dest">馬來西亞・檳城</div>
+        <div class="b10k-sub">4天3夜 · 1人估算 · 廉航 + 平價飯店</div>
+        <div class="b10k-price">約 NT$9,100</div>
+        <div class="b10k-detail">
+          ✈ 機票來回 約 5,500（亞航淡季，經吉隆坡）<br>
+          🏨 住宿 約 NT$1,200/晚 × 3 晚<br>
+          🍜 餐飲・交通・景點 自理
+        </div>
+        <div class="b10k-cta">帶入旅費試算 →</div>
+      </div>
+
     </div>
     <p style="font-size:11px;color:var(--ink-30);margin-top:20px;line-height:1.8">
       ※ 以上機票為廉航淡季參考價，實際隨季節與訂位時機浮動。住宿以平價飯店或青年旅館為基準。餐飲、交通與景點門票依個人安排不同，建議每天另抓 NT$1,500–2,500 預算。
     </p>
   </div>
 
-  <!-- TAB 4: 奢華旅行 -->
+  <!-- TAB 3: 奢華旅行 -->
   <div class="tab-panel" id="tab-roadtrip">
-    <p class="prose" style="margin-bottom:32px">精選 15 條 7–14 天奢華旅行路線，以台灣出發為主，含商務艙機票、五星住宿、私人導覽完整概估。每條路線同步標注里程兌換方案，讓你的指數投資回報轉化為世界級旅行體驗。</p>
+    <p class="prose" style="margin-bottom:32px">精選 19 條 7–14 天奢華旅行路線，以台灣出發為主，含商務艙機票、五星住宿、私人導覽完整概估。每條路線同步標注里程兌換方案，讓你的指數投資回報轉化為世界級旅行體驗。</p>
     <div class="budget10k-grid">
 
       <div class="b10k-card">
@@ -571,6 +598,66 @@
         </div>
       </div>
 
+      <div class="b10k-card">
+        <div class="b10k-badge">🇺🇸 美西壯闊</div>
+        <div class="b10k-dest">美西國家公園</div>
+        <div class="b10k-sub">10天9夜 · 2大人 · 商務艙</div>
+        <div class="b10k-price">約 NT$550,000</div>
+        <div class="b10k-detail">
+          ✈ 商務艙來回（經洛杉磯）約 190,000<br>
+          <span style="color:var(--accent);font-weight:500">里程兌換：AA AAdvantage 57,500 里程</span><br>
+          🏨 Aman 度假村 9 晚 約 260,000<br>
+          🚁 大峽谷直升機之旅 約 60,000<br>
+          🦌 羚羊谷私人導覽 約 25,000<br><br>
+          📍 拉斯維加斯 → 大峽谷 → 羚羊谷
+        </div>
+      </div>
+
+      <div class="b10k-card">
+        <div class="b10k-badge">🇪🇬 文明古國</div>
+        <div class="b10k-dest">埃及尼羅河</div>
+        <div class="b10k-sub">10天9夜 · 2大人 · 商務艙</div>
+        <div class="b10k-price">約 NT$420,000</div>
+        <div class="b10k-detail">
+          ✈ 商務艙來回（經杜拜）約 150,000<br>
+          <span style="color:var(--accent);font-weight:500">里程兌換：ANA 飛開羅 85,000 里程</span><br>
+          🚢 尼羅河奢華遊輪 4 晚 約 120,000<br>
+          🏨 金字塔景飯店 5 晚 約 80,000<br>
+          🏛 帝王谷私人導覽 約 40,000<br><br>
+          📍 開羅 → 路克索 → 亞斯文
+        </div>
+      </div>
+
+      <div class="b10k-card">
+        <div class="b10k-badge">🇳🇿 純淨南島</div>
+        <div class="b10k-dest">紐西蘭南島</div>
+        <div class="b10k-sub">10天9夜 · 2大人 · 商務艙</div>
+        <div class="b10k-price">約 NT$480,000</div>
+        <div class="b10k-detail">
+          ✈ 商務艙來回（經雪梨）約 170,000<br>
+          <span style="color:var(--accent);font-weight:500">里程兌換：亞洲萬里通約 60,000 里程</span><br>
+          🏨 湖畔莊園 9 晚 約 200,000<br>
+          🚁 冰川直升機 約 70,000<br>
+          🛥 米爾福德峽灣私人遊船 約 30,000<br><br>
+          📍 皇后鎮 → 米爾福德 → 基督城
+        </div>
+      </div>
+
+      <div class="b10k-card">
+        <div class="b10k-badge">🇹🇭 奢華海島</div>
+        <div class="b10k-dest">蘇梅島奢華海島</div>
+        <div class="b10k-sub">8天7夜 · 2大人 · 商務艙</div>
+        <div class="b10k-price">約 NT$380,000</div>
+        <div class="b10k-detail">
+          ✈ 商務艙來回 約 90,000<br>
+          <span style="color:var(--accent);font-weight:500">里程兌換：新航 KrisFlyer 50,000 里程</span><br>
+          🏨 Four Seasons 蘇梅島 7 晚 約 210,000<br>
+          🏝 私人泳池別墅 約 60,000<br>
+          💆 海灘 SPA + 泰式晚宴 約 20,000<br><br>
+          📍 蘇梅島 → 帕岸島 → 濤島
+        </div>
+      </div>
+
     </div>
     <p style="font-size:11px;color:var(--ink-30);margin-top:20px;line-height:1.8">
       ※ 以上費用以兩人合計為基準。商務艙同時列出現金價與里程兌換參考。實際費用依季節、訂房時機與個人需求有所不同。
@@ -668,91 +755,12 @@ function goBudget(dest,adults,children,days,cabin,hotel){
   window.scrollTo({top:400,behavior:'smooth'});
 }
 
-// ── MILES DATA ──
-const ZONES={eva:{TPE:'A',KHH:'A',TYO:'B',OSA:'B',OKA:'B',SEL:'B',BKK:'C',HKT:'C',SIN:'C',KUL:'C',HAN:'C',SGN:'C',DPS:'C',HKG:'B',CDG:'E',FCO:'E',LHR:'E',LAX:'F',NYC:'F',SYD:'D'},ci:{TPE:'A',KHH:'A',TYO:'B',OSA:'B',OKA:'B',SEL:'B',BKK:'C',HKT:'C',SIN:'C',KUL:'C',HAN:'C',SGN:'C',DPS:'C',HKG:'B',CDG:'E',FCO:'E',LHR:'E',LAX:'F',NYC:'F',SYD:'D'},am:{TPE:'XS',KHH:'XS',TYO:'S',OSA:'S',OKA:'S',SEL:'S',BKK:'S',HKT:'S',SIN:'S',KUL:'S',HAN:'S',SGN:'S',DPS:'M',HKG:'XS',CDG:'L',FCO:'L',LHR:'L',LAX:'XL',NYC:'XL',SYD:'L'},ana:{TPE:'1',KHH:'1',TYO:'1',OSA:'1',OKA:'1',SEL:'1',BKK:'2',HKT:'2',SIN:'2',KUL:'2',HAN:'2',SGN:'2',DPS:'2',HKG:'1',CDG:'6',FCO:'6',LHR:'6',LAX:'6',NYC:'6',SYD:'5'},jal:{TPE:'1',KHH:'1',TYO:'1',OSA:'1',OKA:'1',SEL:'1',BKK:'2',HKT:'2',SIN:'2',KUL:'2',HAN:'2',SGN:'2',DPS:'2',HKG:'1',CDG:'5',FCO:'5',LHR:'5',LAX:'5',NYC:'5',SYD:'4'}};
-const EVA={'A-A':{eco:15000,prem:22500,biz:30000},'A-B':{eco:35000,prem:52500,biz:50000},'A-C':{eco:40000,prem:60000,biz:60000},'A-D':{eco:80000,prem:120000,biz:130000},'A-E':{eco:105000,prem:140000,biz:160000},'A-F':{eco:120000,prem:160000,biz:180000},'B-B':{eco:35000,prem:52500,biz:50000},'B-C':{eco:40000,prem:60000,biz:60000},'B-D':{eco:80000,prem:120000,biz:130000},'B-E':{eco:105000,prem:140000,biz:160000},'B-F':{eco:120000,prem:160000,biz:180000},'C-C':{eco:40000,prem:60000,biz:60000},'C-D':{eco:80000,prem:120000,biz:130000},'C-E':{eco:90000,prem:130000,biz:150000},'C-F':{eco:100000,prem:145000,biz:165000},'D-E':{eco:100000,prem:140000,biz:155000},'D-F':{eco:110000,prem:150000,biz:170000},'E-E':{eco:80000,prem:120000,biz:130000},'E-F':{eco:115000,prem:155000,biz:175000},'F-F':{eco:60000,prem:90000,biz:120000}};
-const CI={'A-A':{eco:15000,prem:null,biz:30000},'A-B':{eco:35000,prem:null,biz:70000},'A-C':{eco:35000,prem:null,biz:70000},'A-D':{eco:80000,prem:null,biz:160000},'A-E':{eco:100000,prem:null,biz:200000},'A-F':{eco:120000,prem:null,biz:240000},'B-B':{eco:35000,prem:null,biz:70000},'B-C':{eco:35000,prem:null,biz:70000},'B-D':{eco:80000,prem:null,biz:160000},'B-E':{eco:100000,prem:null,biz:200000},'B-F':{eco:120000,prem:null,biz:240000},'C-C':{eco:35000,prem:null,biz:70000},'C-D':{eco:80000,prem:null,biz:160000},'C-E':{eco:100000,prem:null,biz:200000},'C-F':{eco:120000,prem:null,biz:240000},'D-E':{eco:100000,prem:null,biz:200000},'D-F':{eco:120000,prem:null,biz:240000},'E-E':{eco:80000,prem:null,biz:160000},'E-F':{eco:120000,prem:null,biz:240000},'F-F':{eco:60000,prem:null,biz:120000}};
-const AM={'XS-XS':{eco:15000,prem:25000,biz:30000},'XS-S':{eco:20000,prem:35000,biz:40000},'XS-M':{eco:25000,prem:40000,biz:50000},'XS-L':{eco:60000,prem:100000,biz:120000},'XS-XL':{eco:80000,prem:130000,biz:180000},'S-S':{eco:20000,prem:35000,biz:40000},'S-M':{eco:25000,prem:40000,biz:50000},'S-L':{eco:65000,prem:110000,biz:130000},'S-XL':{eco:85000,prem:140000,biz:185000},'M-M':{eco:25000,prem:40000,biz:50000},'M-L':{eco:65000,prem:110000,biz:130000},'M-XL':{eco:85000,prem:140000,biz:185000},'L-L':{eco:60000,prem:100000,biz:120000},'L-XL':{eco:80000,prem:130000,biz:160000},'XL-XL':{eco:50000,prem:80000,biz:120000}};
-const ANA={'1-1':{eco:17000,prem:27000,biz:38000},'1-2':{eco:17000,prem:27000,biz:38000},'1-5':{eco:80000,prem:110000,biz:155000},'1-6':{eco:90000,prem:130000,biz:165000},'2-2':{eco:17000,prem:27000,biz:38000},'2-5':{eco:80000,prem:110000,biz:155000},'2-6':{eco:90000,prem:130000,biz:165000},'5-5':{eco:60000,prem:85000,biz:120000},'5-6':{eco:80000,prem:110000,biz:155000},'6-6':{eco:55000,prem:80000,biz:110000}};
-const JAL={'1-1':{eco:20000,prem:null,biz:40000},'1-2':{eco:20000,prem:null,biz:40000},'1-5':{eco:80000,prem:null,biz:160000},'2-2':{eco:20000,prem:null,biz:40000},'2-5':{eco:80000,prem:null,biz:160000},'5-5':{eco:50000,prem:null,biz:100000},'5-6':{eco:70000,prem:null,biz:140000},'6-6':{eco:50000,prem:null,biz:100000}};
-const PROG={eva:{name:'長榮航空',sub:'無限萬哩遊（星空聯盟）',table:EVA,zone:'eva'},ci:{name:'華航',sub:'華夏哩程（天合聯盟）',table:CI,zone:'ci'},am:{name:'亞洲萬里通',sub:'國泰航空（寰宇一家）',table:AM,zone:'am'},ana:{name:'全日空 ANA',sub:'ANA Mileage Club（星空聯盟）',table:ANA,zone:'ana'},jal:{name:'日本航空 JAL',sub:'JAL Mileage Bank（寰宇一家）',table:JAL,zone:'jal'}};
-
-let tripType='rt';
-function setTrip(t){
-  tripType=t;
-  document.getElementById('m-btn-rt').className='seg-btn'+(t==='rt'?' active':'');
-  document.getElementById('m-btn-ow').className='seg-btn'+(t==='ow'?' active':'');
-  calcMiles();
-}
-function lookupM(table,z1,z2){return table[z1+'-'+z2]||table[z2+'-'+z1]||null;}
-function fmtM(n){return n?n.toLocaleString()+' 里':'—';}
-
-function calcMiles(){
-  const orig=document.getElementById('m-orig').value;
-  const dest=document.getElementById('m-dest').value;
-  const cabin=document.getElementById('m-cabin').value;
-  const pax=Math.max(1,parseInt(document.getElementById('m-pax').value)||1);
-  const myMiles=parseInt(document.getElementById('m-mymiles').value)||0;
-  const isOW=tripType==='ow';
-  if(orig===dest){document.getElementById('miles-out').innerHTML='<p style="color:var(--mid);padding:24px 0;text-align:center">出發地與目的地相同，請重新選擇。</p>';return;}
-  let bestProg='',bestMiles=Infinity;
-  const results=[];
-  for(const[key,prog]of Object.entries(PROG)){
-    const z1=ZONES[prog.zone][orig],z2=ZONES[prog.zone][dest];
-    if(!z1||!z2){results.push({key,prog,row:null});continue;}
-    const row=lookupM(prog.table,z1,z2);
-    if(!row){results.push({key,prog,row:null});continue;}
-    const rtBase=row[cabin]||(cabin==='prem'?row.eco:null);
-    const perPax=rtBase?(isOW?Math.ceil(rtBase/2):rtBase):null;
-    const total=perPax?perPax*pax:null;
-    results.push({key,prog,row,perPax,total});
-    if(perPax&&perPax<bestMiles){bestMiles=perPax;bestProg=key;}
-  }
-  let html='<div class="miles-results">';
-  for(const r of results){
-    const isBest=r.key===bestProg;
-    const enough=myMiles>0&&r.total&&myMiles>=r.total;
-    const dEco=r.row?(isOW?Math.ceil(r.row.eco/2):r.row.eco):null;
-    const dPrem=r.row&&r.row.prem?(isOW?Math.ceil(r.row.prem/2):r.row.prem):null;
-    const dBiz=r.row?(isOW?Math.ceil(r.row.biz/2):r.row.biz):null;
-    const shown=cabin==='eco'?dEco:cabin==='prem'?dPrem:dBiz;
-    const totalStr=r.total?'共 '+r.total.toLocaleString()+' 里（'+pax+'人・'+(isOW?'單程':'來回')+'）':'';
-    const statusStr=myMiles>0&&r.total?(enough?'✓ 里程足夠':'差 '+(r.total-myMiles).toLocaleString()+' 里'):'';
-    const statusColor=enough?'color:var(--accent2)':'color:#c44';
-    html+=`<div class="mcard ${isBest?'best':''}">
-      ${isBest?'<div class="best-tag">最划算</div>':''}
-      <div class="mc-airline">${r.prog.name}</div>
-      <div class="mc-main">${shown?shown.toLocaleString()+' 里':'不適用此航線'}</div>
-      <div class="mc-total">${totalStr}</div>
-      ${myMiles>0&&r.total?`<div class="mc-status" style="${statusColor}">${statusStr}</div>`:''}
-      <div class="mc-all">經 ${fmtM(dEco)} ／ 豪 ${fmtM(dPrem)} ／ 商 ${fmtM(dBiz)}</div>
-      <div class="mc-prog">${r.prog.sub}</div>
-    </div>`;
-  }
-  html+='</div>';
-  if(myMiles>0){
-    const valid=results.filter(r=>r.total);
-    const minT=Math.min(...valid.map(r=>r.total));
-    const canFly=valid.some(r=>myMiles>=r.total);
-    if(canFly){
-      const ok=valid.filter(r=>myMiles>=r.total).map(r=>r.prog.name).join('、');
-      html+=`<div class="status-ok"><div class="st">里程足夠出發！</div><div class="ss">可用計畫：${ok}</div></div>`;
-    } else {
-      const ch=valid.find(r=>r.total===minT);
-      html+=`<div class="status-no"><div class="st">里程尚不足</div><div class="ss">最便宜：${ch?.prog.name}，還差 ${(minT-myMiles).toLocaleString()} 里</div></div>`;
-    }
-  }
-  document.getElementById('miles-out').innerHTML=html;
-  document.getElementById('miles-note').textContent='※ 來回里程為標準兌換數；單程以來回 ÷ 2 計算（部分航空單程票規定不同，以官網為準）。稅金另計約 NT$1,000～5,000。實際機位供應以各航空官網查詢為準。';
-}
-
 // init
 calcBudget();
-calcMiles();
 
 // check hash
-if(location.hash==='#miles') switchTab('miles',document.querySelectorAll('.tab')[1]);
-if(location.hash==='#budget10k') switchTab('budget10k',document.querySelectorAll('.tab')[2]);
+if(location.hash==='#budget10k') switchTab('budget10k',document.querySelectorAll('.tab')[1]);
+if(location.hash==='#roadtrip') switchTab('roadtrip',document.querySelectorAll('.tab')[2]);
 
 
 </script>
